@@ -1,0 +1,371 @@
+/* pages/wishpool/wishpool.wxss */
+.wishpool-page {
+    min-height: 100vh;
+    background: #f6f6f6;
+  }
+  
+  /* 搜索栏 */
+  .search-section {
+    padding: 20rpx 32rpx;
+    background: white;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .search-bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .search-input {
+    flex: 1;
+    height: 80rpx;
+    background: #f8f9fa;
+    border-radius: 40rpx;
+    padding: 0 80rpx 0 32rpx;
+    font-size: 28rpx;
+  }
+  
+  .search-icon {
+    position: absolute;
+    right: 32rpx;
+    font-size: 32rpx;
+  }
+  
+  /* 标签切换 */
+  .tabs-section {
+    background: white;
+    padding: 0 32rpx;
+    position: sticky;
+    top: 120rpx;
+    z-index: 99;
+  }
+  
+  .tabs {
+    display: flex;
+    border-bottom: 1rpx solid #eee;
+  }
+  
+  .tab {
+    position: relative;
+    padding: 24rpx 32rpx;
+    font-size: 28rpx;
+    color: #999;
+    transition: all 0.3s;
+  }
+  
+  .tab.active {
+    color: #ffffff;
+    font-weight: 600;
+  }
+  
+  .tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 32rpx;
+    right: 32rpx;
+    height: 4rpx;
+    background: #ffcc41;
+    border-radius: 2rpx;
+  }
+  
+  .tab-badge {
+    position: absolute;
+    top: 16rpx;
+    right: 16rpx;
+    background: #ff4444;
+    color: white;
+    font-size: 20rpx;
+    padding: 4rpx 8rpx;
+    border-radius: 20rpx;
+    min-width: 32rpx;
+    text-align: center;
+  }
+  
+  /* 主要内容区域 - 侧边栏和内容并排 */
+  .main-content {
+    display: flex;
+    min-height: calc(100vh - 200rpx);
+  }
+  
+  /* 侧边栏 */
+  .sidebar-section {
+    width: 240rpx;
+    background: white;
+    border-right: 1rpx solid #f0f0f0;
+    flex-shrink: 0;
+  }
+  
+  .category-sidebar {
+    --td-side-bar-item-height: 120rpx;
+    --td-side-bar-item-font-size: 28rpx;
+  }
+  
+  /* 内容区域 */
+  .content-area {
+    flex: 1;
+    padding: 32rpx;
+    background: #f6f6f6;
+    min-height: 100%;
+  }
+  
+  /* 分类内容 */
+  .category-content {
+    background: white;
+    border-radius: 16rpx;
+    padding: 32rpx;
+    margin-bottom: 32rpx;
+    box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+  }
+  
+  .content-title {
+    font-size: 36rpx;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 32rpx;
+    display: block;
+    border-left: 8rpx solid #ffcc41;
+    padding-left: 20rpx;
+  }
+  
+  .welcome-text {
+    text-align: center;
+    color: #999;
+    font-size: 28rpx;
+    padding: 60rpx 0;
+  }
+  
+  .wish-item {
+    padding: 24rpx;
+    margin-bottom: 16rpx;
+    background: #f8f9fa;
+    border-radius: 12rpx;
+    border-left: 6rpx solid #ffcc41;
+    font-size: 28rpx;
+    color: #333;
+    transition: all 0.3s;
+  }
+  
+  .wish-item:active {
+    background: #e9ecef;
+    transform: translateY(2rpx);
+  }
+  
+  /* 愿望卡片 */
+  .wish-card {
+    background: white;
+    border-radius: 16rpx;
+    padding: 32rpx;
+    margin-bottom: 24rpx;
+    position: relative;
+    box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+    transition: all 0.3s;
+  }
+  
+  .wish-card:active {
+    transform: translateY(2rpx);
+    box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+  }
+  
+  .wish-card.fulfilled {
+    opacity: 0.7;
+  }
+  
+  .wish-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20rpx;
+  }
+  
+  .wish-title {
+    font-size: 32rpx;
+    font-weight: 600;
+    color: #333;
+    flex: 1;
+    margin-right: 20rpx;
+  }
+  
+  .wish-type, .wish-status {
+    padding: 8rpx 16rpx;
+    border-radius: 8rpx;
+    font-size: 24rpx;
+    font-weight: 500;
+  }
+  
+  .wish-type.buy {
+    background: #e8f5e8;
+    color: #52c41a;
+  }
+  
+  .wish-type.swap {
+    background: #e6f7ff;
+    color: #1890ff;
+  }
+  
+  .wish-status.pending {
+    background: #fff7e6;
+    color: #fa8c16;
+  }
+  
+  .wish-status.fulfilled {
+    background: #f6ffed;
+    color: #52c41a;
+  }
+  
+  .wish-description {
+    font-size: 28rpx;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 20rpx;
+  }
+  
+  .wish-expectation {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24rpx;
+  }
+  
+  .expect-label {
+    font-size: 26rpx;
+    color: #999;
+    margin-right: 12rpx;
+  }
+  
+  .expect-value {
+    font-size: 28rpx;
+    color: #ffcc41;
+    font-weight: 600;
+  }
+  
+  .wish-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .user-avatar {
+    width: 48rpx;
+    height: 48rpx;
+    border-radius: 50%;
+    margin-right: 12rpx;
+  }
+  
+  .user-name {
+    font-size: 26rpx;
+    color: #333;
+  }
+  
+  .user-college {
+    font-size: 24rpx;
+    color: #999;
+  }
+  
+  .wish-meta, .match-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .match-count, .create-time, .no-match {
+    font-size: 24rpx;
+    color: #999;
+  }
+  
+  .match-count {
+    color: #ffcc41;
+    margin-right: 20rpx;
+  }
+  
+  /* 操作按钮 */
+  .wish-actions, .my-wish-actions {
+    margin-top: 20rpx;
+    padding-top: 20rpx;
+    border-top: 1rpx solid #f0f0f0;
+  }
+  
+  .share-btn, .action-btn {
+    padding: 12rpx 24rpx;
+    border-radius: 8rpx;
+    font-size: 26rpx;
+    margin-right: 16rpx;
+  }
+  
+  .share-btn {
+    background: #f0f0f0;
+    color: #666;
+  }
+  
+  .action-btn.edit {
+    background: #e6f7ff;
+    color: #1890ff;
+  }
+  
+  .action-btn.delete {
+    background: #fff2f0;
+    color: #ff4d4f;
+  }
+  
+  .fulfilled-badge {
+    position: absolute;
+    top: 32rpx;
+    right: 32rpx;
+    background: #52c41a;
+    color: white;
+    padding: 8rpx 16rpx;
+    border-radius: 20rpx;
+    font-size: 22rpx;
+  }
+  
+  /* 空状态 */
+  .empty-state {
+    text-align: center;
+    padding: 120rpx 0;
+    color: #999;
+  }
+  
+  .empty-icon {
+    font-size: 120rpx;
+    margin-bottom: 32rpx;
+  }
+  
+  .empty-text {
+    font-size: 32rpx;
+    margin-bottom: 16rpx;
+  }
+  
+  .empty-desc {
+    font-size: 26rpx;
+  }
+  
+  /* 发布按钮 */
+  .publish-fab {
+    position: fixed;
+    right: 32rpx;
+    bottom: 32rpx;
+    background: #ffcc41;
+    color: white;
+    padding: 24rpx 32rpx;
+    border-radius: 50rpx;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 8rpx 32rpx rgba(255, 204, 65, 0.3);
+    z-index: 1000;
+  }
+  
+  .fab-icon {
+    font-size: 36rpx;
+    margin-right: 12rpx;
+  }
+  
+  .fab-text {
+    font-size: 28rpx;
+    font-weight: 600;
+  }
