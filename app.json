@@ -1,0 +1,63 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/publish/publish",
+    "pages/detail/detail",
+    "pages/chat/chat",
+    "pages/wishpool/wishpool",
+    "pages/me/me",
+    "pages/logs/logs",
+    "pages/me/edit-profile/edit-profile",
+    "pages/me/credit-center/credit-center",
+    "pages/me/help-feedback/help-feedback",
+    "miniprogram/components/sub_package/sub_package_page"
+  ],
+  "window": {
+    "navigationBarTitleText": "上财易物",
+    "navigationBarBackgroundColor": "#E8B4B8",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#FAF7F2",
+    "backgroundTextStyle": "dark",
+    "enablePullDownRefresh": true
+  },
+  "tabBar": {
+    "color": "#8C7B6C",
+    "selectedColor": "#E8B4B8",
+    "backgroundColor": "#FAF7F2",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/home.png",
+        "selectedIconPath": "images/home-active.png"
+      },
+      {
+        "pagePath": "pages/wishpool/wishpool",
+        "text": "许愿",
+        "iconPath": "images/wish.png",
+        "selectedIconPath": "images/wish-active.png"
+      },
+      {
+        "pagePath": "pages/publish/publish",
+        "text": "发布",
+        "iconPath": "images/publish.png",
+        "selectedIconPath": "images/publish-active.png"
+      },
+      {
+        "pagePath": "pages/chat/chat",
+        "text": "消息",
+        "iconPath": "images/chat.png",
+        "selectedIconPath": "images/chat-active.png"
+      },
+      {
+        "pagePath": "pages/me/me",
+        "text": "我的",
+        "iconPath": "images/me.png",
+        "selectedIconPath": "images/me-active.png"
+      }
+    ]
+  },
+
+  "sitemapLocation": "sitemap.json"
+}
