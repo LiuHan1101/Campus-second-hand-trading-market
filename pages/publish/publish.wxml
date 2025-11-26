@@ -1,0 +1,184 @@
+<!--pages/publish/publish.wxml-->
+<view class="publish-page">
+  <view class="publish-form">
+    <!-- 标题 -->
+    <view class="form-group">
+      <view class="form-label">商品标题</view>
+      <input 
+        class="form-input" 
+        placeholder="请输入商品标题（最多30字）" 
+        maxlength="30"
+        value="{{formData.title}}"
+        bindinput="onTitleInput"
+      
+      />
+    </view>
+
+    <!-- 描述 -->
+    <view class="form-group">
+      <view class="form-label">商品描述</view>
+      <textarea 
+        class="form-textarea" 
+        placeholder="详细描述商品的状况、使用情况、瑕疵等..." 
+        maxlength="500"
+        value="{{formData.description}}"
+        bindinput="onDescriptionInput"
+      />
+      <view class="char-count">{{formData.description.length}}/500</view>
+    </view>
+
+    <!-- 图片上传 -->
+    <view class="form-group">
+      <view class="form-label">商品图片</view>
+      
+      <!-- 图片上传区域 -->
+      <view class="image-upload-container">
+        <view class="image-upload {{formData.images.length > 0 ? 'active' : ''}}" bindtap="onShowImageAction">
+          <view class="upload-icon">📷</view>
+          <view class="upload-text">
+            {{formData.images.length > 0 ? '继续添加图片' : '点击上传图片'}}
+          </view>
+          <view class="upload-hint">已上传 {{formData.images.length}}/4 张</view>
+          <view class="upload-options">
+            <text class="option-text">支持拍照和相册选择</text>
+          </view>
+        </view>
+
+        <!-- 图片预览 -->
+        <view class="image-preview" wx:if="{{formData.images.length > 0}}">
+          <view 
+            class="preview-item" 
+            wx:for="{{formData.images}}" 
+            wx:key="index" 
+            data-index="{{index}}"
+            bindtap="onPreviewImage"
+            bindtouchstart="onImageDragStart"
+            bindtouchmove="onImageDragOver"
+            bindtouchend="onImageDrop"
+          >
+            <image class="preview-image" src="{{item}}" mode="aspectFill" />
+            <view class="image-order">{{index + 1}}</view>
+            <view class="delete-image" catchtap="onDeleteImage" data-index="{{index}}">×</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 分类选择（多选） -->
+    <view class="form-group">
+      <view class="form-label">
+        商品标签
+        <text class="label-hint">（最多选3个）</text>
+      </view>
+      <view class="selected-tags" wx:if="{{formData.categories.length > 0}}">
+  <text class="selected-text">已选择：{{selectedCategoriesText}}</text>
+</view>
+      <view class="category-grid">
+        <view 
+          class="category-item {{formData.categories.indexOf(item.name) > -1 ? 'active' : ''}}"
+          wx:for="{{categories}}"
+          wx:key="name"
+          data-category="{{item.name}}"
+          bindtap="onCategorySelect"
+        >
+          <text class="category-icon">{{item.icon}}</text>
+          <text class="category-label">{{item.label}}</text>
+
+        </view>
+      </view>
+    </view>
+
+    <!-- 交易类型 -->
+    <view class="form-group">
+      <view class="form-label">交易方式</view>
+      <view class="transaction-type">
+        <view 
+          class="type-option {{formData.transactionType === 'cash' ? 'active' : ''}}"
+          data-type="cash"
+          bindtap="onTypeChange"
+        >
+          <view class="type-icon">💰</view>
+          <view class="type-label">现金交易</view>
+        </view>
+        <view 
+          class="type-option {{formData.transactionType === 'swap' ? 'active' : ''}}"
+          data-type="swap"
+          bindtap="onTypeChange"
+        >
+          <view class="type-icon">🔄</view>
+          <view class="type-label">以物换物</view>
+        </view>
+        <view 
+          class="type-option {{formData.transactionType === 'both' ? 'active' : ''}}"
+          data-type="both"
+          bindtap="onTypeChange"
+        >
+          <view class="type-icon">💫</view>
+          <view class="type-label">均可</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 价格输入 -->
+    <view class="form-group" wx:if="{{formData.transactionType === 'cash' || formData.transactionType === 'both'}}">
+      <view class="form-label">商品价格</view>
+      <view class="price-input-wrapper">
+        <text class="price-symbol">¥</text>
+        <input 
+          class="form-input price-input" 
+          type="digit"
+          placeholder="0.00"
+          value="{{formData.price}}"
+          bindinput="onPriceInput"
+        />
+      </view>
+    </view>
+
+    <!-- 期望换物 -->
+    <view class="form-group" wx:if="{{formData.transactionType === 'swap' || formData.transactionType === 'both'}}">
+      <view class="form-label">期望换得</view>
+      <input 
+        class="form-input" 
+        placeholder="请输入希望换得的物品..."
+        value="{{formData.expectedSwap}}"
+        bindinput="onExpectedSwapInput"
+      />
+    </view>
+
+    <!-- 发布按钮 -->
+    <button 
+      class="publish-btn" 
+      bindtap="onSubmit"
+      disabled="{{isSubmitting}}"
+    >
+      {{isSubmitting ? '发布中...' : '立即发布'}}
+    </button>
+
+    <!-- 发布提示 -->
+    <view class="publish-tips" bindtap="showPublishTips">
+      <text class="tips-icon">💡</text>
+      <text class="tips-text">发布小贴士</text>
+    </view>
+  </view>
+
+  <!-- 图片操作面板 -->
+  <view class="image-action-sheet {{showImageAction ? 'show' : ''}}">
+    <view class="action-mask" bindtap="onHideImageAction"></view>
+    <view class="action-content">
+      <view class="action-header">
+        <text class="action-title">选择图片</text>
+        <text class="action-close" bindtap="onHideImageAction">×</text>
+      </view>
+      <view class="action-buttons">
+        <view class="action-btn take-photo" bindtap="onTakePhoto">
+          <view class="btn-icon">📸</view>
+          <view class="btn-text">拍照</view>
+        </view>
+        <view class="action-btn choose-album" bindtap="onChooseFromAlbum">
+          <view class="btn-icon">🖼️</view>
+          <view class="btn-text">从相册选择</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

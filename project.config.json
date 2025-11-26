@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "miniprogramRoot": "miniprogram/",
   "cloudfunctionRoot": "cloudfunctions/",
   "setting": {
@@ -22,11 +23,28 @@
     "useMultiFrameRuntime": true,
     "useApiHook": true,
     "useApiHostProcess": true,
+=======
+  "compileType": "miniprogram",
+  "libVersion": "trial",
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "setting": {
+    "coverView": true,
+    "es6": true,
+    "postcss": true,
+    "minified": true,
+    "enhance": true,
+    "showShadowRootInWxmlPanel": true,
+    "packNpmRelationList": [],
+>>>>>>> e187c7824ab687d7a5dc8798205ae87464e03676
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],
       "outputPath": ""
     },
+<<<<<<< HEAD
     "enableEngineNative": false,
     "useIsolateContext": true,
     "useCompilerModule": true,
@@ -79,6 +97,24 @@
   },
   "editorSetting": {
     "tabIndent": "insertSpaces",
+=======
+    "compileWorklet": false,
+    "uglifyFileName": false,
+    "uploadWithSourceMap": true,
+    "packNpmManually": false,
+    "minifyWXSS": true,
+    "minifyWXML": true,
+    "localPlugins": false,
+    "condition": false,
+    "swc": false,
+    "disableSWC": true,
+    "disableUseStrict": false,
+    "useCompilerPlugins": false
+  },
+  "condition": {},
+  "editorSetting": {
+    "tabIndent": "auto",
+>>>>>>> e187c7824ab687d7a5dc8798205ae87464e03676
     "tabSize": 2
   },
   "simulatorPluginLibVersion": {}

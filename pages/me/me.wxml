@@ -1,0 +1,74 @@
+<!--pages/me/me.wxml-->
+<view class="me-page">
+  <!-- 用户信息头部 -->
+  <view class="user-header" bindtap="onUserInfoTap">
+  <view class="user-avatar-section">
+    <image class="user-avatar" src="{{userInfo.avatar}}" mode="aspectFill"></image>
+    <view class="verification-badge" wx:if="{{userInfo.isVerified}}">✓</view>
+  </view>
+  <view class="user-info">
+    <view class="user-name">{{userInfo.nickname}}</view>
+    <view class="user-college">{{userInfo.college}}</view>
+    <view class="user-days">加入{{userInfo.joinDays}}天</view>
+    <!-- 调试信息 -->
+    <view class="debug-info" wx:if="{{false}}"> <!-- 设置为 true 可显示调试信息 -->
+      <text>avatar: {{userInfo.avatar}}</text>
+      <text>nickname: {{userInfo.nickname}}</text>
+    </view>
+  </view>
+  <view class="arrow">›</view>
+</view>
+
+  <!-- 数据统计 -->
+  <view class="stats-section">
+    <view class="stats-grid">
+      <view class="stat-item" data-type="selling" bindtap="onStatItemTap">
+        <view class="stat-number">{{stats.selling}}</view>
+        <view class="stat-label">在售</view>
+      </view>
+      <view class="stat-item" data-type="sold" bindtap="onStatItemTap">
+        <view class="stat-number">{{stats.sold}}</view>
+        <view class="stat-label">已售出</view>
+      </view>
+      <view class="stat-item" data-type="bought" bindtap="onStatItemTap">
+        <view class="stat-number">{{stats.bought}}</view>
+        <view class="stat-label">已购买</view>
+      </view>
+      <view class="stat-item" data-type="swapped" bindtap="onStatItemTap">
+        <view class="stat-number">{{stats.swapped}}</view>
+        <view class="stat-label">已交换</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能菜单 -->
+  <view class="menu-section">
+    <view class="menu-grid">
+      <view 
+        class="menu-item" 
+        wx:for="{{menuItems}}" 
+        wx:key="index"
+        data-index="{{index}}"
+        bindtap="onMenuItemTap"
+      >
+        <view class="menu-icon">{{item.icon}}</view>
+        <view class="menu-title">{{item.title}}</view>
+        <view class="menu-badge" wx:if="{{item.badge > 0}}">
+          {{item.badge > 99 ? '99+' : item.badge}}
+        </view>
+        <view class="menu-arrow">›</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部操作 -->
+  <view class="action-section">
+    <button class="share-btn" bindtap="onShareAppMessage" open-type="share">
+      🔗 分享给同学
+    </button>
+    <view class="contact-support" bindtap="onContactCustomer">
+      联系客服 · 帮助中心
+    </view>
+    <view class="version-info">上财易物 v1.0.0</view>
+  </view>
+</view>

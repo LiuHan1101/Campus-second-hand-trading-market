@@ -1,0 +1,7 @@
+{
+    "usingComponents": {},
+    "navigationBarTitleText": "愿望池",
+    "enablePullDownRefresh": true,
+    "backgroundTextStyle": "dark",
+    "backgroundColor": "#f6f6f6"
+  }
