@@ -9,9 +9,7 @@
     "pages/logs/logs",
     "pages/me/edit-profile/edit-profile",
     "pages/me/credit-center/credit-center",
-    "pages/me/help-feedback/help-feedback",
-    "miniprogram/components/sub_package/sub_package_page",
-    "pages/search/search"
+    "pages/me/help-feedback/help-feedback"
   ],
   "window": {
     "navigationBarTitleText": "上财易物",
