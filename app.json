@@ -10,15 +10,10 @@
     "pages/me/edit-profile/edit-profile",
     "pages/me/credit-center/credit-center",
     "pages/me/help-feedback/help-feedback",
-<<<<<<< HEAD
     "pages/search/search",
     "pages/me/profile/profile",
     "pages/me/my-goods/my-goods",
     "pages/me/set/set"
-=======
-    "miniprogram/components/sub_package/sub_package_page",
-    "pages/search/search"
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
   ],
   "window": {
     "navigationBarTitleText": "上财易物",

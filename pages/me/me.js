@@ -9,22 +9,12 @@ Page({
         joinDays: 0
       },
       stats: {
-<<<<<<< HEAD
         published: 0,      // 已发布 
         inProgress: 0,     // 进行中
         completed: 0,      // 已成交 
         favorites: 0       // 收藏
       },
       menuItems: [
-=======
-        selling: 0,      // 在售商品
-        sold: 0,         // 已售出
-        bought: 0,       // 已购买
-        swapped: 0       // 已交换
-      },
-      menuItems: [
-       
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
         {
           icon: '🛡️',
           title: '信用中心',
@@ -34,11 +24,7 @@ Page({
         {
           icon: '⚙️',
           title: '设置',
-<<<<<<< HEAD
           url: '/pages/me/set/set',
-=======
-          url: '/pages/me/settings',
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
           badge: 0
         },
         {
@@ -50,17 +36,6 @@ Page({
       ],
       isLoading: true
     },
-<<<<<<< HEAD
-=======
-  
-
-
-
-
-
-    
-
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
 
     onLoad() {
         this.loadUserInfoFromDatabase();
@@ -171,27 +146,6 @@ Page({
       
       return diffDays > 0 ? diffDays : 0;
     },
-<<<<<<< HEAD
-=======
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
 
     // 加载用户统计数据
     async loadUserStats() {
@@ -199,35 +153,21 @@ Page({
         const db = wx.cloud.database();
         
         // 获取在售商品数量
-<<<<<<< HEAD
         const publishedResult = await db.collection('POST')
-=======
-        const sellingResult = await db.collection('POST')
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
           .where({
             status: 'selling'
           })
           .count();
         
         // 获取已售出商品数量（需要你的业务逻辑）
-<<<<<<< HEAD
         const inProgressResult = await db.collection('POST')
           .where({
             status: 'in_progress'
-=======
-        const soldResult = await db.collection('POST')
-          .where({
-            status: 'sold'
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
           })
           .count();
         
         // 获取愿望数量
-<<<<<<< HEAD
         const favoritesResult = await db.collection('wishes')
-=======
-        const wishesResult = await db.collection('wishes')
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
           .where({
             status: 'pending'
           })
@@ -235,17 +175,10 @@ Page({
   
         this.setData({
           stats: {
-<<<<<<< HEAD
             published: publishedResult.total || 0,
             inProgress: inProgressResult.total || 0,
             completed: 0,  // 需要已成交记录表
             favorites: favoritesResult.total || 0
-=======
-            selling: sellingResult.total || 0,
-            sold: soldResult.total || 0,
-            bought: 0,  // 需要购买记录表
-            swapped: wishesResult.total || 0  // 暂时用愿望数量代替
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
           }
         });
   
@@ -257,17 +190,10 @@ Page({
         // 使用默认数据
         this.setData({
           stats: {
-<<<<<<< HEAD
             published: 0,
             inProgress: 0,
             completed: 0,
             favorites: 0
-=======
-            selling: 0,
-            sold: 0,
-            bought: 0,
-            swapped: 0
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
           }
         });
       }
@@ -277,23 +203,14 @@ Page({
     updateMenuBadges() {
       const menuItems = [...this.data.menuItems];
       
-<<<<<<< HEAD
       // 更新帮助与反馈徽章（现在索引为2）
       menuItems[2].badge = this.data.stats.favorites;
-=======
-      // 更新我的发布徽章
-      menuItems[0].badge = this.data.stats.selling;
-      
-      // 更新我的愿望徽章
-      menuItems[3].badge = this.data.stats.swapped;
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
       
       this.setData({ menuItems });
     },
   
     // 点击菜单项
     onMenuItemTap(e) {
-<<<<<<< HEAD
         const index = e.currentTarget.dataset.index;
         const item = this.data.menuItems[index];
         
@@ -349,74 +266,11 @@ Page({
           }
         });
     },
-=======
-      const index = e.currentTarget.dataset.index;
-      const item = this.data.menuItems[index];
-      
-      if (item.url) {
-        wx.navigateTo({
-          url: item.url
-        });
-      } else {
-        wx.showToast({
-          title: `${item.title}功能开发中`,
-          icon: 'none'
-        });
-      }
-    },
-  
-
-
-
-
-
-
-
-
-
-
-
-
-   // 点击用户信息区域
-// 点击用户信息区域
-onUserInfoTap() {
-    console.log('尝试跳转到编辑页面');
-    
-    // 直接跳转，不经过确认
-    wx.navigateTo({
-      url: '/pages/me/edit-profile/edit-profile',
-      success: (res) => {
-        console.log('跳转成功:', res);
-      },
-      fail: (err) => {
-        console.error('跳转失败:', err);
-        // 显示具体错误信息
-        wx.showModal({
-          title: '跳转失败',
-          content: `错误: ${err.errMsg}\n\n请检查编辑页面文件是否存在`,
-          showCancel: false
-        });
-      }
-    });
-  },
-
-
-
-
-
-
-
-
-
-
-
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
 
     // 点击数据统计项
     onStatItemTap(e) {
       const type = e.currentTarget.dataset.type;
       const statsMap = {
-<<<<<<< HEAD
         published: '已发布商品',
         inProgress: '进行中交易',
         completed: '已成交',
@@ -444,28 +298,11 @@ onUserInfoTap() {
           url: url
         });
       }
-=======
-        selling: '在售商品',
-        sold: '已售出',
-        bought: '已购买',
-        swapped: '已交换'
-      };
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
       
       wx.showToast({
         title: `查看${statsMap[type]}`,
         icon: 'none'
       });
-<<<<<<< HEAD
-=======
-      
-       可以跳转到对应的列表页面
-      if (type === 'selling') {
-        wx.navigateTo({
-          url: '/pages/me/my-goods/my-goods?type=selling'
-        });
-      }
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
     },
   
     // 分享功能
@@ -485,11 +322,4 @@ onUserInfoTap() {
         showCancel: false
       });
     },
-<<<<<<< HEAD
-=======
-
-
-    
-
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
   })

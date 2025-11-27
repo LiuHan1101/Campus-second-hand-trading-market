@@ -1,117 +1,3 @@
-<<<<<<< HEAD
-.detail-page {
-    background: #f5f5f5;
-    padding-bottom: 120rpx;
-  }
-  
-  /* 图片轮播 */
-  .image-swiper {
-    height: 500rpx;
-    background: #fff;
-  }
-  
-  .swiper {
-    height: 100%;
-  }
-  
-  .swiper-image {
-    width: 100%;
-    height: 100%;
-  }
-  
-  /* 商品信息 */
-  .goods-info {
-    background: #fff;
-    padding: 30rpx;
-    margin-bottom: 20rpx;
-  }
-  
-  .price-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20rpx;
-  }
-  
-  .price {
-    font-size: 48rpx;
-    font-weight: bold;
-    color: #ff6b35;
-  }
-  
-  .favorite-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 16rpx;
-  }
-  
-  .favorite-btn.favorited .favorite-icon {
-    color: #ff6b35;
-  }
-  
-  .favorite-icon {
-    font-size: 40rpx;
-    margin-bottom: 8rpx;
-  }
-  
-  .favorite-text {
-    font-size: 24rpx;
-    color: #666;
-  }
-  
-  .title-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 20rpx;
-  }
-  
-  .goods-title {
-    flex: 1;
-    font-size: 32rpx;
-    font-weight: 600;
-    color: #333;
-    line-height: 1.4;
-    margin-right: 20rpx;
-  }
-  
-  .transaction-tag {
-    padding: 8rpx 16rpx;
-    border-radius: 20rpx;
-    font-size: 24rpx;
-    white-space: nowrap;
-  }
-  
-  .transaction-tag.cash {
-    background: #e6f7ff;
-    color: #1890ff;
-    border: 1rpx solid #91d5ff;
-  }
-  
-  .transaction-tag.swap {
-    background: #f6ffed;
-    color: #52c41a;
-    border: 1rpx solid #b7eb8f;
-  }
-  
-  .transaction-tag.both {
-    background: #fff7e6;
-    color: #fa8c16;
-    border: 1rpx solid #ffd591;
-  }
-  
-  .view-count {
-    font-size: 24rpx;
-    color: #999;
-  }
-  
-  /* 卖家信息 */
-  .seller-info {
-    background: #fff;
-    padding: 30rpx;
-    margin-bottom: 20rpx;
-=======
 /* 页面容器 */
 .detail-page {
     background: #f8f9fa;
@@ -126,39 +12,23 @@
     padding: 30rpx;
     border-radius: 20rpx;
     box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.06);
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
   }
   
   .seller-header {
     display: flex;
     align-items: center;
-<<<<<<< HEAD
-=======
     justify-content: space-between;
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
   }
   
   .seller-avatar {
     width: 80rpx;
     height: 80rpx;
     border-radius: 50%;
-<<<<<<< HEAD
-    margin-right: 20rpx;
-=======
     border: 2rpx solid #f0f0f0;
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
   }
   
   .seller-details {
     flex: 1;
-<<<<<<< HEAD
-  }
-  
-  .seller-name {
-    font-size: 28rpx;
-    font-weight: 600;
-    color: #333;
-=======
     margin-left: 20rpx;
   }
   
@@ -167,7 +37,6 @@
     font-weight: 600;
     color: #333;
     display: block;
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
     margin-bottom: 8rpx;
   }
   
@@ -177,11 +46,7 @@
   }
   
   .rating-stars {
-<<<<<<< HEAD
-    color: #ffb400;
-=======
     color: #ffc107;
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
     font-size: 24rpx;
     margin-right: 10rpx;
   }
@@ -192,33 +57,6 @@
   }
   
   .seller-college {
-<<<<<<< HEAD
-    font-size: 24rpx;
-    color: #999;
-  }
-  
-  /* 描述和标签区域 */
-  .description-section,
-  .swap-section,
-  .tags-section {
-    background: #fff;
-    padding: 30rpx;
-    margin-bottom: 20rpx;
-  }
-  
-  .section-title {
-    font-size: 28rpx;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 20rpx;
-  }
-  
-  .goods-description,
-  .expected-swap {
-    font-size: 28rpx;
-    color: #666;
-    line-height: 1.6;
-=======
     font-size: 26rpx;
     color: #999;
     text-align: right;
@@ -362,7 +200,6 @@
     padding: 30rpx;
     border-radius: 16rpx;
     margin-bottom: 30rpx;
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
   }
   
   .tags-list {
@@ -372,13 +209,6 @@
   }
   
   .tag {
-<<<<<<< HEAD
-    background: #f8f9fa;
-    color: #666;
-    padding: 12rpx 20rpx;
-    border-radius: 20rpx;
-    font-size: 24rpx;
-=======
     padding: 12rpx 20rpx;
     background: white;
     border-radius: 20rpx;
@@ -411,7 +241,6 @@
     line-height: 1.6;
     display: block;
     margin-top: 20rpx;
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
   }
   
   /* 底部操作栏 */
@@ -420,22 +249,6 @@
     bottom: 0;
     left: 0;
     right: 0;
-<<<<<<< HEAD
-    background: #fff;
-    padding: 20rpx 30rpx;
-    display: flex;
-    align-items: center;
-    border-top: 1rpx solid #eee;
-    box-shadow: 0 -2rpx 10rpx rgba(0,0,0,0.1);
-  }
-  
-  .action-left {
-    display: flex;
-  }
-  
-  .action-right {
-    flex: 1;
-=======
     background: white;
     padding: 20rpx 30rpx;
     display: flex;
@@ -452,14 +265,12 @@
   
   .action-right {
     flex: 2;
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
     display: flex;
     justify-content: flex-end;
     gap: 20rpx;
   }
   
   .action-btn {
-<<<<<<< HEAD
     display: flex;
     align-items: center;
     justify-content: center;
@@ -467,7 +278,6 @@
     border-radius: 40rpx;
     font-size: 28rpx;
     font-weight: 500;
-=======
     padding: 24rpx 0;
     border-radius: 16rpx;
     font-size: 28rpx;
@@ -481,12 +291,10 @@
   
   .action-btn:active {
     transform: scale(0.98);
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
   }
   
   .chat-btn {
     background: #f8f9fa;
-<<<<<<< HEAD
     color: #333;
     flex-direction: column;
     padding: 20rpx 30rpx;
@@ -511,7 +319,6 @@
     background: #52c41a;
     color: #fff;
     min-width: 200rpx;
-=======
     color: #666;
     flex: 1;
   }
@@ -538,5 +345,4 @@
   .btn-text {
     font-size: 28rpx;
     font-weight: 500;
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
   }
