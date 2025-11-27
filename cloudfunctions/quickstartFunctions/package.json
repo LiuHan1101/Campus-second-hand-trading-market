@@ -1,0 +1,14 @@
+{
+    "name": "quickstart-functions",
+    "version": "1.0.0",
+    "description": "云函数快速启动模板",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "wx-server-sdk": "~2.6.3"
+    }
+  }

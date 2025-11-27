@@ -1,0 +1,17 @@
+{
+    "name": "miniprogram",
+    "version": "1.0.0",
+    "lockfileVersion": 3,
+    "requires": true,
+    "packages": {
+        "": {
+            "name": "miniprogram",
+            "version": "1.0.0",
+            "devDependencies": {}
+        }
+    },
+    "dependencies": {
+        "tdesign-miniprogram": "^1.11.2",
+        "weui-miniprogram": "^1.5.6"
+    }
+}

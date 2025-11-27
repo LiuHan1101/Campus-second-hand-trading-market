@@ -1,0 +1,52 @@
+<!--pages/me/settings/settings.wxml-->
+<view class="settings-container">
+  <!-- 用户信息卡片 -->
+  <view class="user-card">
+    <image class="user-avatar" src="{{userInfo.avatar}}" mode="aspectFill"></image>
+    <view class="user-info">
+      <text class="user-nickname">{{userInfo.nickname}}</text>
+      <text class="user-college">{{userInfo.college}}</text>
+    </view>
+  </view>
+
+  <!-- 设置列表 -->
+  <view class="settings-list">
+    <block wx:for="{{settings}}" wx:key="index">
+      <view class="setting-item" bindtap="onSettingTap" data-index="{{index}}">
+        <view class="setting-left">
+          <text class="setting-icon">{{item.icon}}</text>
+          <view class="setting-content">
+            <text class="setting-title">{{item.title}}</text>
+            <text class="setting-desc">{{item.desc}}</text>
+          </view>
+        </view>
+        <view class="setting-right">
+          <block wx:if="{{item.type === 'toggle'}}">
+            <switch checked="{{item.value}}" color="#07c160" />
+          </block>
+          <block wx:else>
+            <text class="setting-arrow">›</text>
+          </block>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 功能操作 -->
+  <view class="action-list">
+    <view class="action-item" bindtap="onClearCache">
+      <text class="action-text">清除缓存</text>
+      <text class="action-desc">{{cacheSize}}</text>
+      <text class="action-arrow">›</text>
+    </view>
+    
+    <view class="action-item" bindtap="onLogout">
+      <text class="action-text logout-text">退出登录</text>
+    </view>
+  </view>
+
+  <!-- 版本信息 -->
+  <view class="version-info">
+    <text class="version-text">上财易物 v1.0.0</text>
+  </view>
+</view>

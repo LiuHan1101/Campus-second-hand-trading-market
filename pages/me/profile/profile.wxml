@@ -1,0 +1,108 @@
+<!-- pages/me/profile/profile.wxml -->
+<view class="profile-container">
+  <!-- 头部用户信息模块 -->
+  <view class="header-section card">
+    <view class="user-basic-info">
+      <image class="user-avatar" src="{{userInfo.avatar}}" mode="aspectFill"></image>
+      <view class="user-text-info">
+        <view class="user-nickname">{{userInfo.nickname}}</view>
+        <view class="user-college">{{userInfo.college}}</view>
+        <view class="user-stats">
+          <text class="stat-item">加入 {{userInfo.joinDays}} 天</text>
+          <text class="stat-item">信用 {{userInfo.creditScore}}</text>
+        </view>
+      </view>
+    </view>
+    <button class="message-btn" bindtap="onSendMessage">私信</button>
+  </view>
+
+  <!-- 评价模块 -->
+  <view class="rating-section card">
+    <view class="rating-title">用户评价</view>
+    <view class="rating-content">
+      <!-- 左边评论滚动区域 (70%) -->
+      <view class="comment-scroll">
+        <scroll-view class="comment-list" scroll-y>
+          <view class="comment-item" wx:for="{{comments}}" wx:key="id">
+            <text class="comment-user">{{item.user}}:</text>
+            <text class="comment-text">{{item.content}}</text>
+          </view>
+        </scroll-view>
+      </view>
+      <!-- 右边评分区域 (30%) -->
+      <view class="score-display">
+        <view class="score-number">{{ratingScore}}</view>
+        <view class="score-total">/5分</view>
+        <view class="rating-stars">
+          <text class="star" wx:for="{{5}}" wx:key="*this">⭐</text>
+        </view>
+        <view class="rating-count">{{commentCount}}条评价</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 个人简介模块 -->
+  <view class="bio-section card">
+    <view class="section-title">个人简介</view>
+    <view class="bio-content">{{userInfo.bio || '无'}}</view>
+    <view class="tags-section">
+      <view class="tags-title">个性标签</view>
+      <view class="tags-list">
+        <text class="tag" wx:for="{{userInfo.tags}}" wx:key="*this">{{item}}</text>
+        <text class="tag add-tag" bindtap="onAddTag">+</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 出物和许愿信息模块 -->
+  <view class="goods-section">
+    <!-- 出物信息 -->
+    <view class="goods-tabs">
+      <view class="tab {{activeGoodsTab === 'published' ? 'active' : ''}}"data-tab="published" bindtap="switchGoodsTab">
+        发布 ({{publishedGoods.length}})
+      </view>
+      <view class="tab {{activeGoodsTab === 'wish' ? 'active' : ''}}" data-tab="wish" bindtap="switchGoodsTab">
+        许愿 ({{wishGoods.length}})
+      </view>
+    </view>
+
+    <!-- 商品列表 -->
+    <view class="goods-list">
+      <block wx:if="{{activeGoodsTab === 'published'}}">
+        <view class="goods-item" wx:for="{{publishedGoods}}" wx:key="id" data-id="{{item.id}}" bindtap="onGoodsTap">
+          <image class="goods-image" src="{{item.image}}" mode="aspectFill" data-index="{{index}}" binderror="onImageError"></image>
+          <view class="goods-info">
+            <view class="goods-title">{{item.title}}</view>
+            <view class="goods-price">
+              <text class="price" wx:if="{{item.price > 0}}">¥{{item.price}}</text>
+              <text class="swap-tag" wx:if="{{item.transactionType === 'swap' || item.transactionType === 'both'}}">可换物</text>
+            </view>
+            <view class="goods-desc">{{item.description}}</view>
+          </view>
+        </view>
+        <view class="empty-state" wx:if="{{sellingGoods.length === 0}}">
+          <image src="/images/empty-goods.png"></image>
+          <text>还没有发布商品哦～</text>
+        </view>
+      </block>
+
+      <block wx:if="{{activeGoodsTab === 'wishes'}}">
+        <view class="wish-item" wx:for="{{wishGoods}}" wx:key="id" bindtap="onWishTap" data-id="{{item.id}}">
+          <view class="wish-icon">🎯</view>
+          <view class="wish-info">
+            <view class="wish-title">{{item.title}}</view>
+            <view class="wish-desc">{{item.description}}</view>
+            <view class="wish-offer">
+              <text wx:if="{{item.maxPrice > 0}}">愿付 ¥{{item.maxPrice}}</text>
+              <text wx:if="{{item.expectedItem}}">愿换 {{item.expectedItem}}</text>
+            </view>
+          </view>
+        </view>
+        <view class="empty-state" wx:if="{{wishGoods.length === 0}}">
+          <image src="/images/empty-wish.png"></image>
+          <text>还没有许愿哦～</text>
+        </view>
+      </block>
+    </view>
+  </view>
+</view>
