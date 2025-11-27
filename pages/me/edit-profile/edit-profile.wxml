@@ -1,0 +1,52 @@
+<!--pages/me/edit-profile.wxml-->
+<view class="edit-profile-page">
+  <view class="header">
+    <text class="title">编辑个人信息</text>
+  </view>
+  
+  <view class="form-container">
+    <!-- 头像 -->
+    <view class="form-item">
+      <text class="label">头像</text>
+      <view class="avatar-section" bindtap="onChooseAvatar">
+        <image class="avatar" src="{{avatarUrl}}" mode="aspectFill"></image>
+        <text class="avatar-hint">点击更换</text>
+      </view>
+    </view>
+
+    <!-- 昵称 -->
+    <view class="form-item">
+      <text class="label">昵称</text>
+      <input 
+        class="input" 
+        placeholder="请输入昵称"
+        value="{{nickname}}"
+        bindinput="onNicknameInput"
+        maxlength="12"
+      />
+    </view>
+
+    <!-- 学院 -->
+    <view class="form-item">
+      <text class="label">学院</text>
+      <picker 
+        range="{{colleges}}" 
+        value="{{collegeIndex}}" 
+        bindchange="onCollegeChange"
+        class="picker"
+      >
+        <view class="picker-view {{college ? 'has-value' : ''}}">
+          {{college || '请选择学院'}}
+        </view>
+      </picker>
+    </view>
+
+    <!-- 按钮 -->
+    <view class="button-group">
+      <button class="btn save-btn" bindtap="onSave" disabled="{{isSaving}}">
+        {{isSaving ? '保存中...' : '保存'}}
+      </button>
+      <button class="btn cancel-btn" bindtap="onCancel">取消</button>
+    </view>
+  </view>
+</view>

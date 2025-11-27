@@ -1,0 +1,72 @@
+<!--pages/index/index.wxml-->
+<view class="container">
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <input 
+      class="search-input" 
+      placeholder="搜索闲置物品..." 
+      bindinput="onSearch"
+      value="{{searchValue}}"
+    />
+  </view>
+
+  <!-- 标签切换 -->
+  <view class="tabs">
+    <view 
+      class="tab {{activeTab === 'cash' ? 'active' : ''}}" 
+      data-tab="cash" 
+      bindtap="switchTab" 
+    >现金交易</view>
+    <view 
+      class="tab {{activeTab === 'swap' ? 'active' : ''}}" 
+      data-tab="swap" 
+      bindtap="switchTab" 
+    >以物换物</view>
+  </view>
+
+  <!-- 商品列表 -->
+  <view class="goods-list">
+    <block wx:if="{{activeTab === 'cash'}}">
+      <view 
+        class="goods-item" 
+        wx:for="{{cashGoodsList}}" 
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="goToDetail"
+      >
+        <image class="goods-image" src="{{item.image}}"></image>
+        <view class="goods-info">
+          <view class="goods-title">{{item.title}}</view>
+          <view class="goods-price">¥{{item.price}}</view>
+          <view class="goods-user">{{item.user.nickname}}</view>
+        </view>
+      </view>
+    </block>
+
+    <block wx:else>
+      <view 
+        class="goods-item" 
+        wx:for="{{swapGoodsList}}" 
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="goToDetail"
+      >
+        <image class="goods-image" src="{{item.image}}"></image>
+        <view class="goods-info">
+          <view class="goods-title">{{item.title}}</view>
+          <view class="goods-swap">想换: {{item.expectedSwap}}</view>
+          <view class="goods-user">{{item.user.nickname}}</view>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>
+
+
+<image 
+  class="goods-image" 
+  src="{{item.image}}" 
+  mode="aspectFill"
+  binderror="onImageError"
+  data-index="{{index}}"
+></image>

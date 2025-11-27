@@ -1,0 +1,359 @@
+/* pages/wishpool/wishpool.wxss */
+.wishpool-page {
+    background: var(--neutral-light);
+    min-height: 100vh;
+    padding-bottom: 120rpx;
+  }
+  
+  /* 搜索区域 */
+  .search-section {
+    background: linear-gradient(135deg, var(--primary-pink), var(--accent-beige));
+    padding: 30rpx;
+    border-bottom: 1rpx solid rgba(232, 180, 184, 0.3);
+  }
+  
+  .search-bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .search-input {
+    flex: 1;
+    height: 80rpx;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2rpx solid var(--primary-pink);
+    border-radius: 40rpx;
+    padding: 0 80rpx 0 30rpx;
+    font-size: 28rpx;
+    color: var(--neutral-text);
+    backdrop-filter: blur(10rpx);
+  }
+  
+  .search-input:focus {
+    border-color: var(--primary-coral);
+    background: rgba(255, 255, 255, 0.95);
+  }
+  
+  .search-icon {
+    position: absolute;
+    right: 30rpx;
+    font-size: 32rpx;
+    color: var(--primary-coral);
+  }
+  
+  /* 标签切换 */
+  .tabs-section {
+    background: linear-gradient(135deg, var(--primary-pink), var(--accent-beige));
+    padding: 0 30rpx;
+    border-bottom: 1rpx solid rgba(202, 177, 179, 0.3);
+  }
+  
+  .tabs {
+    display: flex;
+    border-bottom: 1rpx solid rgba(211, 194, 195, 0.3);
+  }
+  
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 30rpx 0;
+    font-size: 32rpx;
+    color: var(--neutral-dark);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+  
+  .tab.active {
+    color: var(--primary-red);
+    font-weight: bold;
+  }
+  
+  .tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80rpx;
+    height: 4rpx;
+    background: var(--primary-red);
+    border-radius: 2rpx;
+  }
+  
+  .tab-badge {
+    background: var(--primary-red);
+    color: white;
+    font-size: 20rpx;
+    padding: 4rpx 12rpx;
+    border-radius: 20rpx;
+    margin-left: 10rpx;
+    min-width: 40rpx;
+    text-align: center;
+  }
+  
+  /* 愿望列表 */
+  .wish-list {
+    padding: 30rpx;
+  }
+  
+  .wish-item {
+    background: linear-gradient(135deg, var(--primary-pink), var(--accent-beige));
+    border-radius: 24rpx;
+    padding: 40rpx;
+    margin-bottom: 30rpx;
+    box-shadow: 0 8rpx 32rpx rgba(140, 123, 108, 0.08);
+    border: 1rpx solid rgba(232, 180, 184, 0.2);
+    position: relative;
+    transition: all 0.3s ease;
+  }
+  
+  .wish-item:active {
+    transform: translateY(2rpx);
+    box-shadow: 0 4rpx 16rpx rgba(140, 123, 108, 0.12);
+  }
+  
+  .wish-item.fulfilled {
+    background: linear-gradient(135deg, var(--accent-beige), #E8F4E8);
+    opacity: 0.8;
+  }
+  
+  .wish-item.mine {
+    border-left: 8rpx solid var(--primary-red);
+    background: linear-gradient(135deg, #F7E4C8, var(--accent-beige));
+  }
+  
+  .wish-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20rpx;
+  }
+  
+  .wish-title {
+    flex: 1;
+    font-size: 36rpx;
+    font-weight: bold;
+    color: var(--neutral-text);
+    margin-right: 20rpx;
+  }
+  
+  .wish-type, .wish-status {
+    font-size: 24rpx;
+    padding: 8rpx 16rpx;
+    border-radius: 20rpx;
+    white-space: nowrap;
+    font-weight: 600;
+  }
+  
+  .wish-type.buy {
+    background: rgba(232, 180, 184, 0.3);
+    color: var(--primary-red);
+    border: 1rpx solid var(--primary-red);
+  }
+  
+  .wish-type.swap {
+    background: rgba(247, 228, 200, 0.4);
+    color: var(--neutral-dark);
+    border: 1rpx solid var(--accent-gold);
+  }
+  
+  .wish-status.pending {
+    background: rgba(247, 228, 200, 0.4);
+    color: var(--neutral-dark);
+    border: 1rpx solid var(--accent-gold);
+  }
+  
+  .wish-status.fulfilled {
+    background: rgba(168, 213, 186, 0.3);
+    color: #2D5A3D;
+    border: 1rpx solid #A8D5BA;
+  }
+  
+  .wish-description {
+    font-size: 28rpx;
+    color: var(--neutral-dark);
+    line-height: 1.6;
+    margin-bottom: 25rpx;
+  }
+  
+  .wish-expectation {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25rpx;
+    padding: 20rpx;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 12rpx;
+    border: 1rpx solid rgba(232, 180, 184, 0.3);
+  }
+  
+  .expect-label {
+    font-size: 26rpx;
+    color: var(--neutral-gray);
+    margin-right: 15rpx;
+  }
+  
+  .expect-value {
+    font-size: 30rpx;
+    color: var(--primary-red);
+    font-weight: bold;
+  }
+  
+  .wish-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .user-avatar {
+    width: 40rpx;
+    height: 40rpx;
+    border-radius: 50%;
+    margin-right: 15rpx;
+    border: 1rpx solid var(--primary-pink);
+  }
+  
+  .user-name {
+    font-size: 26rpx;
+    color: var(--neutral-text);
+    margin-right: 10rpx;
+  }
+  
+  .user-college {
+    font-size: 24rpx;
+    color: var(--neutral-gray);
+  }
+  
+  .wish-meta {
+    display: flex;
+    align-items: center;
+    gap: 20rpx;
+  }
+  
+  .match-count {
+    font-size: 24rpx;
+    color: var(--primary-red);
+    font-weight: 600;
+  }
+  
+  .create-time {
+    font-size: 24rpx;
+    color: var(--neutral-gray);
+  }
+  
+  /* 已实现标识 */
+  .fulfilled-badge {
+    position: absolute;
+    top: 20rpx;
+    right: 20rpx;
+    background: var(--success);
+    color: #2D5A3D;
+    font-size: 22rpx;
+    padding: 8rpx 16rpx;
+    border-radius: 20rpx;
+    border: 1rpx solid #A8D5BA;
+  }
+  
+  /* 愿望操作 */
+  .wish-actions {
+    position: absolute;
+    bottom: 20rpx;
+    right: 20rpx;
+  }
+  
+  .share-btn {
+    font-size: 24rpx;
+    color: var(--primary-red);
+    padding: 8rpx 16rpx;
+    border: 1rpx solid var(--primary-red);
+    border-radius: 20rpx;
+    background: rgba(255, 255, 255, 0.7);
+  }
+  
+  .my-wish-actions {
+    display: flex;
+    gap: 20rpx;
+  }
+  
+  .action-btn {
+    font-size: 24rpx;
+    padding: 8rpx 20rpx;
+    border-radius: 20rpx;
+    background: rgba(255, 255, 255, 0.7);
+  }
+  
+  .action-btn.edit {
+    color: var(--primary-red);
+    border: 1rpx solid var(--primary-red);
+  }
+  
+  .action-btn.delete {
+    color: var(--primary-red);
+    border: 1rpx solid var(--primary-red);
+  }
+  
+  /* 空状态 */
+  .empty-state {
+    text-align: center;
+    padding: 120rpx 0;
+    color: var(--neutral-gray);
+  }
+  
+  .empty-icon {
+    font-size: 120rpx;
+    margin-bottom: 30rpx;
+    opacity: 0.5;
+    color: var(--primary-pink);
+  }
+  
+  .empty-text {
+    font-size: 32rpx;
+    margin-bottom: 20rpx;
+    color: var(--neutral-dark);
+  }
+  
+  .empty-desc {
+    font-size: 28rpx;
+    color: var(--neutral-gray);
+  }
+  
+  /* 发布按钮 */
+  .publish-fab {
+    position: fixed;
+    bottom: 60rpx;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--primary-coral), var(--primary-red));
+    color: white;
+    padding: 25rpx 50rpx;
+    border-radius: 50rpx;
+    display: flex;
+    align-items: center;
+    gap: 15rpx;
+    box-shadow: 0 8rpx 32rpx rgba(232, 180, 184, 0.4);
+    border: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+  }
+  
+  .publish-fab:active {
+    transform: translateX(-50%) translateY(2rpx);
+    box-shadow: 0 4rpx 16rpx rgba(196, 180, 181, 0.4);
+  }
+  
+  .fab-icon {
+    font-size: 36rpx;
+    font-weight: bold;
+  }
+  
+  .fab-text {
+    font-size: 30rpx;
+  }

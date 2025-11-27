@@ -1,0 +1,140 @@
+<!--pages/wishpool/wishpool.wxml-->
+<view class="wishpool-page">
+  <!-- 搜索栏 -->
+  <view class="search-section">
+    <view class="search-bar">
+      <input 
+        class="search-input" 
+        placeholder="搜索愿望..." 
+        bindinput="onSearch"
+        value="{{searchValue}}"
+      />
+      <view class="search-icon">🔍</view>
+    </view>
+  </view>
+
+  <!-- 标签切换 -->
+  <view class="tabs-section">
+    <view class="tabs">
+      <view 
+        class="tab {{activeTab === 'all' ? 'active' : ''}}" 
+        data-tab="all" 
+        bindtap="switchTab"
+      >
+        全部愿望
+        <view class="tab-badge" wx:if="{{wishList.length}}">{{wishList.length}}</view>
+      </view>
+      <view 
+        class="tab {{activeTab === 'mine' ? 'active' : ''}}" 
+        data-tab="mine" 
+        bindtap="switchTab"
+      >
+        我的愿望
+        <view class="tab-badge" wx:if="{{myWishes.length}}">{{myWishes.length}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 愿望列表 -->
+  <view class="wish-list">
+    <block wx:if="{{activeTab === 'all'}}">
+      <view 
+        class="wish-item {{item.status === 'fulfilled' ? 'fulfilled' : ''}}" 
+        wx:for="{{wishList}}" 
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="onWishItemTap"
+      >
+        <view class="wish-header">
+          <view class="wish-title">{{item.title}}</view>
+          <view class="wish-type {{item.wishType}}">
+            {{item.wishType === 'buy' ? '求购' : '求换'}}
+          </view>
+        </view>
+        
+        <view class="wish-description">{{item.description}}</view>
+        
+        <view class="wish-expectation">
+          <text class="expect-label">期望：</text>
+          <text class="expect-value">
+            {{item.wishType === 'buy' ? '¥' + item.expectedPrice : item.expectedSwap}}
+          </text>
+        </view>
+        
+        <view class="wish-footer">
+          <view class="user-info">
+            <image class="user-avatar" src="{{item.user.avatar}}"></image>
+            <text class="user-name">{{item.user.nickname}}</text>
+            <text class="user-college">· {{item.user.college}}</text>
+          </view>
+          <view class="wish-meta">
+            <text class="match-count" wx:if="{{item.matchCount > 0}}">
+              {{item.matchCount}}个匹配
+            </text>
+            <text class="create-time">{{item.createTime}}</text>
+          </view>
+        </view>
+        
+        <!-- 已实现标识 -->
+        <view class="fulfilled-badge" wx:if="{{item.status === 'fulfilled'}}">🎉 已实现</view>
+        
+        <!-- 分享按钮 -->
+        <view class="wish-actions" catchtap="onShareWish" data-id="{{item.id}}">
+          <text class="share-btn">📤 分享</text>
+        </view>
+      </view>
+    </block>
+
+    <block wx:else>
+      <view 
+        class="wish-item mine" 
+        wx:for="{{myWishes}}" 
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="onWishItemTap"
+      >
+        <view class="wish-header">
+          <view class="wish-title">{{item.title}}</view>
+          <view class="wish-status {{item.status}}">
+            {{item.status === 'pending' ? '待实现' : '已实现'}}
+          </view>
+        </view>
+        
+        <view class="wish-description">{{item.description}}</view>
+        
+        <view class="wish-expectation">
+          <text class="expect-label">期望：</text>
+          <text class="expect-value">
+            {{item.wishType === 'buy' ? '¥' + item.expectedPrice : item.expectedSwap}}
+          </text>
+        </view>
+        
+        <view class="wish-footer">
+          <view class="match-info">
+            <text class="match-count" wx:if="{{item.matchCount > 0}}">
+              {{item.matchCount}}个商品匹配
+            </text>
+            <text class="no-match" wx:else>暂无匹配</text>
+          </view>
+          <view class="my-wish-actions">
+            <text class="action-btn edit" catchtap="onEditWish" data-id="{{item.id}}">编辑</text>
+            <text class="action-btn delete" catchtap="onDeleteWish" data-id="{{item.id}}">删除</text>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{getCurrentList().length === 0}}">
+      <view class="empty-icon">⭐</view>
+      <view class="empty-text">暂无愿望</view>
+      <view class="empty-desc">发布你的第一个愿望吧</view>
+    </view>
+  </view>
+
+  <!-- 发布按钮 -->
+  <view class="publish-fab" bindtap="onPublishWish">
+    <text class="fab-icon">+</text>
+    <text class="fab-text">发布愿望</text>
+  </view>
+</view>

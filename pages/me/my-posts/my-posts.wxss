@@ -1,0 +1,280 @@
+.container {
+    background: var(--neutral-light);
+    min-height: 100vh;
+    padding: 20rpx;
+    padding-bottom: 40rpx;
+  }
+  
+  /* 页面标题 */
+  .page-header {
+    background: linear-gradient(135deg, var(--primary-pink), var(--primary-coral));
+    margin-bottom: 30rpx;
+    border-radius: 24rpx;
+    padding: 40rpx 30rpx;
+    box-shadow: 0 8rpx 32rpx rgba(140, 123, 108, 0.08);
+    border: 1rpx solid rgba(232, 180, 184, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+  }
+  
+  .page-title {
+    font-size: 36rpx;
+    font-weight: bold;
+    text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
+  }
+  
+  .post-count {
+    font-size: 28rpx;
+    opacity: 0.9;
+  }
+  
+  /* 商品列表 */
+  .posts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24rpx;
+  }
+  
+  .post-item {
+    background: linear-gradient(135deg, var(--primary-pink), var(--accent-beige));
+    border-radius: 24rpx;
+    overflow: hidden;
+    box-shadow: 0 8rpx 32rpx rgba(140, 123, 108, 0.08);
+    border: 1rpx solid rgba(232, 180, 184, 0.2);
+  }
+  
+  .post-image {
+    width: 100%;
+    height: 400rpx;
+    background: var(--accent-beige);
+  }
+  
+  .post-details {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30rpx;
+  }
+  
+  /* 基本信息 */
+  .basic-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24rpx;
+  }
+  
+  .post-title {
+    flex: 1;
+    font-size: 32rpx;
+    font-weight: 600;
+    color: var(--neutral-dark);
+    line-height: 1.4;
+    margin-right: 20rpx;
+  }
+  
+  .post-status {
+    padding: 8rpx 20rpx;
+    border-radius: 20rpx;
+    font-size: 24rpx;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  
+  .post-status.selling {
+    background: var(--primary-red);
+    color: white;
+  }
+  
+  .post-status.sold {
+    background: var(--neutral-gray);
+    color: white;
+  }
+  
+  .post-status.draft {
+    background: var(--accent-beige);
+    color: var(--neutral-dark);
+  }
+  
+  /* 商品描述 */
+  .post-description {
+    display: block;
+    font-size: 28rpx;
+    color: var(--neutral-text);
+    line-height: 1.5;
+    margin-bottom: 24rpx;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 24rpx;
+    border-radius: 16rpx;
+    border-left: 6rpx solid var(--primary-coral);
+  }
+  
+  /* 信息行样式 */
+  .price-info,
+  .expected-swap,
+  .category-info,
+  .transaction-info,
+  .stats-info,
+  .time-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20rpx;
+    font-size: 28rpx;
+    padding: 16rpx 0;
+    border-bottom: 1rpx solid rgba(232, 180, 184, 0.2);
+  }
+  
+  .price-label,
+  .swap-label,
+  .category-label,
+  .transaction-label,
+  .time-label {
+    color: var(--neutral-dark);
+    min-width: 160rpx;
+    font-weight: 600;
+  }
+  
+  .price-value,
+  .swap-value,
+  .category-value,
+  .transaction-value,
+  .time-value {
+    color: var(--neutral-text);
+    flex: 1;
+  }
+  
+  .price-value {
+    font-size: 36rpx;
+    font-weight: bold;
+    color: var(--primary-red);
+  }
+  
+  .price-value.exchange {
+    color: var(--primary-coral);
+  }
+  
+  .swap-value {
+    color: var(--primary-pink);
+    background: rgba(255, 255, 255, 0.7);
+    padding: 12rpx 20rpx;
+    border-radius: 12rpx;
+    border: 1rpx solid rgba(232, 180, 184, 0.3);
+    font-weight: 600;
+  }
+  
+  .category-value {
+    color: var(--primary-coral);
+    background: rgba(255, 255, 255, 0.7);
+    padding: 8rpx 16rpx;
+    border-radius: 12rpx;
+    font-weight: 600;
+  }
+  
+  .transaction-value {
+    color: var(--primary-pink);
+    background: rgba(255, 255, 255, 0.7);
+    padding: 8rpx 16rpx;
+    border-radius: 12rpx;
+    font-weight: 600;
+  }
+  
+  /* 统计数据 */
+  .stats-info {
+    display: flex;
+    gap: 40rpx;
+  }
+  
+  .stat-item {
+    color: var(--neutral-text);
+    background: rgba(255, 255, 255, 0.7);
+    padding: 8rpx 20rpx;
+    border-radius: 20rpx;
+    font-size: 26rpx;
+    font-weight: 600;
+  }
+  
+  /* 时间信息 */
+  .time-value {
+    color: var(--neutral-gray);
+    font-size: 26rpx;
+  }
+  
+  /* 调试信息 */
+  .debug-info {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 16rpx;
+    padding: 24rpx;
+    font-size: 24rpx;
+    border: 1rpx solid rgba(232, 180, 184, 0.3);
+    box-shadow: 0 4rpx 16rpx rgba(140, 123, 108, 0.05);
+    margin-bottom: 20rpx;
+  }
+  
+  .debug-label {
+    color: var(--neutral-dark);
+    min-width: 140rpx;
+    font-weight: 600;
+  }
+  
+  .debug-value {
+    color: var(--neutral-text);
+    font-family: monospace;
+    font-size: 22rpx;
+    word-break: break-all;
+  }
+  
+  /* 空状态 */
+  .empty-state {
+    text-align: center;
+    padding: 120rpx 60rpx;
+    background: linear-gradient(135deg, var(--primary-pink), var(--accent-beige));
+    border-radius: 24rpx;
+    box-shadow: 0 8rpx 32rpx rgba(140, 123, 108, 0.08);
+    border: 1rpx solid rgba(232, 180, 184, 0.2);
+  }
+  
+  .empty-image {
+    width: 200rpx;
+    height: 200rpx;
+    margin-bottom: 40rpx;
+    opacity: 0.7;
+  }
+  
+  .empty-text {
+    display: block;
+    font-size: 32rpx;
+    color: var(--neutral-dark);
+    margin-bottom: 60rpx;
+    font-weight: 600;
+  }
+  
+  .publish-btn {
+    background: linear-gradient(135deg, var(--primary-coral), var(--primary-red));
+    color: white;
+    border: none;
+    border-radius: 50rpx;
+    padding: 0 80rpx;
+    font-size: 30rpx;
+    height: 80rpx;
+    line-height: 80rpx;
+    font-weight: 600;
+    box-shadow: 0 8rpx 32rpx rgba(232, 180, 184, 0.4);
+    transition: all 0.3s ease;
+  }
+  
+  .publish-btn:active {
+    transform: translateY(2rpx);
+    box-shadow: 0 4rpx 16rpx rgba(232, 180, 184, 0.4);
+  }
+  
+  /* 加载状态 */
+  .loading-state {
+    text-align: center;
+    padding: 80rpx;
+    color: var(--neutral-gray);
+    font-size: 28rpx;
+    background: linear-gradient(135deg, var(--primary-pink), var(--accent-beige));
+    border-radius: 24rpx;
+    box-shadow: 0 8rpx 32rpx rgba(140, 123, 108, 0.08);
+    border: 1rpx solid rgba(232, 180, 184, 0.2);
+  }
