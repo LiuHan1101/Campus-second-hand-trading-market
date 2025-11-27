@@ -204,9 +204,13 @@ onDeleteHistory(e) {
       duration: 1000
     });
   },
-  
+
     // 取消搜索
     onCancel() {
-      wx.navigateBack();
-    }
+    console.log('清空按钮被点击了');
+    const value = '';
+    this.setData({ searchValue: value});
+    this.performSearch(value.trim())
+  },
+
   });
