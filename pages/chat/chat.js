@@ -2,7 +2,7 @@
 Page({
 
   /**
-   * 页面的初始数据testtest
+   * 页面的初始数据testtest3
    */
   data: {
 
