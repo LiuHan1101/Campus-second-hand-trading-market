@@ -15,6 +15,9 @@
 =======
     "pages/me/help-feedback/help-feedback",
     "miniprogram/components/sub_package/sub_package_page"
+<<<<<<< HEAD
+>>>>>>> master3
+=======
 >>>>>>> master3
   ],
   "window": {
