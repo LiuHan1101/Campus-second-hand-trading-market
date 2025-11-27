@@ -1,31 +1,9 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
+
 {
   "desc": "关于本文件的更多信息，请参考文档 https://developers.weixin.qq.com/miniprogram/dev/framework/sitemap.html",
   "rules": [{
   "action": "allow",
   "page": "*"
   }]
-=======
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
-{
-  "desc": "关于本文件的更多信息，请参考文档 https://developers.weixin.qq.com/miniprogram/dev/framework/sitemap.html",
-  "rules": [{
-  "action": "allow",
-  "page": "*"
-  }]
-<<<<<<< HEAD
-=======
->>>>>>> wishpool
->>>>>>> 507142d3ec43d0e6e2ca63d076058a95feaa6f79
-=======
-{
-  "desc": "关于本文件的更多信息，请参考文档 https://developers.weixin.qq.com/miniprogram/dev/framework/sitemap.html",
-  "rules": [{
-  "action": "allow",
-  "page": "*"
-  }]
->>>>>>> ce311d92a2fd1dcfa084c75ee37c665e474ea8d1
+
 }
