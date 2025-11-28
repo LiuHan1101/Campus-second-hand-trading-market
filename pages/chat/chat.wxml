@@ -1,2 +1,42 @@
 <!--pages/chat/chat.wxml-->
-<text>pages/chat/chat.wxml</text>
+<view class="chat-container" style="background-color: {{colors.neutralLight}}">
+  <!-- 顶部导航 -->
+  <view class="nav-bar" style="background-color: {{colors.primaryRed}}">
+    <text class="nav-title">消息</text>
+  </view>
+
+  <!-- 聊天列表 -->
+  <view class="chat-list">
+    <block wx:for="{{chatList}}" wx:key="id">
+      <view class="chat-item" bindtap="goToChatDetail" data-chatid="{{item.id}}">
+        <!-- 头像 -->
+        <view class="avatar-container">
+          <image class="avatar" src="{{item.avatar}}" mode="aspectFill" />
+          <view class="unread-badge" wx:if="{{item.unreadCount > 0}}">
+            {{item.unreadCount > 99 ? '99+' : item.unreadCount}}
+          </view>
+        </view>
+        
+        <!-- 聊天内容 -->
+        <view class="chat-content">
+          <view class="chat-header">
+            <text class="username">{{item.username}}</text>
+            <text class="time">{{item.lastTime}}</text>
+          </view>
+          <view class="last-message">
+            <text class="message-text">{{item.lastMessage}}</text>
+          </view>
+        </view>
+        
+        <!-- 分割线 -->
+        <view class="divider"></view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{chatList.length === 0}}">
+    <image class="empty-icon" src="/images/empty-chat.png" />
+    <text class="empty-text">暂无聊天记录</text>
+  </view>
+</view>

@@ -16,7 +16,7 @@
       <text>nickname: {{userInfo.nickname}}</text>
     </view>
   </view>
-  <view class="arrow">›</view>
+  <view class="arrow" style="width: 68rpx; display: block; box-sizing: border-box; position: relative; left: 39rpx; top: 0rpx">›</view>
 </view>
 
   <!-- 数据统计 -->
@@ -43,14 +43,14 @@
 
   <!-- 功能菜单 -->
   <view class="menu-section">
-    <view class="menu-grid">
+    <view class="menu-grid" style="width: 702rpx; height: 529rpx; display: flex; box-sizing: border-box">
       <view 
         class="menu-item" 
         wx:for="{{menuItems}}" 
         wx:key="index"
         data-index="{{index}}"
         bindtap="onMenuItemTap"
-      >
+       style="position: relative; left: 15rpx; top: 6rpx; width: 687rpx; height: 175rpx; display: flex; box-sizing: border-box">
         <view class="menu-icon">{{item.icon}}</view>
         <view class="menu-title">{{item.title}}</view>
         <view class="menu-badge" wx:if="{{item.badge > 0}}">
@@ -63,7 +63,7 @@
 
   <!-- 底部操作 -->
   <view class="action-section">
-    <button class="share-btn" bindtap="onShareAppMessage" open-type="share">
+    <button class="share-btn" bindtap="onShareAppMessage" open-type="share" style="width: 333rpx; height: 81rpx; display: block; box-sizing: border-box; left: -6rpx; top: 16rpx; position: relative">
       🔗 分享给同学
     </button>
     <view class="contact-support" bindtap="onContactCustomer">

@@ -6,6 +6,7 @@ Page({
       description: '',
       images: [],
       categories: [], // 改为数组，支持多选
+      switch:'object',
       transactionType: 'cash',
       price: '',
       expectedSwap: ''
@@ -50,6 +51,14 @@ Page({
       'formData.transactionType': type
     });
   },
+
+    // 选择出物/许愿
+    onFormChange(e) {
+        const type =e.currentTarget.dataset.type;
+        this.setData({
+          'formData.switch':type
+        });
+      },
 // 在选择分类的方法中更新文本
 onCategorySelect(e) {
     const category = e.currentTarget.dataset.category;
@@ -287,6 +296,8 @@ onCategorySelect(e) {
       }
     }
 
+
+
     return true;
   },
 
@@ -316,7 +327,8 @@ async onSubmit() {
         status: 'selling',
         createTime: db.serverDate(), // 使用服务端时间
         viewCount: 0,
-        likeCount: 0
+        likeCount: 0,
+        switch:formData.switch
       };
   
       // 向goods集合添加数据
@@ -416,6 +428,7 @@ async uploadImages(imagePaths) {
         expectedSwap: this.data.formData.expectedSwap || '',
         status: 'selling',
         createTime: db.serverDate(),
+        switch:this.data.formData.switch,
         viewCount: 0,
         likeCount: 0,
         userInfo: {
@@ -481,6 +494,7 @@ async uploadImages(imagePaths) {
         categories: [],
         transactionType: 'cash',
         price: '',
+        switch:'object',
         expectedSwap: ''
       },
       showImageAction: false
@@ -559,6 +573,7 @@ async publishGoods() {
       categories: this.data.categories,
       transactionType: this.data.transactionType,
       status: 'selling',
+      switch:this.data.switch,
       createTime: db.serverDate(),
       viewCount: 0,
       likeCount: 0

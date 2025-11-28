@@ -1,2 +1,86 @@
-<!--pages/detail/detail.wxml-->
-<text>pages/detail/detail.wxml</text>
+<view class="detail-page">
+  <!-- 商品图片轮播 -->
+  <view class="image-swiper">
+    <swiper class="swiper" indicator-dots="{{true}}" autoplay="{{false}}" interval="5000" duration="500">
+      <swiper-item wx:for="{{goods.images}}" wx:key="*this">
+        <image class="swiper-image" src="{{item}}" mode="aspectFill" />
+      </swiper-item>
+    </swiper>
+  </view>
+
+  <!-- 商品信息 -->
+  <view class="goods-info">
+    <!-- 价格和收藏 -->
+    <view class="price-section">
+      <view class="price">¥{{goods.price}}</view>
+      <view class="favorite-btn {{isFavorite ? 'favorited' : ''}}" bindtap="onToggleFavorite">
+        <text class="favorite-icon">{{isFavorite ? '❤️' : '🤍'}}</text>
+        <text class="favorite-text">{{isFavorite ? '已收藏' : '收藏'}}</text>
+      </view>
+    </view>
+
+    <!-- 标题和交易类型 -->
+    <view class="title-section">
+      <text class="goods-title">{{goods.title}}</text>
+      <view class="transaction-tag {{goods.transactionType}}">
+        {{goods.transactionType === 'cash' ? '💰现金' : goods.transactionType === 'swap' ? '🔄换物' : '💰🔄现金/换物'}}
+      </view>
+    </view>
+
+    <!-- 浏览量 -->
+    <view class="view-count">浏览 {{goods.viewCount || 0}} 次</view>
+  </view>
+
+  <!-- 卖家信息 -->
+  <view class="seller-info">
+    <view class="seller-header">
+      <image class="seller-avatar" src="{{goods.user.avatar}}" />
+      <view class="seller-details">
+        <view class="seller-name">{{goods.user.nickname}}</view>
+        <view class="seller-rating">
+          <text class="rating-stars">★★★★★</text>
+          <text class="rating-score">4.8</text>
+        </view>
+      </view>
+      <view class="seller-college">{{goods.user.college || '未知学校'}}</view>
+    </view>
+  </view>
+
+  <!-- 商品描述 -->
+  <view class="description-section">
+    <view class="section-title">商品描述</view>
+    <view class="goods-description">{{goods.description}}</view>
+  </view>
+
+  <!-- 期望换物（如果是换物交易） -->
+  <view class="swap-section" wx:if="{{goods.transactionType === 'swap' || goods.transactionType === 'both'}}">
+    <view class="section-title">期望换物</view>
+    <view class="expected-swap">{{goods.expectedSwap}}</view>
+  </view>
+
+  <!-- 商品标签 -->
+  <view class="tags-section" wx:if="{{goods.tag && goods.tag.length > 0}}">
+    <view class="section-title">商品标签</view>
+    <view class="tags-list">
+      <text class="tag" wx:for="{{goods.tag}}" wx:key="*this">{{item}}</text>
+    </view>
+  </view>
+
+  <!-- 底部操作栏 -->
+  <view class="action-bar">
+    <view class="action-left">
+      <view class="action-btn chat-btn" bindtap="onChat">
+        <text class="btn-icon">💬</text>
+        <text class="btn-text">聊天</text>
+      </view>
+    </view>
+    <view class="action-right">
+      <view class="action-btn buy-btn" bindtap="onBuy" wx:if="{{goods.transactionType === 'cash' || goods.transactionType === 'both'}}">
+        <text class="btn-text">立即购买</text>
+      </view>
+      <view class="action-btn swap-btn" bindtap="onSwap" wx:if="{{goods.transactionType === 'swap' || goods.transactionType === 'both'}}">
+        <text class="btn-text">发起换物</text>
+      </view>
+    </view>
+  </view>
+</view>

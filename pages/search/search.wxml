@@ -1,0 +1,72 @@
+<view class="search-page">
+  <!-- 搜索栏 -->
+  <view class="search-header">
+    <view class="search-input-container">
+      <input 
+        class="search-input" 
+        placeholder="搜索闲置物品..." 
+        focus="{{true}}"
+        value="{{searchValue}}"
+        bindinput="onSearchInput"
+        bindconfirm="onSearchConfirm"
+      />
+      <text class="search-cancel" bindtap="onCancel">取消</text>
+    </view>
+  </view>
+
+  <!-- 搜索历史 -->
+  <view class="search-history" wx:if="{{!searchValue && searchHistory.length > 0}}">
+    <view class="history-header">
+      <text class="history-title">搜索历史</text>
+      <text class="clear-all" bindtap="onClearAllHistory">一键清除</text>
+    </view>
+    <view class="history-list">
+                <view class="history-item" wx:for="{{searchHistory}}" wx:key="*this">
+        <text class="history-text">{{item}}</text>
+        <view class="delete-btn" catchtap="onDeleteHistory" data-index="{{index}}">
+            <text class="delete-icon">×</text>
+        </view>
+        </view>
+    </view>
+  </view>
+
+  <!-- 热门搜索推荐 -->
+  <view class="hot-search" wx:if="{{!searchValue}}">
+    <view class="hot-title">热门搜索</view>
+    <view class="hot-list">
+      <text 
+        class="hot-tag" 
+        wx:for="{{hotSearchList}}" 
+        wx:key="*this"
+        bindtap="onHotTagTap"
+        data-keyword="{{item}}"
+      >{{item}}</text>
+    </view>
+  </view>
+
+  <!-- 搜索结果 -->
+  <view class="search-results" wx:if="{{searchValue}}">
+    <view class="results-count">找到 {{searchResults.length}} 个结果</view>
+    <scroll-view class="results-list" scroll-y>
+      <view 
+        class="result-item" 
+        wx:for="{{searchResults}}" 
+        wx:key="id"
+        bindtap="onResultItemTap"
+        data-item="{{item}}"
+      >
+        <image class="result-image" src="{{item.image}}" mode="aspectFill" />
+        <view class="result-info">
+          <view class="result-title">{{item.title}}</view>
+          <view class="result-price">¥{{item.price}}</view>
+          <view class="result-user">{{item.user.nickname}}</view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 无结果提示 -->
+  <view class="no-results" wx:if="{{searchValue && searchResults.length === 0}}">
+    <text class="no-results-text">没有找到相关商品</text>
+  </view>
+</view>

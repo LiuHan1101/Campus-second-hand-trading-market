@@ -119,6 +119,32 @@
       </view>
     </view>
 
+
+    <!-- 发布形式：出物/许愿 -->
+    <view class="form-group">
+      <view class="form-label">发布形式</view>
+      <view class="switch-type">
+        <view 
+          class="type-option {{formData.switch === 'object' ? 'active' : ''}}"
+          data-type="object"
+          bindtap="onFormChange"
+        >
+          <view class="type-icon">1.</view>
+          <view class="type-label">出物</view>
+        </view>
+        <view 
+          class="type-option {{formData.switch === 'wish' ? 'active' : ''}}"
+          data-type="wish"
+          bindtap="onFormChange"
+        >
+
+          <view class="type-icon">2.</view>
+          <view class="type-label">许愿</view>
+        </view>
+      </view>
+    </view>
+
+
     <!-- 价格输入 -->
     <view class="form-group" wx:if="{{formData.transactionType === 'cash' || formData.transactionType === 'both'}}">
       <view class="form-label">商品价格</view>

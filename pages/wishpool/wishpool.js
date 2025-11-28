@@ -5,9 +5,57 @@ Page({
       searchValue: '',
       wishList: [],
       myWishes: [],
+       // 基本侧边栏
+    //sidebarValue: 'hot',
+    
+    // 带徽章的侧边栏
+    //sidebarWithBadge: 'all',
+    
+    // 禁用状态的侧边栏
+    //sidebarDisabled: 'enabled',
+    
+    // 联动内容的侧边栏
+    contentSidebar: 'study',
+    categoryList: [
+        { label: '学习', value: 'study' },
+        { label: '生活', value: 'life' },
+        { label: '工作', value: 'work' },
+        { label: '健康', value: 'health' },
+        { label: '娱乐', value: 'entertainment' }
+      ],
       isLoading: false
     },
   
+// 基本侧边栏变化
+onSideBarChange(e) {
+    const { value } = e.detail
+    this.setData({
+      sidebarValue: value
+    })
+    wx.showToast({
+      title: `切换到: ${value}`,
+      icon: 'none'
+    })
+  },
+
+  // 带徽章侧边栏变化
+  onSideBarWithBadgeChange(e) {
+    this.setData({
+      sidebarWithBadge: e.detail.value
+    })
+  },
+
+  // 内容联动侧边栏变化
+  onContentSideBarChange(e) {
+    this.setData({
+      contentSidebar: e.detail.value
+    })
+  },
+
+  onLoad() {
+    console.log('WishPool 页面加载')
+  },
+    
     onLoad() {
       this.loadWishesData();
     },

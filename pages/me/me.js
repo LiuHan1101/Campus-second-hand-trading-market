@@ -15,31 +15,7 @@ Page({
         swapped: 0       // 已交换
       },
       menuItems: [
-        {
-          icon: '📦',
-          title: '我的发布',
-          url: '/pages/me/my-posts/my-posts',
-          badge: 0
-        },
-        {
-          icon: '❤️',
-          title: '我的收藏',
-          url: '/pages/me/my-favorites/my-favorites',
-          badge: 0
-        },
-
-        {
-          icon: '⭐',
-          title: '我的愿望',
-          url: '/pages/wishpool/wishpool',
-          badge: 0
-        },
-        {
-          "iconPath": '/images/me-active.png',
-          title: '我发起的换物',
-          url: '/pages/me/my-swaps/my-swaps',
-          badge: 0
-        },
+       
         {
           icon: '🛡️',
           title: '信用中心',
