@@ -22,6 +22,7 @@
   <!-- 数据统计 -->
   <view class="stats-section">
     <view class="stats-grid">
+<<<<<<< HEAD
       <view class="stat-item" data-type="selling" bindtap="onStatItemTap">
         <view class="stat-number">{{stats.selling}}</view>
         <view class="stat-label">在售</view>
@@ -37,6 +38,23 @@
       <view class="stat-item" data-type="swapped" bindtap="onStatItemTap">
         <view class="stat-number">{{stats.swapped}}</view>
         <view class="stat-label">已交换</view>
+=======
+      <view class="stat-item" data-type="published" bindtap="onStatItemTap">
+        <view class="stat-number">{{stats.published}}</view>
+        <view class="stat-label">已发布</view>
+      </view>
+      <view class="stat-item" data-type="inProgress" bindtap="onStatItemTap">
+        <view class="stat-number">{{stats.inProgress}}</view>
+        <view class="stat-label">进行中</view>
+      </view>
+      <view class="stat-item" data-type="completed" bindtap="onStatItemTap">
+        <view class="stat-number">{{stats.completed}}</view>
+        <view class="stat-label">已成交</view>
+      </view>
+      <view class="stat-item" data-type="favorites" bindtap="onStatItemTap">
+        <view class="stat-number">{{stats.favorites}}</view>
+        <view class="stat-label">收藏</view>
+>>>>>>> wishpool
       </view>
     </view>
   </view>

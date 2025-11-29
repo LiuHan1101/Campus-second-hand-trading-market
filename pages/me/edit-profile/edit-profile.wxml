@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!--pages/me/edit-profile.wxml-->
 <view class="edit-profile-page">
   <view class="header">
@@ -11,11 +12,23 @@
       <view class="avatar-section" bindtap="onChooseAvatar">
         <image class="avatar" src="{{avatarUrl}}" mode="aspectFill"></image>
         <text class="avatar-hint">点击更换</text>
+=======
+<!--pages/me/edit-profile/edit-profile.wxml-->
+<view class="edit-profile-container">
+  <view class="form-container">
+    <!-- 头像 -->
+    <view class="form-item">
+      <text class="form-label">头像</text>
+      <view class="avatar-section">
+        <image class="avatar-preview" src="{{avatarUrl}}" mode="aspectFill"></image>
+        <button class="avatar-btn" bindtap="onChooseAvatar">更换头像</button>
+>>>>>>> wishpool
       </view>
     </view>
 
     <!-- 昵称 -->
     <view class="form-item">
+<<<<<<< HEAD
       <text class="label">昵称</text>
       <input 
         class="input" 
@@ -49,4 +62,70 @@
       <button class="btn cancel-btn" bindtap="onCancel">取消</button>
     </view>
   </view>
+=======
+      <text class="form-label">昵称</text>
+      <input 
+        class="form-input" 
+        type="text" 
+        placeholder="请输入昵称（最多20个字符）"
+        value="{{nickname}}"
+        bindinput="onNicknameInput"
+        maxlength="20"
+      />
+    </view>
+
+    <!-- 性别 -->
+    <view class="form-item">
+      <text class="form-label">性别</text>
+      <picker 
+        class="form-picker"
+        range="{{genders}}" 
+        value="{{gender}}"
+        bindchange="onGenderChange"
+      >
+        <view class="picker-value">{{genders[gender]}}</view>
+      </picker>
+    </view>
+
+    <!-- 学院 -->
+    <view class="form-item">
+      <text class="form-label">学院</text>
+      <picker 
+        class="form-picker"
+        range="{{colleges}}" 
+        value="{{collegeIndex}}"
+        bindchange="onCollegeChange"
+      >
+        <view class="picker-value">{{college || '请选择学院'}}</view>
+      </picker>
+    </view>
+
+    <!-- 个人简介 -->
+    <view class="form-item">
+      <text class="form-label">个人简介</text>
+      <view class="textarea-container">
+        <textarea 
+          class="form-textarea" 
+          placeholder="介绍一下自己吧（最多100个字符）"
+          value="{{bio}}"
+          bindinput="onBioInput"
+          maxlength="100"
+        />
+        <text class="word-count">{{wordCount}}/100</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-buttons">
+    <button class="btn-cancel" bindtap="onCancel">取消</button>
+    <button 
+      class="btn-save" 
+      bindtap="onSave"
+      disabled="{{isSaving}}"
+    >
+      {{isSaving ? '保存中...' : '保存'}}
+    </button>
+  </view>
+>>>>>>> wishpool
 </view>

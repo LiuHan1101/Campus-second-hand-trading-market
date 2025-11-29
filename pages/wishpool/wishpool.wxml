@@ -31,12 +31,16 @@
                       wx:for="{{wishList}}" 
                       wx:key="id" 
                       data-id="{{item.id}}" 
+<<<<<<< HEAD
                       data-index="{{index}}"
+=======
+>>>>>>> wishpool
                       bindtap="goToDetail">
                     
                     <!-- 第一行：愿望标题 -->
                     <view class="wish-title">{{item.title}}</view>
                     
+<<<<<<< HEAD
                     <!-- 第二行：愿望描述 -->
                     <view class="wish-description" wx:if="{{item.description}}">
                         {{item.description}}
@@ -64,16 +68,46 @@
                                 </view>
                             </view>
                         </view>
+=======
+                    <!-- 第二行：用户信息和发布时间 -->
+                    <view class="wish-meta">
+                        <view class="user-info">
+                            <image class="user-avatar" src="{{item.user.avatar}}"></image>
+                            <text class="user-name">{{item.user.nickname}}</text>
+                        </view>
+                        <text class="create-time">{{item.createTime}}</text>
+                    </view>
+                    
+                    <!-- 第三行：愿望图片（如果有） -->
+                    <view class="wish-image-section" wx:if="{{item.image}}">
+                        <image class="wish-image" 
+                               src="{{item.image}}" 
+                               mode="aspectFill"
+                               data-index="{{index}}"
+                               binderror="onImageError"
+                               lazy-load="true"></image>
+                    </view>
+                    
+                    <!-- 愿望描述 -->
+                    <view class="wish-description" wx:if="{{item.description}}">
+                        {{item.description}}
+>>>>>>> wishpool
                     </view>
                     
                     <!-- 底部：价格和交易方式 -->
                     <view class="wish-footer">
                         <view class="wish-tags">
+<<<<<<< HEAD
                             <!-- 自定义标签区域 -->
                             <view class="custom-tags" wx:if="{{item.customTags && item.customTags.length > 0}}">
                                 <view class="custom-tag" wx:for="{{item.customTags}}" wx:key="*this">
                                     {{item}}
                                 </view>
+=======
+                            <view class="category-tag">{{item.tag}}</view>
+                            <view class="transaction-type {{item.transactionType}}">
+                                {{item.transactionType === 'cash' ? '现金' : item.transactionType === 'swap' ? '换物' : '均可'}}
+>>>>>>> wishpool
                             </view>
                         </view>
                         <view class="price-section">

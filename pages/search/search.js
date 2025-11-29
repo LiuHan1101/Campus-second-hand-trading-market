@@ -204,9 +204,21 @@ onDeleteHistory(e) {
       duration: 1000
     });
   },
+<<<<<<< HEAD
   
     // 取消搜索
     onCancel() {
       wx.navigateBack();
     }
+=======
+
+    // 取消搜索
+    onCancel() {
+    console.log('清空按钮被点击了');
+    const value = '';
+    this.setData({ searchValue: value});
+    this.performSearch(value.trim())
+  },
+
+>>>>>>> wishpool
   });

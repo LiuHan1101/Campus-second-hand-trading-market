@@ -1,4 +1,5 @@
 <view class="detail-page">
+<<<<<<< HEAD
   <!-- 商品图片轮播 -->
   <view class="image-swiper">
     <swiper class="swiper" indicator-dots="{{true}}" autoplay="{{false}}" interval="5000" duration="500">
@@ -48,10 +49,45 @@
         </view>
       </view>
       <view class="seller-college">{{goods.user.college || '未知学校'}}</view>
+=======
+
+<!-- 卖家信息 -->
+<view class="seller-card">
+  <view class="seller-header">
+    <image class="seller-avatar" src="{{goods.user.avatar}}" />
+    <view class="seller-details">
+      <text class="seller-name">{{goods.user.nickname}}</text>
+      <view class="seller-rating">
+        <text class="rating-stars">★★★★★</text>
+        <text class="rating-score">4.8</text>
+      </view>
+    </view>
+    <text class="seller-college">{{goods.user.college || '未知学校'}}</text>
+  </view>
+</view>
+
+<!-- 商品信息卡片 -->
+<view class="goods-card">
+  <!-- 价格和收藏 -->
+  <view class="price-section">
+    <text class="price" style="position: relative; left: 0rpx; top: -29rpx; width: 233rpx; display: block; box-sizing: border-box">¥{{goods.price}}</text>
+    <view class="favorite-btn {{isFavorite ? 'favorited' : ''}}" bindtap="onToggleFavorite">
+      <text class="favorite-icon">{{isFavorite ? '❤️' : '🤍'}}</text>
+      <text class="favorite-text">{{isFavorite ? '已收藏' : '收藏'}}</text>
+    </view>
+  </view>
+
+  <!-- 标题和交易类型 -->
+  <view class="title-section" style="position: relative; left: 0rpx; top: 266rpx">
+    <text class="goods-title" style="position: relative; left: 0rpx; top: -310rpx">{{goods.title}}</text>
+    <view class="transaction-tag {{goods.transactionType}}" style="position: relative; left: 431rpx; top: -68rpx; width: 224rpx; height: 70rpx; display: inline-block; box-sizing: border-box">
+      {{goods.transactionType === 'cash' ? '💰现金' : goods.transactionType === 'swap' ? '🔄换物' : '💰🔄现金/换物'}}
+>>>>>>> wishpool
     </view>
   </view>
 
   <!-- 商品描述 -->
+<<<<<<< HEAD
   <view class="description-section">
     <view class="section-title">商品描述</view>
     <view class="goods-description">{{goods.description}}</view>
@@ -67,10 +103,29 @@
   <view class="tags-section" wx:if="{{goods.tag && goods.tag.length > 0}}">
     <view class="section-title">商品标签</view>
     <view class="tags-list">
+=======
+  <view class="description-card" style="position: relative; left: -8rpx; top: -137rpx">
+    <text class="section-title">商品描述</text>
+    <text class="goods-description">{{goods.description}}</text>
+  </view>
+
+  <!-- 商品图片轮播 -->
+  <swiper class="swiper" indicator-dots="{{true}}" autoplay="{{false}}" interval="5000" duration="500">
+    <swiper-item wx:for="{{goods.images}}" wx:key="*this">
+      <image class="swiper-image" src="{{item}}" mode="aspectFill" />
+    </swiper-item>
+  </swiper>
+
+  <!-- 商品标签 -->
+  <view class="tags-card" wx:if="{{goods.tag && goods.tag.length > 0}}" style="position: relative; left: -8rpx; top: -779rpx; width: 424rpx; height: 129rpx; display: block; box-sizing: border-box">
+    <text class="section-title" style="position: relative; left: 0rpx; top: -29rpx">商品标签</text>
+    <view class="tags-list" style="position: relative; left: 0rpx; top: -43rpx">
+>>>>>>> wishpool
       <text class="tag" wx:for="{{goods.tag}}" wx:key="*this">{{item}}</text>
     </view>
   </view>
 
+<<<<<<< HEAD
   <!-- 底部操作栏 -->
   <view class="action-bar">
     <view class="action-left">
@@ -101,4 +156,33 @@
       </block>
     </view>
   </view>
+=======
+  <!-- 浏览量 -->
+  <text class="view-count" style="width: 147rpx; height: 27rpx; display: block; box-sizing: border-box; position: relative; left: 516rpx; top: -135rpx">浏览 {{goods.viewCount || 0}} 次</text>
+</view>
+
+<!-- 期望换物 -->
+<view class="swap-card" wx:if="{{goods.transactionType === 'swap' || goods.transactionType === 'both'}}">
+  <text class="section-title">期望换物</text>
+  <text class="expected-swap">{{goods.expectedSwap}}</text>
+</view>
+
+<!-- 底部操作栏 -->
+<view class="action-bar">
+  <view class="action-left">
+    <button class="action-btn chat-btn" bindtap="onChat">
+      <text class="btn-icon">💬</text>
+      <text class="btn-text">聊天</text>
+    </button>
+  </view>
+  <view class="action-right">
+    <button class="action-btn buy-btn" bindtap="onBuy" wx:if="{{goods.transactionType === 'cash' || goods.transactionType === 'both'}}">
+      <text class="btn-text">立即购买</text>
+    </button>
+    <button class="action-btn swap-btn" bindtap="onSwap" wx:if="{{goods.transactionType === 'swap' || goods.transactionType === 'both'}}">
+      <text class="btn-text">发起换物</text>
+    </button>
+  </view>
+</view>
+>>>>>>> wishpool
 </view>

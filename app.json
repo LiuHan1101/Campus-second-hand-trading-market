@@ -10,8 +10,15 @@
     "pages/me/edit-profile/edit-profile",
     "pages/me/credit-center/credit-center",
     "pages/me/help-feedback/help-feedback",
+<<<<<<< HEAD
     "miniprogram/components/sub_package/sub_package_page",
     "pages/search/search"
+=======
+    "pages/search/search",
+    "pages/me/profile/profile",
+    "pages/me/my-goods/my-goods",
+    "pages/me/set/set"
+>>>>>>> wishpool
   ],
   "window": {
     "navigationBarTitleText": "上财易物",

@@ -10,7 +10,16 @@
         bindinput="onSearchInput"
         bindconfirm="onSearchConfirm"
       />
+<<<<<<< HEAD
       <text class="search-cancel" bindtap="onCancel">取消</text>
+=======
+      <view 
+        class="clear-btn {{showClearBtn ? 'show' : 'hide'}}" 
+        bindtap="onCancel"
+    >
+        ×
+    </view>
+>>>>>>> wishpool
     </view>
   </view>
 

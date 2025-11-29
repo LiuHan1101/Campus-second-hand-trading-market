@@ -9,6 +9,7 @@ Page({
         joinDays: 0
       },
       stats: {
+<<<<<<< HEAD
         selling: 0,      // 在售商品
         sold: 0,         // 已售出
         bought: 0,       // 已购买
@@ -16,6 +17,14 @@ Page({
       },
       menuItems: [
        
+=======
+        published: 0,      // 已发布 
+        inProgress: 0,     // 进行中
+        completed: 0,      // 已成交 
+        favorites: 0       // 收藏
+      },
+      menuItems: [
+>>>>>>> wishpool
         {
           icon: '🛡️',
           title: '信用中心',
@@ -25,7 +34,11 @@ Page({
         {
           icon: '⚙️',
           title: '设置',
+<<<<<<< HEAD
           url: '/pages/me/settings',
+=======
+          url: '/pages/me/set/set',
+>>>>>>> wishpool
           badge: 0
         },
         {
@@ -37,6 +50,7 @@ Page({
       ],
       isLoading: true
     },
+<<<<<<< HEAD
   
 
 
@@ -45,6 +59,8 @@ Page({
 
     
 
+=======
+>>>>>>> wishpool
 
     onLoad() {
         this.loadUserInfoFromDatabase();
@@ -155,6 +171,7 @@ Page({
       
       return diffDays > 0 ? diffDays : 0;
     },
+<<<<<<< HEAD
   
 
 
@@ -173,6 +190,8 @@ Page({
 
 
 
+=======
+>>>>>>> wishpool
 
     // 加载用户统计数据
     async loadUserStats() {
@@ -180,21 +199,35 @@ Page({
         const db = wx.cloud.database();
         
         // 获取在售商品数量
+<<<<<<< HEAD
         const sellingResult = await db.collection('POST')
+=======
+        const publishedResult = await db.collection('POST')
+>>>>>>> wishpool
           .where({
             status: 'selling'
           })
           .count();
         
         // 获取已售出商品数量（需要你的业务逻辑）
+<<<<<<< HEAD
         const soldResult = await db.collection('POST')
           .where({
             status: 'sold'
+=======
+        const inProgressResult = await db.collection('POST')
+          .where({
+            status: 'in_progress'
+>>>>>>> wishpool
           })
           .count();
         
         // 获取愿望数量
+<<<<<<< HEAD
         const wishesResult = await db.collection('wishes')
+=======
+        const favoritesResult = await db.collection('wishes')
+>>>>>>> wishpool
           .where({
             status: 'pending'
           })
@@ -202,10 +235,17 @@ Page({
   
         this.setData({
           stats: {
+<<<<<<< HEAD
             selling: sellingResult.total || 0,
             sold: soldResult.total || 0,
             bought: 0,  // 需要购买记录表
             swapped: wishesResult.total || 0  // 暂时用愿望数量代替
+=======
+            published: publishedResult.total || 0,
+            inProgress: inProgressResult.total || 0,
+            completed: 0,  // 需要已成交记录表
+            favorites: favoritesResult.total || 0
+>>>>>>> wishpool
           }
         });
   
@@ -217,10 +257,17 @@ Page({
         // 使用默认数据
         this.setData({
           stats: {
+<<<<<<< HEAD
             selling: 0,
             sold: 0,
             bought: 0,
             swapped: 0
+=======
+            published: 0,
+            inProgress: 0,
+            completed: 0,
+            favorites: 0
+>>>>>>> wishpool
           }
         });
       }
@@ -230,17 +277,23 @@ Page({
     updateMenuBadges() {
       const menuItems = [...this.data.menuItems];
       
+<<<<<<< HEAD
       // 更新我的发布徽章
       menuItems[0].badge = this.data.stats.selling;
       
       // 更新我的愿望徽章
       menuItems[3].badge = this.data.stats.swapped;
+=======
+      // 更新帮助与反馈徽章（现在索引为2）
+      menuItems[2].badge = this.data.stats.favorites;
+>>>>>>> wishpool
       
       this.setData({ menuItems });
     },
   
     // 点击菜单项
     onMenuItemTap(e) {
+<<<<<<< HEAD
       const index = e.currentTarget.dataset.index;
       const item = this.data.menuItems[index];
       
@@ -301,21 +354,109 @@ onUserInfoTap() {
 
 
 
+=======
+        const index = e.currentTarget.dataset.index;
+        const item = this.data.menuItems[index];
+        
+        console.log('点击菜单项:', item.title, '路径:', item.url);
+        
+        if (item.url) {
+          wx.navigateTo({
+            url: item.url,
+            success: (res) => {
+              console.log('跳转成功:', res);
+            },
+            fail: (err) => {
+              console.error('跳转失败:', err);
+              this.showNavigationError(item.title, err);
+            }
+          });
+        } else {
+          wx.showToast({
+            title: `${item.title}功能开发中`,
+            icon: 'none'
+          });
+        }
+      },
+  
+      // 显示导航错误信息
+      showNavigationError(title, error) {
+        wx.showModal({
+          title: '跳转失败',
+          content: `无法打开${title}\n错误: ${error.errMsg}\n\n请检查页面文件是否存在`,
+          showCancel: false,
+          confirmText: '知道了'
+        });
+      },
+
+    // 点击用户信息区域 - 唯一进入个人主页的入口
+    onUserInfoTap() {
+        console.log('跳转到个人主页');
+        
+        // 直接跳转到个人主页
+        wx.navigateTo({
+          url: '/pages/me/profile/profile',
+          success: (res) => {
+            console.log('跳转到个人主页成功:', res);
+          },
+          fail: (err) => {
+            console.error('跳转到个人主页失败:', err);
+            // 显示具体错误信息
+            wx.showModal({
+              title: '跳转失败',
+              content: `错误: ${err.errMsg}\n\n请检查个人主页文件是否存在`,
+              showCancel: false
+            });
+          }
+        });
+    },
+>>>>>>> wishpool
 
     // 点击数据统计项
     onStatItemTap(e) {
       const type = e.currentTarget.dataset.type;
       const statsMap = {
+<<<<<<< HEAD
         selling: '在售商品',
         sold: '已售出',
         bought: '已购买',
         swapped: '已交换'
       };
+=======
+        published: '已发布商品',
+        inProgress: '进行中交易',
+        completed: '已成交',
+        favorites: '收藏'
+      };
+      // 跳转到对应的列表页面
+      let url = '';
+      switch(type) {
+        case 'published':
+          url = '/pages/me/my-goods/my-goods?type=published';
+          break;
+        case 'inProgress':
+          url = '/pages/me/my-goods/my-goods?type=inProgress';
+          break;
+        case 'completed':
+          url = '/pages/me/my-goods/my-goods?type=completed';
+          break;
+        case 'favorites':
+          url = '/pages/me/my-goods/my-goods?type=favorites';
+          break;
+      }
+  
+      if (url) {
+        wx.navigateTo({
+          url: url
+        });
+      }
+>>>>>>> wishpool
       
       wx.showToast({
         title: `查看${statsMap[type]}`,
         icon: 'none'
       });
+<<<<<<< HEAD
       
        可以跳转到对应的列表页面
       if (type === 'selling') {
@@ -323,6 +464,8 @@ onUserInfoTap() {
           url: '/pages/me/my-goods/my-goods?type=selling'
         });
       }
+=======
+>>>>>>> wishpool
     },
   
     // 分享功能
@@ -342,8 +485,11 @@ onUserInfoTap() {
         showCancel: false
       });
     },
+<<<<<<< HEAD
 
 
     
 
+=======
+>>>>>>> wishpool
   })
