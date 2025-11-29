@@ -1,0 +1,84 @@
+<!--components/confirm-popup/confirm-popup.wxml-->
+<view class="popup-mask" wx:if="{{show}}" bindtap="onMaskTap" catchtouchmove="preventTouchMove">
+  <view class="popup-container" catchtap="onContainerTap">
+    <!-- 弹窗头部 -->
+    <view class="popup-header">
+      <text class="popup-title">确认线下交易信息</text>
+    </view>
+    
+    <!-- 协商提示 -->
+    <view class="negotiation-tip">
+      <text class="tip-icon">💡</text>
+      <text class="tip-text">请与卖家协商确认后再填写交易信息</text>
+    </view>
+    
+    <!-- 交易信息表单 -->
+    <view class="form-section">
+      <!-- 交易时间 -->
+      <view class="form-item">
+        <text class="form-label">交易时间</text>
+        <picker 
+          mode="date" 
+          value="{{transactionDate}}" 
+          bindchange="onDateChange"
+          class="date-picker"
+        >
+          <view class="picker-display {{transactionDate ? 'has-value' : ''}}">
+            {{transactionDate ? transactionDate : '请选择日期'}}
+          </view>
+        </picker>
+        <picker 
+          mode="time" 
+          value="{{transactionTime}}" 
+          bindchange="onTimeChange"
+          class="time-picker"
+        >
+          <view class="picker-display {{transactionTime ? 'has-value' : ''}}">
+            {{transactionTime ? transactionTime : '请选择时间'}}
+          </view>
+        </picker>
+      </view>
+      
+      <!-- 交易地点 -->
+      <view class="form-item">
+        <text class="form-label">交易地点</text>
+        <input 
+          class="location-input" 
+          placeholder="请输入具体交易地点（如：图书馆门口、食堂三楼等）"
+          value="{{transactionLocation}}"
+          bindinput="onLocationInput"
+        />
+      </view>
+      
+      <!-- 备注信息 -->
+      <view class="form-item">
+        <text class="form-label">备注信息</text>
+        <textarea 
+          class="remark-textarea" 
+          placeholder="可填写其他约定事项（选填）"
+          value="{{transactionRemark}}"
+          bindinput="onRemarkInput"
+          maxlength="100"
+        />
+        <text class="word-count">{{transactionRemark.length}}/100</text>
+      </view>
+    </view>
+    
+    <!-- 商品信息 -->
+    <view class="product-info">
+      <image class="product-image" src="{{productInfo.image}}" mode="aspectFill"></image>
+      <view class="product-details">
+        <text class="product-title">{{productInfo.title}}</text>
+        <view class="price-section">
+          <text class="product-price">¥{{productInfo.price}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 按钮区域 -->
+    <view class="button-group">
+      <button class="btn btn-cancel" bindtap="onCancel">取消</button>
+      <button class="btn btn-confirm" bindtap="onConfirm">确认交易</button>
+    </view>
+  </view>
+</view>

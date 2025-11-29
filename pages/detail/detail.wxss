@@ -1,3 +1,32 @@
+<<<<<<< HEAD
+.detail-page {
+    background: #f5f5f5;
+    padding-bottom: 120rpx;
+  }
+  
+  /* 图片轮播 */
+  .image-swiper {
+    height: 500rpx;
+    background: #fff;
+  }
+  
+  .swiper {
+    height: 100%;
+  }
+  
+  .swiper-image {
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* 商品信息 */
+  .goods-info {
+    background: #fff;
+    padding: 30rpx;
+    margin-bottom: 20rpx;
+  }
+  
+=======
 /* 页面容器 */
 .detail-page {
     background: #f8f9fa;
@@ -73,16 +102,25 @@
   }
   
   /* 价格和收藏区域 */
+>>>>>>> wishpool
   .price-section {
     display: flex;
     justify-content: space-between;
     align-items: center;
+<<<<<<< HEAD
+    margin-bottom: 20rpx;
+=======
     margin-bottom: 30rpx;
+>>>>>>> wishpool
   }
   
   .price {
     font-size: 48rpx;
+<<<<<<< HEAD
+    font-weight: bold;
+=======
     font-weight: 700;
+>>>>>>> wishpool
     color: #ff6b35;
   }
   
@@ -91,6 +129,16 @@
     flex-direction: column;
     align-items: center;
     padding: 16rpx;
+<<<<<<< HEAD
+  }
+  
+  .favorite-btn.favorited .favorite-icon {
+    color: #ff6b35;
+  }
+  
+  .favorite-icon {
+    font-size: 40rpx;
+=======
     border-radius: 16rpx;
     background: #f8f9fa;
     transition: all 0.3s;
@@ -103,6 +151,7 @@
   
   .favorite-icon {
     font-size: 36rpx;
+>>>>>>> wishpool
     margin-bottom: 8rpx;
   }
   
@@ -111,6 +160,122 @@
     color: #666;
   }
   
+<<<<<<< HEAD
+  .title-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20rpx;
+  }
+  
+  .goods-title {
+    flex: 1;
+    font-size: 32rpx;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.4;
+    margin-right: 20rpx;
+  }
+  
+  .transaction-tag {
+    padding: 8rpx 16rpx;
+    border-radius: 20rpx;
+    font-size: 24rpx;
+    white-space: nowrap;
+  }
+  
+  .transaction-tag.cash {
+    background: #e6f7ff;
+    color: #1890ff;
+    border: 1rpx solid #91d5ff;
+  }
+  
+  .transaction-tag.swap {
+    background: #f6ffed;
+    color: #52c41a;
+    border: 1rpx solid #b7eb8f;
+  }
+  
+  .transaction-tag.both {
+    background: #fff7e6;
+    color: #fa8c16;
+    border: 1rpx solid #ffd591;
+  }
+  
+  .view-count {
+    font-size: 24rpx;
+    color: #999;
+  }
+  
+  /* 卖家信息 */
+  .seller-info {
+    background: #fff;
+    padding: 30rpx;
+    margin-bottom: 20rpx;
+  }
+  
+  .seller-header {
+    display: flex;
+    align-items: center;
+  }
+  
+  .seller-avatar {
+    width: 80rpx;
+    height: 80rpx;
+    border-radius: 50%;
+    margin-right: 20rpx;
+  }
+  
+  .seller-details {
+    flex: 1;
+  }
+  
+  .seller-name {
+    font-size: 28rpx;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8rpx;
+  }
+  
+  .seller-rating {
+    display: flex;
+    align-items: center;
+  }
+  
+  .rating-stars {
+    color: #ffb400;
+    font-size: 24rpx;
+    margin-right: 10rpx;
+  }
+  
+  .rating-score {
+    font-size: 24rpx;
+    color: #666;
+  }
+  
+  .seller-college {
+    font-size: 24rpx;
+    color: #999;
+  }
+  
+  /* 描述和标签区域 */
+  .description-section,
+  .swap-section,
+  .tags-section {
+    background: #fff;
+    padding: 30rpx;
+    margin-bottom: 20rpx;
+  }
+  
+  .section-title {
+    font-size: 28rpx;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20rpx;
+  }
+  
+  .goods-description,
+=======
   .favorite-btn.favorited .favorite-text {
     color: #ff6b35;
   }
@@ -235,12 +400,30 @@
     box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.06);
   }
   
+>>>>>>> wishpool
   .expected-swap {
     font-size: 28rpx;
     color: #666;
     line-height: 1.6;
+<<<<<<< HEAD
+  }
+  
+  .tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16rpx;
+  }
+  
+  .tag {
+    background: #f8f9fa;
+    color: #666;
+    padding: 12rpx 20rpx;
+    border-radius: 20rpx;
+    font-size: 24rpx;
+=======
     display: block;
     margin-top: 20rpx;
+>>>>>>> wishpool
   }
   
   /* 底部操作栏 */
@@ -249,6 +432,22 @@
     bottom: 0;
     left: 0;
     right: 0;
+<<<<<<< HEAD
+    background: #fff;
+    padding: 20rpx 30rpx;
+    display: flex;
+    align-items: center;
+    border-top: 1rpx solid #eee;
+    box-shadow: 0 -2rpx 10rpx rgba(0,0,0,0.1);
+  }
+  
+  .action-left {
+    display: flex;
+  }
+  
+  .action-right {
+    flex: 1;
+=======
     background: white;
     padding: 20rpx 30rpx;
     display: flex;
@@ -265,6 +464,7 @@
   
   .action-right {
     flex: 2;
+>>>>>>> wishpool
     display: flex;
     justify-content: flex-end;
     gap: 20rpx;
@@ -278,6 +478,8 @@
     border-radius: 40rpx;
     font-size: 28rpx;
     font-weight: 500;
+<<<<<<< HEAD
+=======
     padding: 24rpx 0;
     border-radius: 16rpx;
     font-size: 28rpx;
@@ -291,6 +493,7 @@
   
   .action-btn:active {
     transform: scale(0.98);
+>>>>>>> wishpool
   }
   
   .chat-btn {
@@ -319,6 +522,8 @@
     background: #52c41a;
     color: #fff;
     min-width: 200rpx;
+<<<<<<< HEAD
+=======
     color: #666;
     flex: 1;
   }
@@ -345,4 +550,5 @@
   .btn-text {
     font-size: 28rpx;
     font-weight: 500;
+>>>>>>> wishpool
   }

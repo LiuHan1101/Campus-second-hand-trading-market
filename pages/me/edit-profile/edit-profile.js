@@ -1,13 +1,20 @@
+<<<<<<< HEAD
+// pages/me/edit-profile.js
+=======
 // pages/me/edit-profile/edit-profile.js
+>>>>>>> wishpool
 Page({
     data: {
       avatarUrl: '/images/avatar.png',
       nickname: '',
       college: '',
       collegeIndex: 0,
+<<<<<<< HEAD
+=======
       bio: '',
       gender: 0,
       genders: ['未知', '男', '女'],
+>>>>>>> wishpool
       colleges: [
         '会计学院',
         '金融学院', 
@@ -18,8 +25,12 @@ Page({
         '艺术学院',
         '其他学院'
       ],
+<<<<<<< HEAD
+      isSaving: false
+=======
       isSaving: false,
       wordCount: 0
+>>>>>>> wishpool
     },
   
     onLoad(options) {
@@ -39,10 +50,14 @@ Page({
             avatarUrl: userInfo.avatar || '/images/avatar.png',
             nickname: userInfo.nickname || '',
             college: userInfo.college || '',
+<<<<<<< HEAD
+            collegeIndex: collegeIndex >= 0 ? collegeIndex : 0
+=======
             collegeIndex: collegeIndex >= 0 ? collegeIndex : 0,
             bio: userInfo.bio || '',
             gender: userInfo.gender || 0,
             wordCount: (userInfo.bio || '').length
+>>>>>>> wishpool
           });
         }
       } catch (error) {
@@ -57,8 +72,11 @@ Page({
         count: 1,
         mediaType: ['image'],
         sourceType: ['album', 'camera'],
+<<<<<<< HEAD
+=======
         maxWidth: 800,
         maxHeight: 800,
+>>>>>>> wishpool
         success: (res) => {
           console.log('选择的图片:', res.tempFiles[0].tempFilePath);
           this.setData({
@@ -82,6 +100,8 @@ Page({
       });
     },
   
+<<<<<<< HEAD
+=======
     // 输入个人简介
     onBioInput(e) {
       const bio = e.detail.value;
@@ -91,6 +111,7 @@ Page({
       });
     },
   
+>>>>>>> wishpool
     // 选择学院
     onCollegeChange(e) {
       const index = parseInt(e.detail.value);
@@ -100,6 +121,8 @@ Page({
       });
     },
   
+<<<<<<< HEAD
+=======
     // 选择性别
     onGenderChange(e) {
       const index = parseInt(e.detail.value);
@@ -108,6 +131,7 @@ Page({
       });
     },
   
+>>>>>>> wishpool
     // 保存信息
     async onSave() {
       if (this.data.isSaving) return;
@@ -121,6 +145,8 @@ Page({
         return;
       }
   
+<<<<<<< HEAD
+=======
       if (this.data.nickname.trim().length > 20) {
         wx.showToast({ 
           title: '昵称不能超过20个字符', 
@@ -137,6 +163,7 @@ Page({
         return;
       }
   
+>>>>>>> wishpool
       if (!this.data.college) {
         wx.showToast({ 
           title: '请选择学院', 
@@ -157,8 +184,11 @@ Page({
           nickname: this.data.nickname.trim(),
           college: this.data.college,
           avatar: this.data.avatarUrl,
+<<<<<<< HEAD
+=======
           bio: this.data.bio.trim(),
           gender: this.data.gender,
+>>>>>>> wishpool
           isVerified: true,
           updateTime: new Date().toISOString()
         };

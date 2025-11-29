@@ -1,3 +1,13 @@
 {
+<<<<<<< HEAD
+  "usingComponents": {},
+  "navigationBarTitleText": "消息",
+  "navigationBarBackgroundColor": "#E8B4B8",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#FAF7F2",
+  "backgroundTextStyle": "dark",
+  "enablePullDownRefresh": true
+=======
   "usingComponents": {}
+>>>>>>> wishpool
 }
