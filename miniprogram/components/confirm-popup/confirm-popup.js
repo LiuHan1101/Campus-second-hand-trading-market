@@ -10,22 +10,16 @@ Component({
       value: {
         image: '',
         title: '',
-        price: 0,
-        quantity: 1
-      }
-    },
-    orderInfo: {
-      type: Object,
-      value: {
-        orderNumber: '',
-        deliveryTime: '',
-        tip: ''
+        price: 0
       }
     }
   },
 
   data: {
-    defaultTip: '协商发货后订单须在约定发货当天24点前发出并接收，该时间将作为是否延迟发货的判断依据，请知悉。注：消费者仅支持手机操作'
+    transactionDate: '', // 交易日期
+    transactionTime: '', // 交易时间
+    transactionLocation: '', // 交易地点
+    transactionRemark: '' // 备注信息
   },
 
   methods: {
@@ -41,24 +35,103 @@ Component({
       return;
     },
 
+    // 日期选择
+    onDateChange(e) {
+      this.setData({
+        transactionDate: e.detail.value
+      });
+    },
+
+    // 时间选择
+    onTimeChange(e) {
+      this.setData({
+        transactionTime: e.detail.value
+      });
+    },
+
+    // 地点输入
+    onLocationInput(e) {
+      this.setData({
+        transactionLocation: e.detail.value
+      });
+    },
+
+    // 备注输入
+    onRemarkInput(e) {
+      this.setData({
+        transactionRemark: e.detail.value
+      });
+    },
+
     onCancel() {
+      this.resetForm();
       this.triggerEvent('cancel');
       this.triggerEvent('close');
     },
 
     onConfirm() {
-      this.triggerEvent('confirm');
+      // 表单验证
+      if (!this.validateForm()) {
+        return;
+      }
+
+      const transactionInfo = {
+        date: this.data.transactionDate,
+        time: this.data.transactionTime,
+        location: this.data.transactionLocation,
+        remark: this.data.transactionRemark
+      };
+
+      this.triggerEvent('confirm', transactionInfo);
+      this.resetForm();
+    },
+
+    // 表单验证
+    validateForm() {
+      const { transactionDate, transactionTime, transactionLocation } = this.data;
+      
+      if (!transactionDate) {
+        wx.showToast({
+          title: '请选择交易日期',
+          icon: 'none'
+        });
+        return false;
+      }
+
+      if (!transactionTime) {
+        wx.showToast({
+          title: '请选择交易时间',
+          icon: 'none'
+        });
+        return false;
+      }
+
+      if (!transactionLocation.trim()) {
+        wx.showToast({
+          title: '请输入交易地点',
+          icon: 'none'
+        });
+        return false;
+      }
+
+      return true;
+    },
+
+    // 重置表单
+    resetForm() {
+      this.setData({
+        transactionDate: '',
+        transactionTime: '',
+        transactionLocation: '',
+        transactionRemark: ''
+      });
     }
   },
 
   lifetimes: {
-    attached() {
-      // 设置默认提示内容
-      if (!this.data.orderInfo.tip) {
-        this.setData({
-          'orderInfo.tip': this.data.defaultTip
-        });
-      }
+    detached() {
+      // 组件销毁时重置表单
+      this.resetForm();
     }
   }
 })
