@@ -198,8 +198,8 @@
     font-size: 28rpx;
     color: #999;
   }
-<<<<<<< HEAD
-=======
+
+
   .clear-btn {
     width: 60rpx;
     height: 60rpx;
@@ -212,8 +212,6 @@
     color: #999;
     margin-left: 20rpx;
   }
-  
-  .clear-btn.show {
-    display: flex;
-  }
->>>>>>> wishpool
+
+
+

@@ -401,10 +401,10 @@
     color: white;
     border: none;
     border-radius: 16rpx;
-    padding: 30rpx;
-    font-size: 40rpx;
+    padding: 10rpx;
+    font-size: 30rpx;
     font-weight: bold;
-    margin-top:40rpx;
+    margin-top:10rpx;
     box-shadow: 0 8rpx 32rpx rgba(232, 180, 184, 0.4);
     transition: all 0.3s ease;
   }
@@ -425,7 +425,6 @@
     text-align: center;
     margin-top: 30rpx;
     padding: 20rpx;
-    background: rgba(255, 255, 255, 0.5);
     border-radius: 12rpx;
     border: 1rpx solid rgba(232, 180, 184, 0.3);
     display: flex;
@@ -448,4 +447,197 @@
     font-size: 26rpx;
     color: var(--neutral-dark);
     font-weight: 600;
+  }
+
+
+  /* 自定义标签模态框样式 */
+.custom-tag-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+  }
+  
+  .custom-tag-mask {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+  }
+  
+  .custom-tag-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 600rpx;
+    background: white;
+    border-radius: 20rpx;
+    overflow: hidden;
+    box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.2);
+  }
+  
+  .custom-tag-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40rpx 30rpx 30rpx;
+    border-bottom: 1rpx solid #f0f0f0;
+  }
+  
+  .custom-tag-title {
+    font-size: 32rpx;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .custom-tag-close {
+    font-size: 40rpx;
+    color: #999;
+    padding: 10rpx;
+  }
+  
+  .custom-tag-body {
+    padding: 40rpx 30rpx;
+  }
+  
+  .input-container {
+    position: relative;
+    margin-bottom: 20rpx;
+  }
+  
+  .custom-tag-input {
+    border: 2rpx solid #e0e0e0;
+    border-radius: 12rpx;
+    padding: 24rpx;
+    font-size: 28rpx;
+    background: #fafafa;
+  }
+  
+  .custom-tag-input:focus {
+    border-color: #07c160;
+    background: white;
+  }
+  
+  .placeholder {
+    color: #ccc;
+  }
+  
+  .char-count {
+    position: absolute;
+    right: 20rpx;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 24rpx;
+    color: #999;
+  }
+  
+  .char-count.exceed {
+    color: #f17573;
+    font-weight: bold;
+  }
+  
+  .custom-tag-tip {
+    font-size: 24rpx;
+    color: #999;
+    text-align: center;
+  }
+  
+  .custom-tag-footer {
+    display: flex;
+    border-top: 1rpx solid #f0f0f0;
+  }
+  
+  .custom-tag-btn {
+    flex: 1;
+    border: none;
+    border-radius: 50rpx;
+    padding: 30r}
+
+    /* 自定义标签区域样式 */
+.custom-tags-section {
+    margin-bottom: 20rpx;
+    padding: 20rpx;
+    background: #f8f9fa;
+    border-radius: 12rpx;
+  }
+  
+  .custom-tags-header {
+    margin-bottom: 16rpx;
+  }
+  
+  .custom-tags-title {
+    font-size: 28rpx;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .custom-tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16rpx;
+  }
+  
+  .custom-tag-item {
+    display: flex;
+    align-items: center;
+    padding: 12rpx 20rpx;
+    background: #e6f7ff;
+    border: 1rpx solid #91d5ff;
+    border-radius: 24rpx;
+    font-size: 24rpx;
+  }
+  
+  .custom-tag-text {
+    color: #1890ff;
+    margin-right: 8rpx;
+  }
+  
+  .custom-tag-remove {
+    color: #1890ff;
+    font-size: 32rpx;
+    line-height: 1;
+    cursor: pointer;
+  }
+  
+  /* 已选择标签列表样式 */
+  .selected-tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16rpx;
+    margin-top: 16rpx;
+  }
+  
+  .selected-tag-item {
+    display: flex;
+    align-items: center;
+    padding: 12rpx 20rpx;
+    background: #f0f0f0;
+    border-radius: 24rpx;
+    font-size: 24rpx;
+  }
+  
+  .selected-tag-text {
+    color: #666;
+    margin-right: 8rpx;
+  }
+  
+  .selected-tag-remove {
+    color: #999;
+    font-size: 32rpx;
+    line-height: 1;
+    cursor: pointer;
+  }
+  
+  /* 自定义标签添加按钮 */
+  .custom-tag-add {
+    background: #f8f9fa !important;
+    border: 1rpx dashed #d9d9d9 !important;
+  }
+  
+  .custom-tag-add .category-icon {
+    color: #1890ff;
   }

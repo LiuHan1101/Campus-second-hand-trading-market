@@ -8,8 +8,6 @@
     </view>
   </view>
 
-
-
   <!-- 标签切换 -->
   <view class="tabs" style="height: 125rpx; display: flex; font-size: 100px; text-align: center; width: 712rpx; box-sizing: border-box">
     <view 
@@ -32,21 +30,24 @@
         wx:for="{{cashGoodsList}}" 
         wx:key="id"
         data-id="{{item.id}}"
-        bindtap="goToDetail"
-       style="width: 702rpx; height: 195rpx; display: flex; box-sizing: border-box; left: -16rpx; top: 0rpx">
-        <image class="goods-image" src="{{item.image}}" style="width: 335rpx; height: 170rpx; display: block; box-sizing: border-box; position: relative; left: 18rpx; top: 16rpx"></image>
-        <view class="goods-info" style="width: 550rpx; height: 199rpx; display: flex; box-sizing: border-box">
-            <view class="goods-item" style="width: 483rpx; height: 191rpx; display: block; box-sizing: border-box; left: 16rpx; top: -18rpx; position: relative">
+        bindtap="goToDetail"       
+       style="width: 702rpx; height: 200rpx; display: flex; box-sizing: border-box; left: -18rpx; top: 0rpx">
+
+        <image class="goods-image" src="{{item.image}}" style="width: 187rpx; height: 177rpx; display: block; box-sizing: border-box; position: relative; left: 22rpx; top: 12rpx"></image>
+
+        <view class="goods-info" style="width: 500rpx; height: 156rpx; display: flex; box-sizing: border-box">
+            <view class="goods-item" style="width: 489rpx; display: block; box-sizing: border-box; left: -8rpx; top: -20rpx; position: relative; height: 170rpx">
             <view class="goods-title" style="position: relative; left: 16rpx; top: 22rpx; width: 356rpx; height: 33rpx; display: block; box-sizing: border-box">{{item.title}}</view>
             <view class="goods-price" style="position: absolute; left: 272rpx; top: 22rpx; width: 189rpx; display: block; box-sizing: border-box">¥{{item.price}}</view>
             <view class="goods-user" style="position: relative; left: 16rpx; top: 38rpx">{{item.user.nickname}}</view>
-            <view class="goods-time" style="width: 189rpx; height: 39rpx; display: block; box-sizing: border-box; position: relative; left: 277rpx; top: 11rpx">{{item.createTime}}</view>
+            <view class="goods-time" style="width: 189rpx; height: 39rpx; display: block; box-sizing: border-box; position: relative; left: 281rpx; top: -12rpx">{{item.createTime}}</view>
             <view class="goods-tag" style="width: 356rpx; height: 39rpx; display: inline-block; box-sizing: border-box; position: relative; left: 16rpx; top: 3rpx">{{item.tag}}</view>
-            <view class="goods-type" style="width: 81rpx; height: 33rpx; display: block; box-sizing: border-box; left: 379rpx; top: 153rpx">{{item.transactionType}}</view>
+            <view class="goods-type" style="width: 81rpx; height: 33rpx; display: block; box-sizing: border-box; left: 370rpx; top: 150rpx; position: absolute">{{item.transactionType}}</view>
 </view>
 
 
         </view>
+
       </view>
     </block>
 
@@ -57,19 +58,25 @@
     wx:key="id"
     data-id="{{item.id}}"
     bindtap="goToDetail"
-  >
-    <image class="goods-image" src="{{item.image}}"></image>
-    <view class="goods-content">
-      <view class="goods-title">{{item.title}}</view>
-      <view class="goods-price">¥{{item.price}}</view>
-      <view class="goods-user">{{item.user.nickname}}</view>
-      <view class="goods-time">{{item.createTime}}</view>
-      <view class="goods-swap">想换: {{item.expectedSwap}}</view>
-      <view class="goods-type">{{item.transactionType}}</view>
-    </view>
-  </view>
-</block>
-  </view>
+    style="width: 702rpx; height: 195rpx; display: flex; box-sizing: border-box; left: -16rpx; top: 0rpx">
+
+    <image class="goods-image" src="{{item.image}}" style="width: 187rpx; height: 177rpx; display: block; box-sizing: border-box; position: relative; left: 22rpx; top: 12rpx"></image>
+    <view class="goods-info" style="width: 500rpx; height: 156rpx; display: flex; box-sizing: border-box">
+            <view class="goods-item" style="width: 489rpx; display: block; box-sizing: border-box; left: -8rpx; top: -20rpx; position: relative; height: 170rpx">
+            <view class="goods-title" style="position: relative; left: 16rpx; top: 22rpx; width: 356rpx; height: 33rpx; display: block; box-sizing: border-box">{{item.title}}</view>
+            <view class="goods-price" style="position: absolute; left: 272rpx; top: 22rpx; width: 189rpx; display: block; box-sizing: border-box">¥{{item.price}}</view>
+            <view class="goods-user" style="position: relative; left: 16rpx; top: 38rpx">{{item.user.nickname}}</view>
+            <view class="goods-time" style="width: 189rpx; height: 39rpx; display: block; box-sizing: border-box; position: relative; left: 281rpx; top: -12rpx">{{item.createTime}}</view>
+            <view class="goods-tag" style="width: 356rpx; height: 39rpx; display: inline-block; box-sizing: border-box; position: relative; left: 16rpx; top: 3rpx">{{item.tag}}</view>
+            <view class="goods-type" style="width: 81rpx; height: 33rpx; display: block; box-sizing: border-box; left: 370rpx; top: 150rpx; position: absolute">{{item.transactionType}}</view>
+</view>
+
+
+
+     </view>
+   </view>
+    </block>
+</view>
 </view>
 
 <image 

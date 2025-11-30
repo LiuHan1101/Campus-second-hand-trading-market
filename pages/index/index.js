@@ -5,11 +5,11 @@ Page({
       cashGoodsList: [],
       swapGoodsList: [],
       searchValue: '',
-      isLoading: false,
-      
+      isLoading: false ,
     },
+  
   // 图片加载失败处理
-onImageError(e) {
+  onImageError(e) {
     const index = e.currentTarget.dataset.index;
     const { activeTab } = this.data;
     
@@ -28,6 +28,7 @@ onImageError(e) {
       });
     }
   },
+  
     onLoad() {
       this.loadGoodsData();
     },
@@ -69,17 +70,15 @@ onImageError(e) {
         // 处理数据格式
         const processedData = this.processGoodsData(result.data);
         
-        // 分离现金和换物商品 - 修复字段名问题
-        // 修改后的筛选逻辑
-// 现金交易商品：必须是出物，且交易方式为现金或两者皆可
-const cashGoods = processedData.filter(item => 
-    item.switch === 'object' && (item.transactionType === 'cash' || item.transactionType === 'both')
-  );
-  
-  // 以物换物商品：必须是出物，且交易方式为换物或两者皆可
-  const swapGoods = processedData.filter(item => 
-    item.switch === 'object' && (item.transactionType === 'swap' || item.transactionType === 'both')
-  );
+        // 分离现金和换物商品
+        const cashGoods = processedData.filter(item => 
+          item.switch === 'object' && (item.rawData.transactionType === 'cash' || item.rawData.transactionType === 'both')
+        );
+        
+        const swapGoods = processedData.filter(item => 
+          item.switch === 'object' && (item.rawData.transactionType === 'swap' || item.rawData.transactionType === 'both')
+        );
+        
         console.log('现金商品数量:', cashGoods.length);
         console.log('换物商品数量:', swapGoods.length);
         
@@ -101,49 +100,59 @@ const cashGoods = processedData.filter(item =>
       }
     },
   
-    // 处理商品数据格式 - 修复字段名问题
-   // 处理商品数据格式
-processGoodsData(goodsList) {
-    return goodsList.map(item => {
-      // 处理图片URL
-      let imageUrl = '/images/default.jpg';
-      
-      if (item.images && item.images.length > 0) {
-        // 如果是云文件ID，直接使用
-        if (item.images[0].startsWith('cloud://')) {
-          imageUrl = item.images[0];
-        } 
-        // 如果是网络URL，直接使用
-        else if (item.images[0].startsWith('http')) {
-          imageUrl = item.images[0];
+    // 处理商品数据格式
+    processGoodsData(goodsList) {
+      const that = this;
+      return goodsList.map(item => {
+        // 处理图片URL
+        let imageUrl = '/images/default.jpg';
+        
+        if (item.images && item.images.length > 0) {
+          // 如果是云文件ID，直接使用
+          if (item.images[0].startsWith('cloud://')) {
+            imageUrl = item.images[0];
+          } 
+          // 如果是网络URL，直接使用
+          else if (item.images[0].startsWith('http')) {
+            imageUrl = item.images[0];
+          }
+          // 如果是本地路径，需要检查文件是否存在
+          else {
+            imageUrl = item.images[0];
+          }
         }
-        // 如果是本地路径，需要检查文件是否存在
-        else {
-          imageUrl = item.images[0];
-        }
-      }
-      
-      return {
-        id: item._id || item.id,
-        title: item.title,
-        description: item.description,
-        price: parseFloat(item.price) || 0,
-        image: imageUrl, // 使用处理后的图片URL
-        transactionType: item.transactionType || 'cash',
-        tag: item.categories,
-        switch:item.switch,
-        user: {
-          nickname: item.userInfo?.nickname || item.nickname || '匿名用户',
-          avatar: item.userInfo?.avatar || item.avatar || '/images/avatar.png',//应该是用户头像
-          college: item.college || ''
-        },
-        expectedSwap: item.expectedSwap || '',
-        createTime: this.formatTime(item.createTime), // 在这里格式化时间
-        rawData: item
-      };
-    });
-  },
+        
+        return {
+          id: item._id || item.id,
+          title: item.title,
+          description: item.description,
+          price: parseFloat(item.price) || 0,
+          image: imageUrl, // 使用处理后的图片URL
+          transactionType: that.showTransactionType(item.transactionType),       
+          tag: item.categories,
+          switch: item.switch,
+          user: {
+            nickname: item.userInfo?.nickname || item.nickname || '匿名用户',
+            avatar: item.userInfo?.avatar || item.avatar || '/images/avatar.png',
+            college: item.college || ''
+          },
+          expectedSwap: item.expectedSwap || '',
+          createTime: that.formatTime(item.createTime),
+          rawData: item // 保留原始数据用于筛选
+        };
+      });
+    },
 
+    // 显示交易类型的中文
+    showTransactionType(transactionType) {
+      if (transactionType === 'cash') {
+        return '现金';
+      } else if (transactionType === 'swap') {
+        return '换物';
+      } else {
+        return '均可';
+      }
+    },
   
     // 加载模拟数据（备用）
     loadMockData() {
@@ -153,27 +162,26 @@ processGoodsData(goodsList) {
           title: '九成新AirPods耳机', 
           price: 299, 
           image: '/images/demo1.jpg', 
-          transactionType: 'cash', 
+          transactionType: '现金', 
           user: { nickname: '学长A' },
-          description: '音质很好，几乎没用过'
+          description: '音质很好，几乎没用过',
+          tag: ['数码产品'],
+          switch: 'object',
+          createTime: '2024-01-15 10:30',
+          rawData: { transactionType: 'cash' }
         },
         { 
           id: 2, 
           title: 'Java编程思想教材', 
           price: 25, 
           image: '/images/demo2.jpg', 
-          transactionType: 'cash', 
+          transactionType: '现金', 
           user: { nickname: '学姐B' },
-          description: '大二课本，有详细笔记'
-        },
-        { 
-          id: 3, 
-          title: '篮球一个', 
-          price: 50, 
-          image: '/images/demo3.jpg', 
-          transactionType: 'cash', 
-          user: { nickname: '学弟C' },
-          description: '7成新，气很足'
+          description: '大二课本，有详细笔记',
+          tag: ['图书教材'],
+          switch: 'object',
+          createTime: '2024-01-14 14:20',
+          rawData: { transactionType: 'cash' }
         }
       ];
   
@@ -183,20 +191,14 @@ processGoodsData(goodsList) {
           title: '高数课本', 
           price: 0, 
           image: '/images/demo4.jpg', 
-          transactionType: 'swap', 
+          transactionType: '换物', 
           user: { nickname: '同学D' }, 
           expectedSwap: '换线性代数课本',
-          description: '同济版高数教材'
-        },
-        { 
-          id: 5, 
-          title: '蓝牙音箱', 
-          price: 0, 
-          image: '/images/demo5.jpg', 
-          transactionType: 'swap', 
-          user: { nickname: '同学E' }, 
-          expectedSwap: '换台灯或书籍',
-          description: '便携小音箱，音质不错'
+          description: '同济版高数教材',
+          tag: ['图书教材'],
+          switch: 'object',
+          createTime: '2024-01-13 16:45',
+          rawData: { transactionType: 'swap' }
         }
       ];
   
@@ -206,12 +208,12 @@ processGoodsData(goodsList) {
       });
     },
   
-// 跳转到搜索页面
-goToSearch() {
-    wx.navigateTo({
-      url: '/pages/search/search'
-    });
-  },
+    // 跳转到搜索页面
+    goToSearch() {
+      wx.navigateTo({
+        url: '/pages/search/search'
+      });
+    },
   
     // 筛选商品
     filterGoods(keyword) {
@@ -220,9 +222,9 @@ goToSearch() {
       const filteredCash = cashGoodsList.filter(item =>
         item.title.includes(keyword) ||
         (item.description && item.description.includes(keyword)) ||
-        (item.user.nickname && item.user.nickname.includes(keyword))||//加入类型、tag、时间
-        item.categories.includes(keyword)||
-        (item.createTime && item.cerateTime.includes(keyword)) ||
+        (item.user.nickname && item.user.nickname.includes(keyword)) ||
+        (item.tag && item.tag.some(tag => tag.includes(keyword))) ||
+        (item.createTime && item.createTime.includes(keyword)) ||
         (item.transactionType && item.transactionType.includes(keyword))
       );
       
@@ -230,9 +232,9 @@ goToSearch() {
         item.title.includes(keyword) ||
         (item.description && item.description.includes(keyword)) ||
         (item.expectedSwap && item.expectedSwap.includes(keyword)) ||
-        (item.user.nickname && item.user.nickname.includes(keyword))||
-        item.categories.includes(keyword)||
-        (item.createTime && item.cerateTime.includes(keyword)) ||
+        (item.user.nickname && item.user.nickname.includes(keyword)) ||
+        (item.tag && item.tag.some(tag => tag.includes(keyword))) ||
+        (item.createTime && item.createTime.includes(keyword)) ||
         (item.transactionType && item.transactionType.includes(keyword))
       );
       
@@ -255,42 +257,41 @@ goToSearch() {
         });
       }
     },
-
    
     formatTime(time) {
-        console.log('调试 - 原始时间:', time);
-        
-        if (!time) return '刚刚';
-        
-        try {
-          // 如果是云数据库服务器时间对象
-          if (time && time.$date) {
-            const dateStr = time.$date;
-            return dateStr.replace('T', ' ').substring(0, 16);
-          }
-          
-          // 统一转换为 Date 对象处理
-          const date = new Date(time);
-          
-          if (isNaN(date.getTime())) {
-            // 如果转换失败，返回简化版本
-            return String(time).substring(4, 21); // "Mon Nov 24 2025 16:22:36" -> "Nov 24 2025 16:22"
-          }
-          
-          // 成功转换，格式化输出
-          const year = date.getFullYear();
-          const month = (date.getMonth() + 1).toString().padStart(2, '0');
-          const day = date.getDate().toString().padStart(2, '0');
-          const hour = date.getHours().toString().padStart(2, '0');
-          const minute = date.getMinutes().toString().padStart(2, '0');
-          
-          return `${year}-${month}-${day} ${hour}:${minute}`;
-          
-        } catch (error) {
-          console.error('时间处理错误:', error);
-          return String(time).substring(4, 21); // 降级处理
+      console.log('调试 - 原始时间:', time);
+      
+      if (!time) return '刚刚';
+      
+      try {
+        // 如果是云数据库服务器时间对象
+        if (time && time.$date) {
+          const dateStr = time.$date;
+          return dateStr.replace('T', ' ').substring(0, 16);
         }
-      },
+        
+        // 统一转换为 Date 对象处理
+        const date = new Date(time);
+        
+        if (isNaN(date.getTime())) {
+          // 如果转换失败，返回简化版本
+          return String(time).substring(4, 21);
+        }
+        
+        // 成功转换，格式化输出
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const hour = date.getHours().toString().padStart(2, '0');
+        const minute = date.getMinutes().toString().padStart(2, '0');
+        
+        return `${year}-${month}-${day} ${hour}:${minute}`;
+        
+      } catch (error) {
+        console.error('时间处理错误:', error);
+        return String(time).substring(4, 21);
+      }
+    },
 
     // 下拉刷新
     onPullDownRefresh() {
@@ -304,4 +305,4 @@ goToSearch() {
       // 这里可以添加分页加载逻辑
       console.log('触发底部，可以加载更多数据');
     }
-  });
+});

@@ -1,5 +1,4 @@
 <!--pages/chat/chat.wxml-->
-<<<<<<< HEAD
 <view class="chat-container" style="background-color: {{colors.neutralLight}}">
   <!-- 顶部导航 -->
   <view class="nav-bar" style="background-color: {{colors.primaryRed}}">
@@ -41,6 +40,3 @@
     <text class="empty-text">暂无聊天记录</text>
   </view>
 </view>
-=======
-<text>pages/chat/chat.wxml</text>
->>>>>>> wishpool

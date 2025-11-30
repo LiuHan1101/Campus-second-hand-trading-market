@@ -43,7 +43,7 @@
   .goods-list {
     display: flex;
     flex-direction: column;
-    gap: 30rpx;
+    gap: 1rpx;
   }
   
 
@@ -115,8 +115,8 @@
     width: auto;
     height: 34rpx;
     font-size: 24rpx;
-    color: #009432;
-    background: #e6f7ee;
+    color: #a09e9e;
+    background: #ffeaf0;
     padding: 4rpx 12rpx;
     border-radius: 8rpx;
     display: inline-block;
@@ -127,7 +127,7 @@
   .goods-type {
     width: 200rpx;
     font-size: 26rpx;
-    color: #3742fa;
+    color: #919191;
     position: absolute;
     right: 20rpx;
     bottom: 20rpx;
@@ -199,13 +199,3 @@
     line-height: 34rpx;
   }
   
-  .goods-type {
-    width: 200rpx;
-    font-size: 26rpx;
-    color: #3742fa;
-    position: absolute;
-    right: 20rpx;
-    bottom: 20rpx;
-    text-align: right;
-    line-height: 34rpx;
-  }

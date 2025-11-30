@@ -204,13 +204,6 @@ onDeleteHistory(e) {
       duration: 1000
     });
   },
-<<<<<<< HEAD
-  
-    // 取消搜索
-    onCancel() {
-      wx.navigateBack();
-    }
-=======
 
     // 取消搜索
     onCancel() {
@@ -220,5 +213,4 @@ onDeleteHistory(e) {
     this.performSearch(value.trim())
   },
 
->>>>>>> wishpool
   });
