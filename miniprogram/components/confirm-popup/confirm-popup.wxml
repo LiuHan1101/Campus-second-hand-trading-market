@@ -75,10 +75,13 @@
       </view>
     </view>
     
-    <!-- 按钮区域 -->
+    <!-- 按钮区域 - 修改为三个按钮：取消、确认(发送气泡)、确认交易 -->
     <view class="button-group">
       <button class="btn btn-cancel" bindtap="onCancel">取消</button>
-      <button class="btn btn-confirm" bindtap="onConfirm">确认交易</button>
+      <button class="btn btn-bubble {{isFormValid ? '' : 'btn-disabled'}}" 
+              bindtap="onConfirmBubble" 
+              disabled="{{!isFormValid}}">确认</button>
+      <button class="btn btn-transaction" bindtap="onConfirmTransaction">确认交易</button>
     </view>
   </view>
 </view>

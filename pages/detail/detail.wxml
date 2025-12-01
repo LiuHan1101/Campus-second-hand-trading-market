@@ -72,10 +72,11 @@
 <!-- 底部操作栏 -->
 <view class="action-bar" style="position: fixed; left: -2rpx; top: 1281rpx; height: 162rpx; display: flex; box-sizing: border-box">
   <view class="action-left"  >
-    <view class="action-btn chat-btn" bindtap="onChat" chatid="{{item.id}}">
-      <text class="btn-icon">💬</text>
-      <text class="btn-text">聊天</text>
-    </view>
+   <!-- 修改聊天按钮绑定 -->
+<view class="action-btn chat-btn" bindtap="onChatWithPopup">
+  <text class="btn-icon">💬💬</text>
+  <text class="btn-text">聊天</text>
+</view>
   </view>
   <view class="action-right">
     <!-- 出物商品 -->
@@ -97,10 +98,16 @@
         <text class="btn-text">以物换物</text>
       </view>
     </block>
-
-
-
-
   </view>
 </view>
+<!-- 在detail.wxml中修改confirm-popup组件的绑定 -->
+<confirm-popup 
+  show="{{showConfirmPopup}}"
+  product-info="{{popupProductInfo}}"
+  goods-id="{{popupGoodsId}}"
+  seller-info="{{popupSellerInfo}}"
+  bind:close="onPopupClose"
+  bind:confirm="onPopupConfirm"
+  bind:confirmBubble="onPopupConfirmBubble"
+/>
 </view>

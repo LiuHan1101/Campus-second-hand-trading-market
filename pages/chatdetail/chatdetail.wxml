@@ -111,4 +111,34 @@
         <button bindtap="sendMessage" class="send-button" style="position: relative; left: 10rpx; top: -19rpx">发送
         </button>
     </view>
+    <!-- 交易信息确认气泡 -->
+<view class="bubble-transaction" wx:if="{{item.bubbleType === 'transaction' && showTransactionBubble}}">
+    <view class="transaction-details">
+        <text class="transaction-title">交易信息确认</text>
+        <view class="transaction-item">
+            <text class="transaction-label">商品：</text>
+            <text class="transaction-value">{{item.transactionData.productInfo.title}}</text>
+        </view>
+        <view class="transaction-item">
+            <text class="transaction-label">价格：</text>
+            <text class="transaction-value">¥{{item.transactionData.productInfo.price}}</text>
+        </view>
+        <view class="transaction-item">
+            <text class="transaction-label">时间：</text>
+            <text class="transaction-value">{{item.transactionData.date}} {{item.transactionData.time}}</text>
+        </view>
+        <view class="transaction-item">
+            <text class="transaction-label">地点：</text>
+            <text class="transaction-value">{{item.transactionData.location}}</text>
+        </view>
+        <view class="transaction-item" wx:if="{{item.transactionData.remark}}">
+            <text class="transaction-label">备注：</text>
+            <text class="transaction-value">{{item.transactionData.remark}}</text>
+        </view>
+    </view>
+    <view class="bubble-buttons">
+        <button class="bubble-btn cancel" bindtap="cancelTransaction" data-index="{{index}}">取消</button>
+        <button class="bubble-btn confirm" bindtap="onConfirmTransaction" data-index="{{index}}">确认</button>
+    </view>
+</view>
 </view>

@@ -10,6 +10,8 @@ Page({
         // 弹窗显示状态
         showConfirmBubble: false,
         showRatingBubble: false,
+        showTransactionBubble: false, // 新增：交易信息气泡状态
+        // 评价内容
         // 评价内容
         comment: '',
         // 评价数据
@@ -18,21 +20,121 @@ Page({
             timeScore: 0,
             attitudeScore: 0
         },
+           // 新增：交易信息
+           transactionInfo: null,
+           systemInfo: {},
+           inputHeight: 44,
+           safeAreaBottom: 0,
         systemInfo: {}, // 存储系统信息
         inputHeight: 44, // 输入框默认高度
         safeAreaBottom: 0 // 安全区域底部距离
     },
-    onLoad() {
-        // 获取系统信息
-        wx.getWindowInfo({
-            success: (res) => {
-                this.setData({
-                    systemInfo: res,
-                    safeAreaBottom: res.screenHeight - res.safeArea.bottom
-                });
-            }
-        });
-    },
+    onLoad(options) {
+      console.log('聊天页面参数:', options);
+      
+      // 获取系统信息
+      wx.getWindowInfo({
+          success: (res) => {
+              this.setData({
+                  systemInfo: res,
+                  safeAreaBottom: res.screenHeight - res.safeArea.bottom
+              });
+          }
+      });
+      
+      // 检查是否有交易信息
+      if (options.transactionInfo) {
+          try {
+              const transactionInfo = JSON.parse(decodeURIComponent(options.transactionInfo));
+              const sellerInfo = options.sellerInfo ? JSON.parse(decodeURIComponent(options.sellerInfo)) : {};
+              
+              this.setData({
+                  transactionInfo: transactionInfo
+              });
+              
+              // 自动发送交易信息气泡
+              this.sendTransactionBubble(transactionInfo, sellerInfo);
+          } catch (error) {
+              console.error('解析交易信息失败:', error);
+          }
+      }
+  },
+  
+  // 发送交易信息气泡
+  sendTransactionBubble(transactionInfo, sellerInfo) {
+      const now = new Date();
+      const timeString = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+      
+      const transactionMessage = {
+          text: `交易信息确认`,
+          sender: 'sent',
+          time: timeString,
+          isBubble: true,
+          bubbleType: 'transaction',
+          transactionData: transactionInfo
+      };
+      
+      this.setData({
+          messages: [...this.data.messages, transactionMessage],
+          showTransactionBubble: true
+      });
+      
+      this.scrollToBottom();
+  },
+  
+  // 卖家确认交易信息
+  onConfirmTransaction(e) {
+      const index = e.currentTarget.dataset.index;
+      console.log('卖家确认交易信息:', index);
+      
+      // 隐藏交易确认气泡
+      this.setData({
+          showTransactionBubble: false
+      });
+      
+      // 发送卖家确认消息
+      const now = new Date();
+      const timeString = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+      const confirmMessage = {
+          text: '卖家已确认交易信息，交易达成！',
+          sender: 'received',
+          time: timeString
+      };
+      
+      this.setData({
+          messages: [...this.data.messages, confirmMessage]
+      });
+      this.scrollToBottom();
+      
+      wx.showToast({
+          title: '交易确认成功',
+          icon: 'success'
+      });
+  },
+  
+  // 取消交易信息
+  cancelTransaction(e) {
+      const index = e.currentTarget.dataset.index;
+      console.log('取消交易信息:', index);
+      
+      this.setData({
+          showTransactionBubble: false
+      });
+      
+      // 发送取消交易消息
+      const now = new Date();
+      const timeString = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+      const cancelMessage = {
+          text: '交易信息已取消',
+          sender: 'received',
+          time: timeString
+      };
+      
+      this.setData({
+          messages: [...this.data.messages, cancelMessage]
+      });
+      this.scrollToBottom();
+  },
     onInput(e) {
         this.setData({
             inputValue: e.detail.value

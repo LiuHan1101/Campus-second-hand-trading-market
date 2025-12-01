@@ -352,3 +352,68 @@ scroll-view ::-webkit-scrollbar-thumb:hover {
         transform: scale(1);
     }
 }
+/* 交易信息气泡样式 */
+.bubble-transaction {
+  background: #FFFFFF;
+  border: 1rpx solid #F0E6E6;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  margin-top: 10rpx;
+}
+
+.transaction-details {
+  margin-bottom: 20rpx;
+}
+
+.transaction-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #5D534A;
+  display: block;
+  margin-bottom: 15rpx;
+  text-align: center;
+}
+
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10rpx;
+  font-size: 26rpx;
+}
+
+.transaction-label {
+  color: #8C7B6C;
+  flex: 1;
+}
+
+.transaction-value {
+  color: #5D534A;
+  flex: 2;
+  text-align: right;
+}
+
+.bubble-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 15rpx;
+  margin-top: 20rpx;
+}
+
+.bubble-btn {
+  flex: 1;
+  padding: 15rpx;
+  border: none;
+  border-radius: 8rpx;
+  font-size: 26rpx;
+  font-weight: 500;
+}
+
+.bubble-btn.cancel {
+  background: #F0E6E6;
+  color: #8C7A7A;
+}
+
+.bubble-btn.confirm {
+  background: #E8B4B8;
+  color: white;
+}

@@ -12,6 +12,18 @@ Component({
         title: '',
         price: 0
       }
+    },
+    // 新增：商品ID和卖家信息
+    goodsId: {
+      type: String,
+      value: ''
+    },
+    sellerInfo: {
+      type: Object,
+      value: {
+        nickname: '卖家',
+        avatar: ''
+      }
     }
   },
 
@@ -19,7 +31,15 @@ Component({
     transactionDate: '', // 交易日期
     transactionTime: '', // 交易时间
     transactionLocation: '', // 交易地点
-    transactionRemark: '' // 备注信息
+    transactionRemark: '', // 备注信息
+    isFormValid: false // 表单是否有效
+  },
+
+  observers: {
+    // 监听表单字段变化，自动验证表单
+    'transactionDate, transactionTime, transactionLocation': function(date, time, location) {
+      this.validateForm();
+    }
   },
 
   methods: {
@@ -63,15 +83,30 @@ Component({
       });
     },
 
+    // 表单验证
+    validateForm() {
+      const { transactionDate, transactionTime, transactionLocation } = this.data;
+      const isValid = !!transactionDate && !!transactionTime && !!transactionLocation.trim();
+      
+      this.setData({
+        isFormValid: isValid
+      });
+      
+      return isValid;
+    },
+
     onCancel() {
       this.resetForm();
-      this.triggerEvent('cancel');
       this.triggerEvent('close');
     },
 
-    onConfirm() {
-      // 表单验证
+    // 新增：确认按钮点击事件（发送气泡并跳转到聊天）
+    onConfirmBubble() {
       if (!this.validateForm()) {
+        wx.showToast({
+          title: '请填写完整信息',
+          icon: 'none'
+        });
         return;
       }
 
@@ -79,42 +114,48 @@ Component({
         date: this.data.transactionDate,
         time: this.data.transactionTime,
         location: this.data.transactionLocation,
-        remark: this.data.transactionRemark
+        remark: this.data.transactionRemark,
+        productInfo: this.properties.productInfo,
+        timestamp: new Date().getTime(),
+        type: 'bubble'
       };
 
-      this.triggerEvent('confirm', transactionInfo);
+      console.log('确认发送交易信息气泡:', transactionInfo);
+      
+      // 触发发送气泡并跳转事件
+      this.triggerEvent('confirmBubble', {
+        transactionInfo: transactionInfo,
+        goodsId: this.properties.goodsId,
+        sellerInfo: this.properties.sellerInfo
+      });
+      
+      // 重置表单
       this.resetForm();
     },
 
-    // 表单验证
-    validateForm() {
-      const { transactionDate, transactionTime, transactionLocation } = this.data;
-      
-      if (!transactionDate) {
+    // 原有的确认交易按钮
+    onConfirmTransaction() {
+      if (!this.validateForm()) {
         wx.showToast({
-          title: '请选择交易日期',
+          title: '请填写完整信息',
           icon: 'none'
         });
-        return false;
+        return;
       }
 
-      if (!transactionTime) {
-        wx.showToast({
-          title: '请选择交易时间',
-          icon: 'none'
-        });
-        return false;
-      }
+      const transactionInfo = {
+        date: this.data.transactionDate,
+        time: this.data.transactionTime,
+        location: this.data.transactionLocation,
+        remark: this.data.transactionRemark,
+        productInfo: this.properties.productInfo,
+        timestamp: new Date().getTime(),
+        type: 'transaction'
+      };
 
-      if (!transactionLocation.trim()) {
-        wx.showToast({
-          title: '请输入交易地点',
-          icon: 'none'
-        });
-        return false;
-      }
-
-      return true;
+      // 触发确认交易事件
+      this.triggerEvent('confirm', transactionInfo);
+      this.resetForm();
     },
 
     // 重置表单
@@ -123,7 +164,8 @@ Component({
         transactionDate: '',
         transactionTime: '',
         transactionLocation: '',
-        transactionRemark: ''
+        transactionRemark: '',
+        isFormValid: false
       });
     }
   },

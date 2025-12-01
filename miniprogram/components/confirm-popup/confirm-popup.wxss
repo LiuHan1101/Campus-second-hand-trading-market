@@ -14,7 +14,7 @@
 
 .popup-container {
   width: 100%;
-  background: #FAF7F2; /* 莫兰迪浅粉色背景 */
+  background: #FAF7F2;
   border-radius: 24rpx 24rpx 0 0;
   max-height: 85vh;
   overflow-y: auto;
@@ -34,24 +34,24 @@
 .popup-header {
   padding: 40rpx 32rpx 20rpx;
   text-align: center;
-  border-bottom: 1rpx solid #E8D7D7; /* 莫兰迪粉色边框 */
+  border-bottom: 1rpx solid #E8D7D7;
 }
 
 .popup-title {
   font-size: 36rpx;
   font-weight: 600;
-  color: #5D534A; /* 莫兰迪深棕色 */
+  color: #5D534A;
 }
 
 /* 协商提示 */
 .negotiation-tip {
   display: flex;
   align-items: center;
-  background: #F8E8E8; /* 浅粉色背景 */
+  background: #F8E8E8;
   margin: 20rpx 32rpx;
   padding: 20rpx;
   border-radius: 12rpx;
-  border-left: 4rpx solid #E8B4B8; /* 莫兰迪粉色 */
+  border-left: 4rpx solid #E8B4B8;
 }
 
 .tip-icon {
@@ -61,7 +61,7 @@
 
 .tip-text {
   font-size: 26rpx;
-  color: #8C7B6C; /* 莫兰迪灰色 */
+  color: #8C7B6C;
   line-height: 1.4;
 }
 
@@ -141,7 +141,7 @@
 /* 商品信息 */
 .product-info {
   display: flex;
-  background: #F5F0EB; /* 浅米色背景 */
+  background: #F5F0EB;
   margin: 20rpx 32rpx;
   padding: 24rpx;
   border-radius: 12rpx;
@@ -170,15 +170,15 @@
 
 .product-price {
   font-size: 32rpx;
-  color: #E8B4B8; /* 莫兰迪粉色 */
+  color: #E8B4B8;
   font-weight: 600;
 }
 
-/* 按钮区域 */
+/* 按钮区域 - 修改为三个按钮布局 */
 .button-group {
   display: flex;
   padding: 24rpx 32rpx;
-  gap: 20rpx;
+  gap: 16rpx;
 }
 
 .btn {
@@ -194,12 +194,24 @@
 }
 
 .btn-cancel {
-  background: #F0E6E6; /* 浅粉色 */
+  background: #F0E6E6;
   color: #8C7B6C;
 }
 
-.btn-confirm {
-  background: #E8B4B8; /* 莫兰迪粉色 */
+.btn-bubble {
+  background: #E8B4B8;
   color: white;
   box-shadow: 0 4rpx 16rpx rgba(232, 180, 184, 0.3);
+}
+
+.btn-bubble.btn-disabled {
+  background: #D8CFC7;
+  color: #A8A8A8;
+  box-shadow: none;
+}
+
+.btn-transaction {
+  background: #5D534A;
+  color: white;
+  box-shadow: 0 4rpx 16rpx rgba(93, 83, 74, 0.3);
 }
