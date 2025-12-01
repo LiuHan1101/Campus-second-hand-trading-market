@@ -1,0 +1,116 @@
+<!-- pages/me/credit-center/credit-center.wxml -->
+<view class="credit-container" style="background: {{colors.neutralLight || '#FAF7F2'}};">
+  
+  <!-- 顶部圆形分数显示 -->
+  <view class="score-section">
+    <view class="score-circle" style="border-color: {{getCreditLevelColor(creditScore.total)}};">
+      <text class="score-number">{{creditScore.total}}</text>
+      <text class="score-label">信用分</text>
+    </view>
+    <view class="score-info">
+      <text class="score-level" style="color: {{getCreditLevelColor(creditScore.total)}};">
+        {{creditScore.level}}
+      </text>
+      <text class="score-desc">{{creditScore.desc}}</text>
+    </view>
+  </view>
+
+  <!-- 评分维度 -->
+  <view class="dimension-section">
+    <view class="section-title">评分维度</view>
+    <view class="dimension-list">
+      <block wx:for="{{dimensionScores}}" wx:key="name">
+        <view class="dimension-item">
+          <view class="dimension-header">
+            <text class="dimension-name">{{item.name}}</text>
+            <text class="dimension-score">{{item.score}}分</text>
+          </view>
+          <text class="dimension-desc">{{item.desc}}</text>
+          <view class="stars-container">
+            <block wx:for="{{item.stars}}" wx:key="index">
+              <text class="star-icon {{item}}">★</text>
+            </block>
+            <text class="score-text">({{item.score}}/{{item.fullScore}})</text>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 评价记录 -->
+  <view class="rating-section">
+    <view class="section-title">评价记录</view>
+    <view class="rating-list">
+      <block wx:for="{{ratingList}}" wx:key="id">
+        <view class="rating-item" bindtap="viewRatingDetail" data-index="{{index}}">
+          <!-- 用户信息 -->
+          <view class="rating-header">
+            <image 
+              class="user-avatar" 
+              src="{{item.avatar}}" 
+              data-index="{{index}}"
+              binderror="onAvatarError"
+            />
+            <view class="user-info">
+              <text class="username">{{item.username}}</text>
+              <text class="transaction-info">{{item.transactionType}} · {{item.itemName}}</text>
+            </view>
+            <text class="rating-time">{{item.createTime}}</text>
+          </view>
+
+          <!-- 综合评分 -->
+          <view class="overall-rating">
+            <text class="rating-label">综合评分：</text>
+            <view class="stars-container">
+              <block wx:for="{{item.stars}}" wx:key="index">
+                <text class="star-icon {{item}}">★</text>
+              </block>
+              <text class="rating-score">{{item.totalScore}}</text>
+            </view>
+          </view>
+
+          <!-- 详细评分 -->
+          <view class="detail-ratings">
+            <view class="detail-item">
+              <text class="detail-label">描述相符：</text>
+              <view class="stars-container small">
+                <block wx:for="{{item.detailStars.desc}}" wx:key="index">
+                  <text class="star-icon small {{item}}">★</text>
+                </block>
+              </view>
+            </view>
+            <view class="detail-item">
+              <text class="detail-label">守时履约：</text>
+              <view class="stars-container small">
+                <block wx:for="{{item.detailStars.time}}" wx:key="index">
+                  <text class="star-icon small {{item}}">★</text>
+                </block>
+              </view>
+            </view>
+            <view class="detail-item">
+              <text class="detail-label">沟通态度：</text>
+              <view class="stars-container small">
+                <block wx:for="{{item.detailStars.attitude}}" wx:key="index">
+                  <text class="star-icon small {{item}}">★</text>
+                </block>
+              </view>
+            </view>
+          </view>
+
+          <!-- 评价内容 -->
+          <view class="rating-comment">
+            <text class="comment-text">{{item.comment}}</text>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view wx:if="{{ratingList.length === 0}}" class="empty-state">
+    <image class="empty-icon" src="/images/empty-credit.png" mode="aspectFit" />
+    <text class="empty-text">暂无评价记录</text>
+    <text class="empty-desc">完成交易后即可获得评价</text>
+  </view>
+
+</view>

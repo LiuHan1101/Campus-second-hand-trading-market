@@ -10,7 +10,11 @@
     "pages/me/edit-profile/edit-profile",
     "pages/me/credit-center/credit-center",
     "pages/me/help-feedback/help-feedback",
-    "miniprogram/components/sub_package/sub_package_page"
+    "pages/search/search",
+    "pages/me/profile/profile",
+    "pages/me/my-goods/my-goods",
+    "pages/me/set/set",
+    "pages/chatdetail/chatdetail"
   ],
   "window": {
     "navigationBarTitleText": "上财易物",
@@ -58,6 +62,5 @@
       }
     ]
   },
-
   "sitemapLocation": "sitemap.json"
 }

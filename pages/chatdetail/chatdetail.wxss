@@ -1,0 +1,342 @@
+.chat-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #FAF5F0;
+}
+
+/* 顶部导航栏 */
+.chat-header {
+    background-color: #D8A8B7;
+    color: #5D4E60;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    height: 50px;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(93, 78, 96, 0.1);
+} 
+
+.back-arrow {
+    font-size: 20px;
+    margin-right: 15px;
+    color: #5D4E60;
+}
+
+.chat-title {
+    font-size: 18px;
+    font-weight: 500;
+    flex: 1;
+    color: #5D4E60;
+}
+
+.test-button {
+    background-color: rgba(93, 78, 96, 0.2);
+    color: #5D4E60;
+    border: 1px solid rgba(93, 78, 96, 0.3);
+    border-radius: 16px;
+    padding: 4px 12px;
+    font-size: 12px;
+}
+
+/* 聊天消息区域 */
+.chat-messages {
+    flex: 1;
+    padding: 15px;
+    background-color: #FAF5F0;
+}
+
+.message {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.message.received {
+    justify-content: flex-start;
+}
+
+.message.sent {
+    justify-content: flex-end;
+}
+
+.message-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.received .message-avatar {
+    background-color: #D8A8B7;
+    color: #5D4E60;
+}
+
+.sent .message-avatar {
+    background-color: #9FB4C7;
+    color: #4A5B6D;
+}
+
+.message-content {
+    max-width: 70%;
+    padding: 12px 15px;
+    border-radius: 18px;
+    position: relative;
+    word-break: break-word;
+    box-shadow: 0 2px 6px rgba(93, 78, 96, 0.1);
+}
+
+.received .message-content {
+    background-color: #FFFFFF;
+    border-top-left-radius: 4px;
+    color: #5D4E60;
+    border: 1px solid #F0E6E6;
+}
+
+.sent .message-content {
+    background-color: #E8D0D8;
+    border-top-right-radius: 4px;
+    color: #5D4E60;
+}
+
+.message-time {
+    font-size: 11px;
+    color: #A89F9F;
+    margin-top: 5px;
+    text-align: right;
+}
+
+/* 气泡式消息样式 */
+.bubble-message {
+    background-color: #FFFFFF;
+    border: 1px solid #F0E6E6;
+    border-radius: 16px;
+    padding: 15px;
+    min-width: 280px;
+    box-shadow: 0 4px 12px rgba(216, 168, 183, 0.2);
+}
+
+.bubble-text {
+    font-size: 16px;
+    color: #5D4E60;
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* 确认收货气泡 */
+.bubble-confirm {
+    margin-top: 10px;
+}
+
+.confirm-text {
+    font-size: 14px;
+    color: #5D4E60;
+    text-align: center;
+    margin-bottom: 15px;
+    padding: 10px;
+}
+
+/* 评价气泡 */
+.bubble-rating {
+    margin-top: 10px;
+}
+
+.rating-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 12px 0;
+}
+
+.rating-label {
+    font-size: 14px;
+    color: #5D4E60;
+    flex: 1;
+}
+
+.stars-container {
+    display: flex;
+    gap: 3px;
+}
+
+.star {
+    font-size: 20px;
+    color: #E8D0D8;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.star.active {
+    color: #D8A8B7;
+    text-shadow: 0 2px 4px rgba(216, 168, 183, 0.3);
+}
+
+/* 评价内容输入区域 */
+.comment-section {
+    margin: 15px 0;
+}
+
+.comment-textarea {
+    width: 100%;
+    height: 80px;
+    border: 1px solid #E8D0D8;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 14px;
+    box-sizing: border-box;
+    background-color: #FAF5F0;
+    color: #5D4E60;
+}
+
+.comment-textarea::placeholder {
+    color: #A89F9F;
+}
+
+.comment-tip {
+    font-size: 12px;
+    color: #A89F9F;
+    text-align: center;
+    margin-top: 5px;
+}
+
+/* 气泡按钮 */
+.bubble-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.bubble-btn {
+    flex: 1;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.bubble-btn.cancel {
+    background-color: #F0E6E6;
+    color: #8C7A7A;
+    border: 1px solid #E8D0D8;
+}
+
+.bubble-btn.cancel:active {
+    background-color: #E8D0D8;
+}
+
+.bubble-btn.confirm {
+    background-color: #D8A8B7;
+    color: #FFFFFF;
+    border: 1px solid #D8A8B7;
+    box-shadow: 0 2px 4px rgba(216, 168, 183, 0.3);
+}
+
+.bubble-btn.confirm:active {
+    background-color: #C298A7;
+    transform: translateY(1px);
+}
+
+/* 底部输入区域 */
+.chat-input-area {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background-color: #FFFFFF;
+    border-top: 1px solid #F0E6E6;
+    box-shadow: 0 -2px 8px rgba(93, 78, 96, 0.05);
+}
+
+.message-input {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid #E8D0D8;
+    border-radius: 20px;
+    outline: none;
+    font-size: 16px;
+    background-color: #FAF5F0;
+    margin-right: 10px;
+    color: #5D4E60;
+}
+
+.message-input::placeholder {
+    color: #A89F9F;
+}
+
+.send-button {
+    width: 60px;
+    height: 36px;
+    background-color: #D8A8B7;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(216, 168, 183, 0.3);
+    transition: all 0.3s ease;
+}
+
+.send-button:active {
+    background-color: #C298A7;
+    transform: translateY(1px);
+}
+
+/* 滚动条样式 */
+scroll-view ::-webkit-scrollbar {
+    width: 4px;
+}
+
+scroll-view ::-webkit-scrollbar-track {
+    background: #FAF5F0;
+}
+
+scroll-view ::-webkit-scrollbar-thumb {
+    background: #D8A8B7;
+    border-radius: 2px;
+}
+
+scroll-view ::-webkit-scrollbar-thumb:hover {
+    background: #C298A7;
+}
+
+/* 动画效果 */
+.message-content {
+    animation: fadeInUp 0.3s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.bubble-message {
+    animation: scaleIn 0.3s ease;
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

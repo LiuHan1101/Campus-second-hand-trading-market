@@ -1,0 +1,112 @@
+<view class="chat-container">
+    <!-- 顶部导航栏 -->
+    <view class="chat-header">
+        <view class="back-arrow" bindtap="goBack">←</view>
+        <view class="chat-title">与卖家聊天</view>
+        <!-- 测试按钮 -->
+        <button class="test-button" bindtap="testSellerBubble" size="mini">卖家触发</button>
+    </view>
+    
+    <!-- 聊天消息区域 -->
+    <scroll-view class="chat-messages" scroll-y scroll-top="{{scrollTop}}" scroll-with-animation>
+        <block wx:for="{{messages}}" wx:key="index">
+            <!-- 普通消息 -->
+            <view class="message {{item.sender}}" wx:if="{{!item.isBubble}}">
+                <view class="message-avatar" wx:if="{{item.sender === 'received'}}">TA</view>
+                <view class="message-content {{item.sender}}">
+                    {{item.text}}
+                    <view class="message-time">{{item.time}}</view>
+                </view>
+                <view class="message-avatar" wx:if="{{item.sender === 'sent'}}">我</view>
+            </view>
+            
+            <!-- 气泡式消息 -->
+            <view class="message received" wx:if="{{item.isBubble}}">
+                <view class="message-avatar">TA</view>
+                <view class="message-content received bubble-message">
+                    <view class="bubble-text">{{item.text}}</view>
+                    <view class="message-time">{{item.time}}</view>
+                    
+                    <!-- 确认收货气泡 - 简化版 -->
+                    <view class="bubble-confirm" wx:if="{{item.bubbleType === 'confirm' && showConfirmBubble}}">
+                        <view class="confirm-text">确认已收到商品无误？</view>
+                        <view class="bubble-buttons">
+                            <button class="bubble-btn cancel" bindtap="cancelConfirm">取消</button>
+                            <button class="bubble-btn confirm" bindtap="onConfirmReceipt">确认收货</button>
+                        </view>
+                    </view>
+                    
+                    <!-- 评价气泡 -->
+                    <view class="bubble-rating" wx:if="{{item.bubbleType === 'rating' && showRatingBubble}}">
+                        <view class="rating-item">
+                            <text class="rating-label">描述是否符合</text>
+                            <view class="stars-container">
+                                <text 
+                                    wx:for="{{5}}" 
+                                    wx:key="index"
+                                    class="star {{index < ratingData.descScore ? 'active' : ''}}"
+                                    bindtap="rateDesc"
+                                    data-score="{{index + 1}}"
+                                >★</text>
+                            </view>
+                        </view>
+                        
+                        <view class="rating-item">
+                            <text class="rating-label">交易是否准时</text>
+                            <view class="stars-container">
+                                <text 
+                                    wx:for="{{5}}" 
+                                    wx:key="index"
+                                    class="star {{index < ratingData.timeScore ? 'active' : ''}}"
+                                    bindtap="rateTime"
+                                    data-score="{{index + 1}}"
+                                >★</text>
+                            </view>
+                        </view>
+                        
+                        <view class="rating-item">
+                            <text class="rating-label">交流态度</text>
+                            <view class="stars-container">
+                                <text 
+                                    wx:for="{{5}}" 
+                                    wx:key="index"
+                                    class="star {{index < ratingData.attitudeScore ? 'active' : ''}}"
+                                    bindtap="rateAttitude"
+                                    data-score="{{index + 1}}"
+                                >★</text>
+                            </view>
+                        </view>
+                        
+                        <!-- 评价内容输入框（可选） -->
+                        <view class="comment-section">
+                            <textarea 
+                                class="comment-textarea" 
+                                placeholder="请输入评价内容（可选）" 
+                                maxlength="200"
+                                value="{{comment}}"
+                                bindinput="onCommentInput"
+                            ></textarea>
+                            <view class="comment-tip">如未输入，将使用默认评价语句</view>
+                        </view>
+                        
+                        <view class="bubble-buttons">
+                            <button class="bubble-btn cancel" bindtap="cancelRating">取消</button>
+                            <button class="bubble-btn confirm" bindtap="submitRating">提交评价</button>
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </block>
+    </scroll-view>
+    
+    <!-- 底部输入区域 -->
+    <view class="chat-input-area">
+        <input 
+            value="{{inputValue}}" 
+            bindinput="onInput" 
+            placeholder="输入消息..." 
+            class="message-input"
+        />
+        <button bindtap="sendMessage" class="send-button">发送</button>
+    </view>
+</view>

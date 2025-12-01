@@ -1,7 +1,7 @@
 // app.js
 App({
     onLaunch() {
-      // 小程序启动时，检查登录状态111
+      // 小程序启动时，检查登录状态
       wx.cloud.init({
           env:"cloud1-8gw6xrycfea6d00b",
           traceUser:true
