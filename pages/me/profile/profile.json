@@ -1,6 +1,6 @@
 {
     "usingComponents": {},
     "navigationBarTitleText": "个人主页",
-    "enablePullDownRefresh": false,
+    "enablePullDownRefresh": true,
     "backgroundColor": "#FAF7F2"
   }

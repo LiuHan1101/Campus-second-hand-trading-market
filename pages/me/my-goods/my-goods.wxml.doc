@@ -1,0 +1,85 @@
+<view class="container">
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <view class="search-input" bindtap="onSearchTap">
+      <text class="search-placeholder">搜索我的商品...</text>
+    </view>
+  </view>
+
+  <!-- 商品列表 -->
+  <scroll-view class="goods-list" scroll-y>
+    <view class="goods-container">
+      <block wx:for="{{goodsList}}" wx:key="id">
+        <!-- 可滑动的商品项 -->
+        <movable-area class="movable-area">
+          <movable-view 
+            class="movable-view"
+            direction="horizontal"
+            damping="40"
+            friction="4"
+            out-of-bounds="false"
+            x="{{item.moveX}}"
+            bindchange="onMovableChange"
+            bindtouchend="onMovableEnd"
+            data-index="{{index}}"
+          >
+            <!-- 商品内容 -->
+            <view class="goods-item">
+              <image 
+                class="goods-image" 
+                src="{{item.image}}" 
+                mode="aspectFill"
+                binderror="onImageError"
+                data-index="{{index}}"
+              />
+              <view class="goods-info">
+                <text class="goods-title">{{item.title}}</text>
+                <text class="goods-description">{{item.description}}</text>
+                <view class="goods-meta">
+                  <text class="goods-price">¥{{item.price}}</text>
+                  <text class="goods-time">{{item.createTime}}</text>
+                </view>
+                <view class="goods-tags">
+                  <text class="goods-tag">{{item.transactionType === 'cash' ? '现金' : item.transactionType === 'swap' ? '换物' : '均可'}}</text>
+                  <block wx:for="{{item.tag}}" wx:for-item="tag" wx:key="*this">
+                    <text class="goods-tag">{{tag}}</text>
+                  </block>
+                </view>
+              </view>
+            </view>
+
+            <!-- 操作按钮 -->
+            <view class="action-buttons">
+              <block wx:if="{{type === 'published'}}">
+                <view 
+                  class="action-btn edit-btn" 
+                  bindtap="onEditGoods"
+                  data-index="{{index}}"
+                >
+                  编辑
+                </view>
+              </block>
+              <view 
+                class="action-btn delete-btn" 
+                bindtap="onDeleteGoods"
+                data-index="{{index}}"
+              >
+                删除
+              </view>
+            </view>
+          </movable-view>
+        </movable-area>
+      </block>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{goodsList.length === 0 && !isLoading}}" class="empty-state">
+      <text class="empty-text">暂无商品</text>
+    </view>
+
+    <!-- 加载状态 -->
+    <view wx:if="{{isLoading}}" class="loading-state">
+      <text class="loading-text">加载中...</text>
+    </view>
+  </scroll-view>
+</view>

@@ -4,8 +4,8 @@ Page({
       type: '', // published, inProgress, completed, favorites
       goodsList: [],
       searchValue: '',
-      isLoading: true,
-      currentSwipeIndex: -1 // 当前滑动的项目索引
+      isLoading: true
+      // 移除了滑动相关的数据
     },
   
     onLoad(options) {
@@ -37,6 +37,30 @@ Page({
     async loadGoodsList() {
       try {
         this.setData({ isLoading: true });
+        
+        // 先获取当前用户的openid
+        const openid = wx.getStorageSync('openid');
+        if (!openid) {
+          console.error('未找到openid，用户未登录');
+          this.setData({ 
+            goodsList: [],
+            isLoading: false 
+          });
+          wx.showToast({
+            title: '请先登录',
+            icon: 'none',
+            duration: 1500
+          });
+          setTimeout(() => {
+            wx.navigateTo({
+              url: '/pages/login/login'
+            });
+          }, 1500);
+          return;
+        }
+        
+        console.log('当前用户openid:', openid);
+        
         const db = wx.cloud.database();
         
         let query = db.collection('POST');
@@ -45,18 +69,21 @@ Page({
         switch(this.data.type) {
           case 'published':
             query = query.where({
+              _openid: openid,  // 只查询当前用户的商品
               status: 'selling',
-              deleted: db.command.neq(true) // 不包含已删除的
+              deleted: db.command.neq(true)
             });
             break;
           case 'inProgress':
             query = query.where({
+              _openid: openid,  // 只查询当前用户的商品
               status: 'in_progress',
               deleted: db.command.neq(true)
             });
             break;
           case 'completed':
             query = query.where({
+              _openid: openid,  // 只查询当前用户的商品
               status: 'completed',
               deleted: db.command.neq(true)
             });
@@ -64,6 +91,7 @@ Page({
           case 'favorites':
             // 收藏功能需要单独实现，这里先使用selling状态
             query = query.where({
+              _openid: openid,  // 只查询当前用户的商品
               status: 'selling',
               deleted: db.command.neq(true)
             });
@@ -81,7 +109,10 @@ Page({
   
       } catch (error) {
         console.error('加载商品列表失败:', error);
-        this.setData({ isLoading: false });
+        this.setData({ 
+          goodsList: [],
+          isLoading: false 
+        });
         wx.showToast({
           title: '加载失败',
           icon: 'none'
@@ -89,7 +120,7 @@ Page({
       }
     },
   
-    // 处理商品数据
+    // 处理商品数据 - 移除了moveX字段
     processGoodsData(goodsList) {
       return goodsList.map(item => {
         let imageUrl = '/images/default.jpg';
@@ -105,8 +136,8 @@ Page({
           image: imageUrl,
           transactionType: item.transactionType || 'cash',
           tag: item.categories || [],
-          createTime: this.formatTime(item.createTime),
-          moveX: 0 // 滑动位置
+          createTime: this.formatTime(item.createTime)
+          // 移除了moveX字段
         };
       });
     },
@@ -135,6 +166,34 @@ Page({
       }
     },
   
+    // 点击商品 - 跳转到详情页
+    onGoodsTap(e) {
+      const id = e.currentTarget.dataset.id;
+      const index = e.currentTarget.dataset.index;
+      
+      if (!id) {
+        console.error('商品ID为空');
+        wx.showToast({
+          title: '商品信息错误',
+          icon: 'none'
+        });
+        return;
+      }
+      
+      console.log('点击商品，ID:', id, '索引:', index);
+      
+      wx.navigateTo({
+        url: `/pages/detail/detail?id=${id}`,
+        fail: (err) => {
+          console.error('跳转失败:', err);
+          wx.showToast({
+            title: '跳转失败',
+            icon: 'none'
+          });
+        }
+      });
+    },
+  
     // 图片加载失败处理
     onImageError(e) {
       const index = e.currentTarget.dataset.index;
@@ -149,36 +208,6 @@ Page({
       wx.showToast({
         title: '搜索功能开发中',
         icon: 'none'
-      });
-    },
-  
-    // 滑动变化
-    onMovableChange(e) {
-      const { x } = e.detail;
-      const index = e.currentTarget.dataset.index;
-      
-      // 限制最大滑动距离
-      const maxSwipeDistance = 20; // 最大滑动距离
-      const actualX = Math.min(Math.max(x, -maxSwipeDistance), 0);
-      
-      const key = `goodsList[${index}].moveX`;
-      this.setData({
-        [key]: actualX
-      });
-    },
-  
-    // 滑动结束
-    onMovableEnd(e) {
-      const { x } = e.detail;
-      const index = e.currentTarget.dataset.index;
-      
-      // 如果滑动距离超过阈值，保持打开状态，否则收回
-      const threshold = -100;
-      const finalX = x < threshold ? -200 : 0;
-      
-      const key = `goodsList[${index}].moveX`;
-      this.setData({
-        [key]: finalX
       });
     },
   

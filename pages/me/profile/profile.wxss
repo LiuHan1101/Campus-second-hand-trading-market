@@ -489,3 +489,61 @@
     padding: 8rpx 16rpx;
     border-radius: 8rpx;
   }
+
+  /* 商品状态标签 */
+.status-tag {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-left: 5px;
+  }
+  
+  .status-tag.sold {
+    background-color: #f0f0f0;
+    color: #999;
+  }
+  
+  .status-tag.offline {
+    background-color: #ffe6e6;
+    color: #f56c6c;
+  }
+  
+  .both-tag {
+    background-color: #e6f7ff;
+    color: #1890ff;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-left: 5px;
+  }
+  
+  /* 星星评分 */
+  .star {
+    font-size: 16px;
+    margin-right: 2px;
+  }
+  
+  .star.active {
+    color: #faad14;
+  }
+  
+  /* 空状态 */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+  }
+  
+  .empty-icon {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 16px;
+    opacity: 0.6;
+  }
+  
+  .empty-text {
+    color: #999;
+    font-size: 14px;
+  }
