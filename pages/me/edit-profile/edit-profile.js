@@ -20,8 +20,9 @@ Page({
     ],
     isSaving: false,
     wordCount: 0,
-    userId: null, // 添加用户ID字段
-    tempFilePath: '' // 添加临时文件路径
+    userId: null,
+    tempFilePath: '',
+    userOpenid: null // 添加openid存储
   },
 
   onLoad(options) {
@@ -39,7 +40,8 @@ Page({
       if (userInfo) {
         const collegeIndex = this.data.colleges.indexOf(userInfo.college);
         this.setData({
-          userId: userInfo._id, // 保存用户ID
+          userId: userInfo._id,
+          userOpenid: userInfo.openid || openid, // 保存openid
           avatarUrl: userInfo.avatar || userInfo.avatarUrl || '/images/avatar.png',
           nickname: userInfo.nickname || userInfo.nickName || '',
           college: userInfo.college || '',
@@ -128,7 +130,7 @@ Page({
   // 上传头像到云存储
   async uploadAvatar() {
     if (!this.data.tempFilePath) {
-      return null; // 没有新头像，返回null
+      return null;
     }
 
     try {
@@ -147,6 +149,83 @@ Page({
     } catch (uploadError) {
       console.error('头像上传失败:', uploadError);
       throw new Error('头像上传失败');
+    }
+  },
+
+  // 更新用户已发布的所有商品信息
+  async updateAllPublishedGoods(updatedUserInfo) {
+    try {
+      const db = wx.cloud.database();
+      const openid = updatedUserInfo.openid || this.data.userOpenid;
+      
+      if (!openid) {
+        console.log('没有openid，跳过更新商品');
+        return;
+      }
+      
+      console.log('开始更新用户发布的商品，openid:', openid);
+      
+      // 1. 查询该用户发布的所有商品
+      const goodsRes = await db.collection('POST')
+        .where({ publisherOpenid: openid })
+        .get();
+      
+      if (goodsRes.data.length === 0) {
+        console.log('该用户没有发布的商品');
+        return;
+      }
+      
+      console.log(`找到${goodsRes.data.length}个需要更新的商品`);
+      
+      // 2. 准备更新数据
+      const updateData = {
+        'publisherInfo.nickname': updatedUserInfo.nickname,
+        'publisherInfo.avatar': updatedUserInfo.avatar || updatedUserInfo.avatarUrl,
+        'publisherInfo.college': updatedUserInfo.college,
+        'publisherInfo.isVerified': updatedUserInfo.isVerified || false,
+        updateTime: db.serverDate()
+      };
+      
+      // 可选：添加其他用户信息字段
+      if (updatedUserInfo.studentId) {
+        updateData['publisherInfo.studentId'] = updatedUserInfo.studentId;
+      }
+      if (updatedUserInfo.phone) {
+        updateData['publisherInfo.phone'] = updatedUserInfo.phone;
+      }
+      if (updatedUserInfo.bio) {
+        updateData['publisherInfo.bio'] = updatedUserInfo.bio;
+      }
+      if (updatedUserInfo.gender !== undefined) {
+        updateData['publisherInfo.gender'] = updatedUserInfo.gender;
+      }
+      
+      // 3. 批量更新商品中的用户信息
+      const updatePromises = goodsRes.data.map(goods => {
+        return db.collection('POST').doc(goods._id).update({
+          data: updateData
+        });
+      });
+      
+      // 4. 执行所有更新
+      const results = await Promise.all(updatePromises);
+      console.log(`成功更新${results.length}个商品`);
+      
+      // 显示提示但不打断主要流程
+      setTimeout(() => {
+        wx.showToast({
+          title: `已更新${results.length}个商品信息`,
+          icon: 'success',
+          duration: 2000
+        });
+      }, 100);
+      
+      return results.length;
+      
+    } catch (error) {
+      console.error('更新商品信息失败:', error);
+      // 不阻止用户信息更新的主要流程
+      return 0;
     }
   },
 
@@ -223,21 +302,21 @@ Page({
         updateData.avatarUrl = avatarFileID; // 兼容字段
       }
 
-      console.log('准备更新的数据:', updateData);
+      console.log('准备更新的用户数据:', updateData);
       console.log('用户ID:', this.data.userId);
       console.log('用户openid:', openid);
 
       const db = wx.cloud.database();
       
-      // 3. 更新数据库
+      // 3. 更新用户数据库
       if (this.data.userId) {
-        // 方式1：使用用户ID更新（最准确）
+        // 方式1：使用用户ID更新
         await db.collection('users').doc(this.data.userId).update({
           data: updateData
         });
-        console.log('通过ID更新成功');
+        console.log('通过ID更新用户信息成功');
       } else {
-        // 方式2：通过openid查找并更新（备用方案）
+        // 方式2：通过openid查找并更新
         const userQuery = await db.collection('users')
           .where({ openid: openid })
           .get();
@@ -249,31 +328,47 @@ Page({
         await db.collection('users').doc(userQuery.data[0]._id).update({
           data: updateData
         });
-        console.log('通过openid更新成功');
+        console.log('通过openid更新用户信息成功');
         
         // 保存用户ID
         this.setData({ userId: userQuery.data[0]._id });
       }
 
-      // 4. 更新本地缓存
+      // 4. 构建完整的用户信息用于更新商品
       const currentUserInfo = wx.getStorageSync('userInfo') || {};
       const updatedUserInfo = {
         ...currentUserInfo,
         ...updateData,
         _id: this.data.userId || currentUserInfo._id,
-        _openid: openid,
-        openid: openid
+        openid: openid,
+        // 保留其他用户信息
+        studentId: currentUserInfo.studentId || '',
+        phone: currentUserInfo.phone || ''
       };
       
+      // 5. 更新本地缓存
       wx.setStorageSync('userInfo', updatedUserInfo);
       console.log('本地用户信息已更新:', updatedUserInfo);
 
-      // 5. 更新全局数据
+      // 6. 更新全局数据
       const app = getApp();
       if (app && app.globalData) {
         app.globalData.userInfo = updatedUserInfo;
         console.log('全局数据已更新');
       }
+
+      // 7. 更新用户已发布的所有商品信息（异步执行，不阻塞主流程）
+      setTimeout(async () => {
+        try {
+          const updatedCount = await this.updateAllPublishedGoods(updatedUserInfo);
+          if (updatedCount > 0) {
+            console.log(`已成功更新${updatedCount}个商品的发布者信息`);
+          }
+        } catch (goodsError) {
+          console.error('更新商品信息过程中出错:', goodsError);
+          // 不显示错误提示，避免干扰用户
+        }
+      }, 500);
 
       wx.hideLoading();
       wx.showToast({
@@ -282,7 +377,7 @@ Page({
         duration: 1500
       });
 
-      // 6. 返回上一页
+      // 8. 返回上一页
       setTimeout(() => {
         wx.navigateBack({
           success: () => {
@@ -295,7 +390,7 @@ Page({
           }
         });
       }, 1500);
-
+    
     } catch (error) {
       console.error('保存失败:', error);
       wx.hideLoading();
@@ -322,5 +417,10 @@ Page({
   // 取消
   onCancel() {
     wx.navigateBack();
+  },
+
+  // 页面显示时重新加载
+  onShow() {
+    this.loadUserInfo();
   }
 });

@@ -4,7 +4,8 @@ Page({
     formData: {
       studentId: '',
       name: '',
-      phone: ''
+      phone: '',
+      nickname: '' // 新增昵称字段
     },
     avatarUrl: '',
     tempFilePath: '',
@@ -26,6 +27,28 @@ Page({
     
     // 检查登录状态
     this.checkLoginStatus();
+    
+    // 尝试从缓存加载已有信息
+    this.loadExistingUserInfo();
+  },
+
+  // 加载已有的用户信息（如果有）
+  loadExistingUserInfo() {
+    try {
+      const userInfo = wx.getStorageSync('userInfo');
+      if (userInfo) {
+        // 如果已经有用户信息，填充到表单中
+        this.setData({
+          'formData.nickname': userInfo.nickname || '',
+          'formData.studentId': userInfo.studentId || '',
+          'formData.name': userInfo.name || '',
+          'formData.phone': userInfo.phone || '',
+          'avatarUrl': userInfo.avatar || userInfo.avatarUrl || ''
+        });
+      }
+    } catch (error) {
+      console.error('加载已有用户信息失败:', error);
+    }
   },
 
   // 检查登录状态
@@ -89,7 +112,7 @@ Page({
 
   // 输入验证
   validateForm() {
-    const { studentId, name, phone } = this.data.formData;
+    const { studentId, name, phone, nickname } = this.data.formData;
     
     // 学号验证（示例：至少6位数字）
     if (!studentId || !/^\d{6,}$/.test(studentId)) {
@@ -115,6 +138,16 @@ Page({
     if (!phone || !/^1[3-9]\d{9}$/.test(phone)) {
       wx.showToast({ 
         title: '请输入正确的手机号', 
+        icon: 'none',
+        duration: 2000
+      });
+      return false;
+    }
+    
+    // 昵称验证（可选，但如果有输入则需要验证长度）
+    if (nickname && nickname.trim().length > 20) {
+      wx.showToast({ 
+        title: '昵称不能超过20个字符', 
         icon: 'none',
         duration: 2000
       });
@@ -167,7 +200,7 @@ Page({
       
       // 4. 获取用户信息
       const openid = wx.getStorageSync('openid');
-      const userInfo = wx.getStorageSync('userInfo');
+      const existingUserInfo = wx.getStorageSync('userInfo');
       
       if (!openid) {
         throw new Error('用户信息失效，请重新登录');
@@ -183,10 +216,16 @@ Page({
         updateTime: new Date()
       };
       
+      // 如果有昵称，添加到数据中
+      if (formData.nickname && formData.nickname.trim()) {
+        userData.nickname = formData.nickname.trim();
+      }
+      
       // 如果有头像，添加到数据中
       if (avatarFileID) {
         userData.avatarFileID = avatarFileID;
         userData.avatar = avatarFileID; // 兼容字段
+        userData.avatarUrl = avatarFileID; // 另一个兼容字段
       }
       
       console.log('准备保存的用户数据:', userData);
@@ -207,8 +246,14 @@ Page({
         userId = userQuery.data[0]._id;
         console.log('找到用户记录，ID:', userId);
         
+        // 合并现有数据和新数据，避免覆盖不修改的字段
+        const updateData = {
+          ...userData,
+          updateTime: new Date()
+        };
+        
         result = await db.collection('users').doc(userId).update({
-          data: userData
+          data: updateData
         });
         console.log('更新用户记录成功:', result);
       } else {
@@ -227,14 +272,14 @@ Page({
       // 7. 更新本地存储的用户信息
       const updatedUserInfo = {
         _id: userId,
-        ...userInfo,
-        ...userData,
+        ...existingUserInfo, // 保留原有的用户信息
+        ...userData, // 用新数据覆盖
         isRegistered: true,
         _openid: openid // 本地存储可以包含这个字段
       };
       
       wx.setStorageSync('userInfo', updatedUserInfo);
-      console.log('本地用户信息已更新');
+      console.log('本地用户信息已更新:', updatedUserInfo);
       
       // 8. 更新全局数据
       const app = getApp();

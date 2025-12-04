@@ -44,6 +44,24 @@
 
   <!-- 表单区域 -->
   <view class="form-section">
+      <!-- 在原来的表单区域添加昵称输入项 -->
+    <!-- 昵称（可选） -->
+    <view class="form-item">
+      <view class="form-label">
+        <text class="label-text">昵称</text>
+        <text class="optional">（可选）</text>
+      </view>
+      <input 
+        class="form-input"
+        placeholder="请输入昵称（不超过20个字符）"
+        placeholder-class="placeholder"
+        maxlength="20"
+        value="{{formData.nickname}}"
+        bindinput="onInput"
+        data-field="nickname"
+      />
+      <view class="form-tip">用于社区显示，可随时修改</view>
+    </view>
     <!-- 学号 -->
     <view class="form-item">
       <view class="form-label">
@@ -110,6 +128,15 @@
         </text>
       </view>
     </view>
+
+      <!-- 底部提示 -->
+    <view class="footer-tip">
+      <text>提交即表示同意</text>
+      <text class="link-text" bindtap="showPrivacyPolicy">《用户协议》</text>
+      <text>和</text>
+      <text class="link-text" bindtap="showPrivacyPolicy">《隐私政策》</text>
+    </view>
+    
   </view>
 
   <!-- 提交按钮区域 -->
@@ -144,13 +171,9 @@
         暂时跳过，稍后完善
       </button>
     </view>
+
+    
   </view>
   
-  <!-- 底部提示 -->
-  <view class="footer-tip">
-    <text>提交即表示同意</text>
-    <text class="link-text" bindtap="showPrivacyPolicy">《用户协议》</text>
-    <text>和</text>
-    <text class="link-text" bindtap="showPrivacyPolicy">《隐私政策》</text>
-  </view>
+
 </view>
