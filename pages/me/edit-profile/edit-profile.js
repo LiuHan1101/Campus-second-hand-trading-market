@@ -128,7 +128,7 @@ Page({
         showAvatarModal: false
       });
     },
-  
+
     // 输入昵称
     onNicknameInput(e) {
       this.setData({

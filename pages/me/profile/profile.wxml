@@ -11,8 +11,8 @@
   <view wx:else>
     <!-- 头部用户信息模块 -->
     <view class="header-section card">
-      <view class="user-basic-info">
-        <!-- 头像，添加错误处理 -->
+      <!-- 左边：头像和统计数据 -->
+      <view class="left-section">
         <image 
           class="user-avatar" 
           src="{{userInfo.avatar}}" 
@@ -20,74 +20,70 @@
           binderror="onImageError"
           data-type="avatar">
         </image>
-        <view class="user-text-info">
-          <view class="user-nickname">{{userInfo.nickname}}</view>
-          <view class="user-college">{{userInfo.college || '未设置学院'}}</view>
-          <view class="user-stats">
-            <text class="stat-item">加入 {{userInfo.joinDays}} 天</text>
-            <text class="stat-item">信用 {{userInfo.creditScore}}</text>
+        <view class="user-stats">
+          <text class="stat-item">加入 {{userInfo.joinDays}} 天</text>
+          <text class="stat-item">信用 {{userInfo.creditScore}}</text>
+        </view>
+      </view>
+
+      <!-- 右边：用户信息 -->
+      <view class="right-section">
+        <view class="user-nickname">{{userInfo.nickname}}</view>
+        <view class="user-college">{{userInfo.college || '未设置学院'}}</view>
+        <view class="bio-content">{{userInfo.bio || '暂无简介'}}</view>
+        <view class="tags-section">
+          <view class="tags-list">
+            <text class="tag" wx:for="{{userInfo.tags}}" wx:key="*this">{{item}}</text>
           </view>
         </view>
       </view>
-      
-      <!-- 根据是否查看他人显示不同按钮 -->
+
+      <!-- 右上角编辑资料按钮 -->
       <button 
-        class="action-btn message-btn" 
-        bindtap="onSendMessage" 
-        wx:if="{{isViewOtherUser}}">
-        私信
-      </button>
-      <button 
-        class="action-btn edit-btn" 
+        class="edit-btn" 
         bindtap="onEditProfile" 
-        wx:else>
+        wx:if="{{!isViewOtherUser}}" style="width: 147rpx; display: flex; box-sizing: border-box; left: 533rpx; top: 52rpx; position: absolute">
         编辑资料
       </button>
     </view>
 
-    <!-- 评价模块 -->
-    <view class="rating-section card" wx:if="{{!isViewOtherUser || commentCount > 0}}">
-      <view class="rating-title">用户评价</view>
-      <view class="rating-content">
-        <!-- 左边评论滚动区域 -->
-        <view class="comment-scroll" wx:if="{{comments.length > 0}}">
-          <scroll-view class="comment-list" scroll-y>
-            <view class="comment-item" wx:for="{{comments}}" wx:key="id">
-              <text class="comment-user">{{item.user}}:</text>
-              <text class="comment-text">{{item.content}}</text>
-            </view>
-          </scroll-view>
-        </view>
+  
+
+  <!-- 评价模块 -->
+  <view class="rating-section card">
+    <view class="rating-title">用户评价</view>
+    <view class="rating-content">
+      <!-- 左边评论区域 - 固定70%宽度 -->
+      <view class="comment-scroll">
+        <scroll-view class="comment-list" scroll-y wx:if="{{comments.length > 0}}">
+          <view class="comment-item" wx:for="{{comments}}" wx:key="id">
+            <text class="comment-user">{{item.user}}:</text>
+            <text class="comment-text">{{item.content}}</text>
+          </view>
+        </scroll-view>
         <view class="comment-empty" wx:else>
           <text>暂无评价</text>
         </view>
-        <!-- 右边评分区域 -->
-        <view class="score-display">
-          <view class="score-number">{{ratingScore}}</view>
-          <view class="score-total">/5分</view>
-          <view class="rating-stars">
-            <!-- 根据实际评分显示星星 -->
-            <text class="star active" wx:for="{{5}}" wx:key="*this" wx:if="{{index < Math.floor(ratingScore)}}">★</text>
-            <text class="star" wx:for="{{5}}" wx:key="*this" wx:if="{{index >= Math.floor(ratingScore)}}">☆</text>
-          </view>
-          <view class="rating-count">{{commentCount}}条评价</view>
+      </view>
+
+      <!-- 右边评分区域 - 固定30%宽度，始终显示 -->
+      <view class="score-display">
+        <view class="score-number">{{ratingScore || 0}}</view>
+        <view class="score-total">/5分</view>
+        <view class="rating-stars">
+          <!-- 根据实际评分显示星星，无评分时显示空心星星 -->
+          <text 
+            class="star {{index < ratingScore ? 'active' : ''}}" 
+            wx:for="{{5}}" 
+            wx:key="*this"
+          >{{index < ratingScore ? '★' : '☆'}}</text>
         </view>
+        <view class="rating-count">{{commentCount}}条评价</view>
       </view>
     </view>
+  </view>
 
-    <!-- 个人简介模块 -->
-    <view class="bio-section card">
-      <view class="section-title">个人简介</view>
-      <view class="bio-content">{{userInfo.bio || '暂无简介'}}</view>
-      <view class="tags-section">
-        <view class="tags-title">个性标签</view>
-        <view class="tags-list">
-          <text class="tag" wx:for="{{userInfo.tags}}" wx:key="*this">{{item}}</text>
-          <text class="tag add-tag" bindtap="onAddTag" wx:if="{{!isViewOtherUser}}">+</text>
-        </view>
-      </view>
-    </view>
-
+    
     <!-- 出物和许愿信息模块 -->
     <view class="goods-section">
       <!-- 标签切换 -->
