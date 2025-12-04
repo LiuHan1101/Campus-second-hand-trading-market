@@ -12,17 +12,17 @@
   <!-- 设置列表 -->
   <view class="settings-list">
     <block wx:for="{{settings}}" wx:key="index">
-      <view class="setting-item" bindtap="onSettingTap" data-index="{{index}}">
+      <view class="setting-item" bindtap="onSettingTap" data-index="{{index}}" style="height: 145rpx; display: flex; box-sizing: border-box">
         <view class="setting-left">
           <text class="setting-icon">{{item.icon}}</text>
           <view class="setting-content">
-            <text class="setting-title">{{item.title}}</text>
-            <text class="setting-desc">{{item.desc}}</text>
+            <text class="setting-title" style="position: relative; left: -79rpx; top: 0rpx">{{item.title}}</text>
+            <text class="setting-desc" style="position: relative; left: -79rpx; top: -1rpx">{{item.desc}}</text>
           </view>
         </view>
         <view class="setting-right">
           <block wx:if="{{item.type === 'toggle'}}">
-            <switch checked="{{item.value}}" color="#07c160" />
+            <switch checked="{{item.value}}" color="#bad467" />
           </block>
           <block wx:else>
             <text class="setting-arrow">›</text>
@@ -34,10 +34,10 @@
 
   <!-- 功能操作 -->
   <view class="action-list">
-    <view class="action-item" bindtap="onClearCache">
+    <view class="action-item" bindtap="onClearCache" style="position: relative; left: 0rpx; top: -12rpx; height: 112rpx; display: flex; box-sizing: border-box">
       <text class="action-text">清除缓存</text>
       <text class="action-desc">{{cacheSize}}</text>
-      <text class="action-arrow">›</text>
+      <text class="action-arrow" style="width: 6rpx; display: block; box-sizing: border-box">›</text>
     </view>
     
     <view class="action-item" bindtap="onLogout">

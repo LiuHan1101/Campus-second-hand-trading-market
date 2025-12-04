@@ -1,6 +1,8 @@
 {
-    "usingComponents": {},
-    "navigationBarTitleText": "我的商品",
-    "enablePullDownRefresh": true,
-    "backgroundTextStyle": "dark"
-  }
+  "usingComponents": {},
+  "navigationBarTitleText": "我的商品",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "navigationBarBackgroundColor": "#ffffff",  
+  "navigationBarTextStyle": "black" 
+}

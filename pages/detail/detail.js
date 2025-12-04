@@ -200,6 +200,109 @@ Page({
           icon: 'none'
         });
       }
-    }
+    },
   
+ // 购买/出售
+ onBuy() {
+  const { isWish, goods } = this.data;
+  
+  if (isWish) {
+    // 许愿商品：立即出售（我有这个物品，卖给他）
+    wx.showToast({
+      title: '出售功能开发中',
+      icon: 'none'
+    });
+  } else {
+    // 出物商品：立即购买 - 显示确认弹窗
+    this.showConfirmPopup(goods);
+  }
+},
+
+// 显示确认弹窗
+showConfirmPopup(goods) {
+  this.setData({
+    showConfirmPopup: true,
+    popupProductInfo: {
+      image: goods.images && goods.images.length > 0 ? goods.images[0] : '/images/default.jpg',
+      title: goods.title,
+      price: goods.price
+    }
+  });
+},
+
+// 弹窗关闭事件
+onPopupClose() {
+  this.setData({
+    showConfirmPopup: false
+  });
+},
+
+// 弹窗取消事件
+onPopupCancel() {
+  console.log('用户取消交易');
+  this.setData({
+    showConfirmPopup: false
+  });
+},
+
+// 弹窗确认事件
+onPopupConfirm(e) {
+  const transactionInfo = e.detail;
+  console.log('交易信息:', transactionInfo);
+  
+  // 这里处理交易确认逻辑
+  wx.showToast({
+    title: '交易确认成功',
+    icon: 'success'
+  });
+  
+  // 可以在这里调用云函数或API提交交易信息
+  this.submitTransaction(transactionInfo);
+  
+  this.setData({
+    showConfirmPopup: false
+  });
+},
+
+// 提交交易信息到后端
+async submitTransaction(transactionInfo) {
+  try {
+    // 示例：调用云函数提交交易信息
+    const result = await wx.cloud.callFunction({
+      name: 'createTransaction',
+      data: {
+        goodsId: this.data.goods.id,
+        ...transactionInfo,
+        timestamp: new Date()
+      }
+    });
+    
+    console.log('交易提交成功:', result);
+  } catch (error) {
+    console.error('交易提交失败:', error);
+    wx.showToast({
+      title: '交易提交失败',
+      icon: 'none'
+    });
+  }
+},
+
+  // 换物
+  onSwap() {
+    const { isWish, goods } = this.data;
+    if (isWish) {
+      // 许愿商品：以物换物（我有物品可以和他交换）
+      wx.showToast({
+        title: '换物功能开发中',
+        icon: 'none'
+      });
+    } else {
+      // 出物商品：发起换物
+      wx.showToast({
+        title: '换物功能开发中',
+        icon: 'none'
+      });
+    }
+  }
+
 });

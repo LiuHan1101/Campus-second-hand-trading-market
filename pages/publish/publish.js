@@ -608,4 +608,3 @@ async publishGoods() {
     }
   },
 })
-

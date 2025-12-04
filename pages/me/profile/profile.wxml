@@ -1,23 +1,23 @@
 <!-- pages/me/profile/profile.wxml -->
-<view class="profile-container">
+<view class="profile-container" style="width: 724rpx; display: block; box-sizing: content-box">
   <!-- 头部用户信息模块 -->
-  <view class="header-section card">
+  <view class="header-section card" style="height: 335rpx; display: flex; box-sizing: border-box; position: relative; left: -2rpx; top: -20rpx">
     <view class="user-basic-info">
-      <image class="user-avatar" src="{{userInfo.avatar}}" mode="aspectFill"></image>
+      <image class="user-avatar" src="{{userInfo.avatar}}" mode="aspectFill" style="width: 139rpx; height: 139rpx; display: block; box-sizing: border-box"></image>
       <view class="user-text-info">
         <view class="user-nickname">{{userInfo.nickname}}</view>
         <view class="user-college">{{userInfo.college}}</view>
         <view class="user-stats">
-          <text class="stat-item">加入 {{userInfo.joinDays}} 天</text>
-          <text class="stat-item">信用 {{userInfo.creditScore}}</text>
+          <text class="stat-item" style="position: relative; left: -154rpx; top: 47rpx; width: 127rpx; height: 50rpx; display: block; box-sizing: border-box">加入 {{userInfo.joinDays}} 天</text>
+          <text class="stat-item" style="position: relative; left: -300rpx; top: 97rpx; width: 127rpx; height: 52rpx; display: block; box-sizing: border-box">信用 {{userInfo.creditScore}}</text>
         </view>
       </view>
     </view>
-    <button class="message-btn" bindtap="onSendMessage">私信</button>
+    <button class="message-btn" bindtap="onSendMessage" style="width: 99rpx; height: 58rpx; display: block; box-sizing: border-box; left: 70rpx; top: 0rpx; position: relative">私信</button>
   </view>
 
   <!-- 评价模块 -->
-  <view class="rating-section card">
+  <view class="rating-section card" style="width: 727rpx; height: 331rpx; display: block; box-sizing: border-box; position: relative; left: -6rpx; top: -27rpx">
     <view class="rating-title">用户评价</view>
     <view class="rating-content">
       <!-- 左边评论滚动区域 (70%) -->
@@ -43,19 +43,19 @@
 
   <!-- 个人简介模块 -->
   <view class="bio-section card">
-    <view class="section-title">个人简介</view>
-    <view class="bio-content">{{userInfo.bio || '无'}}</view>
+    
+    <view class="bio-content" style="position: relative; left: 147rpx; top: -616rpx; width: 454rpx; height: 75rpx; display: block; box-sizing: border-box">{{userInfo.bio || '无'}}</view>
     <view class="tags-section">
-      <view class="tags-title">个性标签</view>
+      
       <view class="tags-list">
-        <text class="tag" wx:for="{{userInfo.tags}}" wx:key="*this">{{item}}</text>
-        <text class="tag add-tag" bindtap="onAddTag">+</text>
+        <text class="tag" wx:for="{{userInfo.tags}}" wx:key="*this" style="position: relative; left: 139rpx; top: -607rpx; width: 143rpx; height: 60rpx; display: block; box-sizing: border-box">{{item}}</text>
+        
       </view>
     </view>
   </view>
 
   <!-- 出物和许愿信息模块 -->
-  <view class="goods-section">
+  <view class="goods-section" style="width: 729rpx; display: block; box-sizing: border-box; height: 4375rpx; position: relative; left: -27rpx; top: -308rpx">
     <!-- 出物信息 -->
     <view class="goods-tabs">
       <view class="tab {{activeGoodsTab === 'published' ? 'active' : ''}}"data-tab="published" bindtap="switchGoodsTab">
@@ -69,7 +69,7 @@
     <!-- 商品列表 -->
     <view class="goods-list">
       <block wx:if="{{activeGoodsTab === 'published'}}">
-        <view class="goods-item" wx:for="{{publishedGoods}}" wx:key="id" data-id="{{item.id}}" bindtap="onGoodsTap">
+        <view class="goods-item" wx:for="{{publishedGoods}}" wx:key="id" data-id="{{item.id}}" bindtap="onGoodsTap" style="width: 712rpx; display: flex; box-sizing: border-box; position: relative; left: -11rpx; top: 0rpx">
           <image class="goods-image" src="{{item.image}}" mode="aspectFill" data-index="{{index}}" binderror="onImageError"></image>
           <view class="goods-info">
             <view class="goods-title">{{item.title}}</view>

@@ -1,15 +1,15 @@
 <!--pages/me/me.wxml-->
 <view class="me-page">
   <!-- 用户信息头部 -->
-  <view class="user-header" bindtap="onUserInfoTap">
+  <view class="user-header" bindtap="onUserInfoTap" style="height: 197rpx; display: flex; box-sizing: border-box; left: 0rpx; top: 0rpx">
   <view class="user-avatar-section">
-    <image class="user-avatar" src="{{userInfo.avatar}}" mode="aspectFill"></image>
-    <view class="verification-badge" wx:if="{{userInfo.isVerified}}">✓</view>
+    <image class="user-avatar" src="{{userInfo.avatar}}" mode="aspectFill" style="position: relative; left: 0rpx; top: -10rpx"></image>
+    <view class="verification-badge" wx:if="{{userInfo.isVerified}}" style="position: absolute; left: 81rpx; top: 72rpx">✓</view>
   </view>
-  <view class="user-info">
+  <view class="user-info" style="height: 181rpx; display: block; box-sizing: border-box; position: relative; left: -2rpx; top: 12rpx; width: 375rpx">
     <view class="user-name">{{userInfo.nickname}}</view>
     <view class="user-college">{{userInfo.college}}</view>
-    <view class="user-days">加入{{userInfo.joinDays}}天</view>
+    <view class="user-days" style="position: relative; left: 0rpx; top: -8rpx">加入{{userInfo.joinDays}}天</view>
     <!-- 调试信息 -->
     <view class="debug-info" wx:if="{{false}}"> <!-- 设置为 true 可显示调试信息 -->
       <text>avatar: {{userInfo.avatar}}</text>
@@ -43,15 +43,14 @@
 
   <!-- 功能菜单 -->
   <view class="menu-section">
-    <view class="menu-grid" style="width: 702rpx; height: 529rpx; display: flex; box-sizing: border-box">
+    <view class="menu-grid">
       <view 
         class="menu-item" 
         wx:for="{{menuItems}}" 
         wx:key="index"
         data-index="{{index}}"
-        bindtap="onMenuItemTap"
-       style="position: relative; left: 15rpx; top: 6rpx; width: 687rpx; height: 175rpx; display: flex; box-sizing: border-box">
-        <view class="menu-icon">{{item.icon}}</view>
+        bindtap="onMenuItemTap" style="width: 710rpx; height: 114rpx; display: flex; box-sizing: border-box; left: 0rpx; top: 0rpx">
+        <image class="menu-icon" src="{{item.icon}}" mode="aspectFit"></image>
         <view class="menu-title">{{item.title}}</view>
         <view class="menu-badge" wx:if="{{item.badge > 0}}">
           {{item.badge > 99 ? '99+' : item.badge}}
@@ -63,12 +62,9 @@
 
   <!-- 底部操作 -->
   <view class="action-section">
-    <button class="share-btn" bindtap="onShareAppMessage" open-type="share" style="width: 333rpx; height: 81rpx; display: block; box-sizing: border-box; left: -6rpx; top: 16rpx; position: relative">
-      🔗 分享给同学
+    <button class="share-btn" bindtap="onShareAppMessage" open-type="share" style="width: 320rpx; height: 89rpx; display: block; box-sizing: border-box; left: -3rpx; top: -14rpx; position: relative">
+       分享给同学
     </button>
-    <view class="contact-support" bindtap="onContactCustomer">
-      联系客服 · 帮助中心
-    </view>
-    <view class="version-info">上财易物 v1.0.0</view>
+    <view class="version-info" style="position: relative; left: 0rpx; top: -2rpx; height: 120rpx; display: block; box-sizing: border-box">上财易物 v1.0.0</view>
   </view>
 </view>

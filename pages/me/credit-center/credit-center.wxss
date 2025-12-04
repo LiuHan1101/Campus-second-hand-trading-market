@@ -1,5 +1,6 @@
 /* pages/me/credit-center/credit-center.wxss */
 .credit-container {
+    background: #ffffff !important; 
     min-height: 100vh;
     padding: 20rpx;
   }
@@ -12,7 +13,7 @@
     border-radius: 20rpx;
     padding: 40rpx;
     margin-bottom: 20rpx;
-    box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
   }
   
   .score-circle {
@@ -61,7 +62,7 @@
     border-radius: 20rpx;
     padding: 30rpx;
     margin-bottom: 20rpx;
-    box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
   }
   
   .section-title {
@@ -147,7 +148,7 @@
     background: white;
     border-radius: 20rpx;
     padding: 30rpx;
-    box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
   }
   
   .rating-item {

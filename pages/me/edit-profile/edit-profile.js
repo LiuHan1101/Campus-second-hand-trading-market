@@ -18,6 +18,9 @@ Page({
         '艺术学院',
         '其他学院'
       ],
+      tags: [], // 用户标签
+      tagInput: '', // 标签输入框内容
+      showAvatarModal: false,
       isSaving: false,
       wordCount: 0
     },
@@ -42,6 +45,7 @@ Page({
             collegeIndex: collegeIndex >= 0 ? collegeIndex : 0,
             bio: userInfo.bio || '',
             gender: userInfo.gender || 0,
+            tags: userInfo.tags || [], // 加载标签
             wordCount: (userInfo.bio || '').length
           });
         }
@@ -50,31 +54,62 @@ Page({
       }
     },
   
-    // 选择头像
+    // 点击头像（打开预览弹窗）
     onChooseAvatar() {
-      console.log('选择头像');
-      wx.chooseMedia({
-        count: 1,
-        mediaType: ['image'],
-        sourceType: ['album', 'camera'],
-        maxWidth: 800,
-        maxHeight: 800,
-        success: (res) => {
-          console.log('选择的图片:', res.tempFiles[0].tempFilePath);
-          this.setData({
-            avatarUrl: res.tempFiles[0].tempFilePath
-          });
-        },
-        fail: (err) => {
-          console.error('选择图片失败:', err);
-          wx.showToast({
-            title: '选择图片失败',
-            icon: 'none'
-          });
-        }
+      console.log('打开头像预览弹窗');
+      this.setData({
+        showAvatarModal: true
       });
     },
   
+    // 弹窗内点击“更换头像”按钮
+    onChangeAvatarInModal() {
+      console.log('弹窗内点击更换头像');
+    
+      // 1. 先关闭弹窗
+      this.setData({ showAvatarModal: false });
+      
+      // 2. 延迟执行选择图片，让弹窗关闭动画完成
+      setTimeout(() => {
+        // 3. 调用选择图片API（复用您原有的核心逻辑）
+        wx.chooseMedia({
+          count: 1,
+          mediaType: ['image'],
+          sourceType: ['album', 'camera'],
+          maxWidth: 800,
+          maxHeight: 800,
+          success: (res) => {
+            console.log('选择的新图片:', res.tempFiles[0].tempFilePath);
+            // 4. 更新页面头像预览
+            this.setData({
+              avatarUrl: res.tempFiles[0].tempFilePath
+            });
+            // 可选：给用户一个成功提示
+            wx.showToast({
+              title: '头像已更新',
+              icon: 'success',
+              duration: 1500
+            });
+          },
+          fail: (err) => {
+            console.error('选择图片失败:', err);
+            wx.showToast({
+              title: '选择图片失败',
+              icon: 'none'
+            });
+          }
+        });
+      }, 150); // 延迟300毫秒，确保弹窗关闭动画流畅
+    },
+
+    // 关闭头像弹窗（点击遮罩或“取消”按钮时调用）
+    onCloseAvatarModal() {
+      console.log('关闭头像弹窗');
+      this.setData({
+        showAvatarModal: false
+      });
+    },
+
     // 输入昵称
     onNicknameInput(e) {
       this.setData({
@@ -108,6 +143,65 @@ Page({
       });
     },
   
+    // 标签输入
+    onTagInput(e) {
+      this.setData({
+      tagInput: e.detail.value
+      });
+    },
+
+    // 添加标签
+    onAddTag(e) {
+      const newTag = this.data.tagInput.trim();
+      
+      if (!newTag) {
+        return;
+      }
+      
+      if (newTag.length > 6) {
+        wx.showToast({
+          title: '标签不能超过6个字符',
+          icon: 'none'
+        });
+        return;
+      }
+      
+      if (this.data.tags.length >= 5) {
+        wx.showToast({
+          title: '最多只能添加5个标签',
+          icon: 'none'
+        });
+        return;
+      }
+      
+      // 检查是否已存在相同标签
+      if (this.data.tags.includes(newTag)) {
+        wx.showToast({
+          title: '标签已存在',
+          icon: 'none'
+        });
+        return;
+      }
+      
+      const updatedTags = [...this.data.tags, newTag];
+      
+      this.setData({
+        tags: updatedTags,
+        tagInput: ''
+      });
+    },
+
+    // 移除标签
+    onRemoveTag(e) {
+      const index = e.currentTarget.dataset.index;
+      const updatedTags = [...this.data.tags];
+      updatedTags.splice(index, 1);
+      
+      this.setData({
+        tags: updatedTags
+      });
+    },
+
     // 保存信息
     async onSave() {
       if (this.data.isSaving) return;
@@ -152,13 +246,14 @@ Page({
       });
   
       try {
-        // 准备用户数据
+        // 保存信息 - 修改用户数据对象
         const userInfo = {
           nickname: this.data.nickname.trim(),
           college: this.data.college,
           avatar: this.data.avatarUrl,
           bio: this.data.bio.trim(),
           gender: this.data.gender,
+          tags: this.data.tags, // 添加标签
           isVerified: true,
           updateTime: new Date().toISOString()
         };

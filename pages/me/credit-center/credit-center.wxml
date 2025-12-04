@@ -8,10 +8,10 @@
       <text class="score-label">信用分</text>
     </view>
     <view class="score-info">
-      <text class="score-level" style="color: {{getCreditLevelColor(creditScore.total)}};">
+      <text class="score-level" style="color: {{getCreditLevelColor(creditScore.total)}}; position: relative; left: 0rpx; top: -25rpx">
         {{creditScore.level}}
       </text>
-      <text class="score-desc">{{creditScore.desc}}</text>
+      <text class="score-desc" style="position: relative; left: 0rpx; top: -25rpx">{{creditScore.desc}}</text>
     </view>
   </view>
 

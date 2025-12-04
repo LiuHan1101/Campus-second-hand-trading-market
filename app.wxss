@@ -4,9 +4,9 @@
 /* 定义莫兰迪色系变量 */
 page {
     /* 主色调 - 红粉系列 */
-    --primary-red: #E8B4B8;    /* 莫兰迪粉红 */
-    --primary-pink: #F5D5D0;   /* 莫兰迪浅粉 */
-    --primary-coral: #F4A6A3;  /* 莫兰迪珊瑚粉 */
+    --primary-red: #ffd262;    /* 莫兰迪粉红 */
+    --primary-pink: #ffd262;   /* 莫兰迪浅粉 */
+    --primary-coral: #ffd262;  /* 莫兰迪珊瑚粉 */
     
     /* 辅助色 - 黄色系列 */
     --accent-yellow: #F7E4C8;  /* 莫兰迪奶黄 */
@@ -27,7 +27,7 @@ page {
   
   /* 全局页面样式 */
   page {
-    background-color: var(--neutral-light);
+    background-color: #ffffff;
     font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', SimSun, sans-serif;
     color: var(--neutral-text);
     line-height: 1.6;
@@ -43,7 +43,7 @@ page {
   
   /* 通用卡片样式 */
   .card {
-    background: linear-gradient(135deg, var(--primary-pink), var(--accent-beige));
+    background:#ffd262;
     border-radius: 24rpx;
     padding: 32rpx;
     box-shadow: 
@@ -55,7 +55,7 @@ page {
   
   /* 按钮基础样式 */
   .btn-primary {
-    background: linear-gradient(135deg, var(--primary-coral), var(--primary-red));
+    background: #fade97;
     color: white;
     border-radius: 16rpx;
     border: none;
@@ -108,7 +108,7 @@ page {
   }
   
   .tab.active {
-    background: linear-gradient(135deg, var(--primary-pink), var(--primary-coral));
+    background: #ffd262;
     color: white;
     box-shadow: 0 4rpx 16rpx rgba(232, 180, 184, 0.3);
   }
@@ -192,11 +192,11 @@ page {
   
   /* 渐变背景 */
   .gradient-bg {
-    background: linear-gradient(135deg, var(--primary-pink), var(--accent-yellow));
+    background:  var(--accent-yellow);
   }
   
   .gradient-bg-reverse {
-    background: linear-gradient(135deg, var(--accent-yellow), var(--primary-pink));
+    background: var(--accent-yellow);
   }
   
   /* 阴影效果 */
@@ -252,6 +252,6 @@ page {
   }
   
   .status-error {
-    background: var(--error);
+    background: #ffffff;
     color: #8C4A4D;
   }

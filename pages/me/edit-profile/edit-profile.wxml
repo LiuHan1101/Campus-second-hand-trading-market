@@ -2,18 +2,21 @@
 <view class="edit-profile-container">
   <view class="form-container">
     <!-- 头像 -->
-    <view class="form-item">
+    <view class="form-item" style="height: 166rpx; display: flex; box-sizing: border-box; left: 0rpx; top: 0rpx">
       <text class="form-label">头像</text>
       <view class="avatar-section">
-        <image class="avatar-preview" src="{{avatarUrl}}" mode="aspectFill"></image>
-        <button class="avatar-btn" bindtap="onChooseAvatar">更换头像</button>
+        <image 
+          class="avatar-preview" 
+          src="{{avatarUrl}}" 
+          mode="aspectFill"
+          bindtap="onChooseAvatar"  style="position: relative; left: 373rpx; top: -2rpx"></image>
       </view>
     </view>
 
     <!-- 昵称 -->
     <view class="form-item">
       <text class="form-label">昵称</text>
-      <input 
+      <input style="position: relative; left: 0rpx; top: -1rpx" 
         class="form-input" 
         type="text" 
         placeholder="请输入昵称（最多20个字符）"
@@ -32,7 +35,7 @@
         value="{{gender}}"
         bindchange="onGenderChange"
       >
-        <view class="picker-value">{{genders[gender]}}</view>
+        <view class="picker-value" style="position: relative; left: 0rpx; top: 0rpx">{{genders[gender]}}</view>
       </picker>
     </view>
 
@@ -50,10 +53,10 @@
     </view>
 
     <!-- 个人简介 -->
-    <view class="form-item">
+    <view class="form-item" style="height: 245rpx; display: flex; box-sizing: border-box; left: 0rpx; top: 0rpx">
       <text class="form-label">个人简介</text>
       <view class="textarea-container">
-        <textarea 
+        <textarea style="position: relative; left: 22rpx; top: 0rpx" 
           class="form-textarea" 
           placeholder="介绍一下自己吧（最多100个字符）"
           value="{{bio}}"
@@ -61,6 +64,34 @@
           maxlength="100"
         />
         <text class="word-count">{{wordCount}}/100</text>
+      </view>
+    </view>
+
+    <!-- 个人标签 -->
+    <view class="form-item" style="height: 243rpx; display: flex; box-sizing: border-box; left: 0rpx; top: 0rpx">
+      <text class="form-label">个人标签</text>
+      <view class="tags-edit-section">
+        <!-- 当前标签展示 -->
+        <view class="tags-list-edit">
+          <view class="tag-edit-item" wx:for="{{tags}}" wx:key="index" data-index="{{index}}">
+            <text class="tag-text">{{item}}</text>
+            <text class="tag-remove" bindtap="onRemoveTag">×</text>
+          </view>
+        </view>
+        
+        <!-- 添加新标签 -->
+        <view class="tag-input-container">
+          <input style="height: 83rpx; display: block; box-sizing: border-box; position: relative; left: 0rpx; top: 0rpx" 
+            class="tag-input" 
+            type="text" 
+            placeholder="输入标签后按回车添加" 
+            value="{{tagInput}}"
+            bindinput="onTagInput"
+            bindconfirm="onAddTag"
+            maxlength="6"
+          />
+          
+        </view>
       </view>
     </view>
   </view>
@@ -75,5 +106,25 @@
     >
       {{isSaving ? '保存中...' : '保存'}}
     </button>
+  </view>
+</view>
+
+<!-- 头像预览/更换弹窗 -->
+<view class="avatar-modal" wx:if="{{showAvatarModal}}">
+  <!-- 半透明遮罩层 -->
+  <view class="modal-mask" bindtap="onCloseAvatarModal"></view>
+  
+  <!-- 弹窗内容 -->
+  <view class="modal-content">
+    <!-- 当前头像预览 (方形) -->
+    <view class="modal-avatar-section">
+      <image class="modal-avatar" src="{{avatarUrl}}" mode="aspectFill"></image>
+    </view>
+    
+    <!-- 操作按钮 -->
+    <view class="modal-actions">
+      <button class="modal-btn-change" bindtap="onChangeAvatarInModal">更换头像</button>
+      <button class="modal-btn-cancel" bindtap="onCloseAvatarModal">取消</button>
+    </view>
   </view>
 </view>

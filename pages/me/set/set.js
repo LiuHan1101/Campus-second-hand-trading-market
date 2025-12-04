@@ -8,14 +8,12 @@ Page({
       },
       settings: [
         {
-          icon: '👤',
           title: '编辑个人资料',
           desc: '修改昵称、头像、学院等信息',
           url: '/pages/me/edit-profile/edit-profile',
           type: 'navigate'
         },
         {
-          icon: '🔒',
           title: '隐私设置',
           desc: '管理个人信息可见性',
           url: '',
@@ -23,7 +21,6 @@ Page({
           value: true
         },
         {
-          icon: '🔔',
           title: '消息通知',
           desc: '接收交易和系统通知',
           url: '',
@@ -31,33 +28,17 @@ Page({
           value: true
         },
         {
-          icon: '🌐',
           title: '语言设置',
           desc: '简体中文',
           url: '',
           type: 'navigate'
         },
         {
-          icon: '📱',
           title: '关于上财易物',
           desc: '版本号 1.0.0',
           url: '/pages/me/about/about',
           type: 'navigate'
         },
-        {
-          icon: '📞',
-          title: '联系客服',
-          desc: '有问题？联系我们',
-          url: '',
-          type: 'contact'
-        },
-        {
-          icon: '📝',
-          title: '用户协议',
-          desc: '查看用户协议和隐私政策',
-          url: '/pages/me/agreement/agreement',
-          type: 'navigate'
-        }
       ],
       cacheSize: '0.0MB'
     },
@@ -118,10 +99,6 @@ Page({
           this.toggleSetting(index);
           break;
           
-        case 'contact':
-          this.contactCustomer();
-          break;
-          
         default:
           wx.showToast({
             title: `${setting.title}功能开发中`,
@@ -141,12 +118,6 @@ Page({
       
       // 保存设置到本地
       this.saveSetting(this.data.settings[index].title, newValue);
-      
-      wx.showToast({
-        title: newValue ? '已开启' : '已关闭',
-        icon: 'success',
-        duration: 1000
-      });
     },
   
     // 保存设置

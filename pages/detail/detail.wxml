@@ -97,10 +97,13 @@
         <text class="btn-text">以物换物</text>
       </view>
     </block>
-
-
-
-
   </view>
 </view>
+<confirm-popup 
+  show="{{showConfirmPopup}}"
+  product-info="{{popupProductInfo}}"
+  bind:close="onPopupClose"
+  bind:cancel="onPopupCancel"
+  bind:confirm="onPopupConfirm"
+/>
 </view>

@@ -18,22 +18,15 @@
     "pages/login/login"
   ],
   "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#ffffff",
     "navigationBarTitleText": "上财易物",
-    "navigationBarBackgroundColor": "#E8B4B8",
-    "navigationBarTextStyle": "white",
-    "backgroundColor": "#FAF7F2",
-    "backgroundTextStyle": "dark",
-    "enablePullDownRefresh": true,
-    "lazyCodeLoading": "requiredComponents",
-    "requireBackgroundModes": ["audio", "location"],
-    "optimization": {
-        "subPackages": true
-    }
+    "navigationBarTextStyle": "black"  
   },
   "tabBar": {
     "color": "#8C7B6C",
     "selectedColor": "#E8B4B8",
-    "backgroundColor": "#FAF7F2",
+    "backgroundColor": "#ffffff",
     "borderStyle": "white",
     "list": [
       {
@@ -68,8 +61,6 @@
       }
     ]
   },
-
-  
-
+  "style": "v2",
   "sitemapLocation": "sitemap.json"
 }

@@ -1,9 +1,11 @@
 {
-    "usingComponents": {
-        "t-drawer": "/miniprogram_npm/tdesign-miniprogram/drawer/drawer"
-    },
-    "enablePullDownRefresh": true,
-    "backgroundTextStyle": "dark",
-    "backgroundColor": "#f6f6f6",
-    "onReachBottomDistance": 50
+  "usingComponents": {
+    "t-drawer": "/miniprogram_npm/tdesign-miniprogram/drawer/drawer"
+  },
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "backgroundColor": "#ffffff",
+  "onReachBottomDistance": 50,
+  "navigationBarBackgroundColor": "#ffffff",  
+  "navigationBarTextStyle": "black" 
 }
