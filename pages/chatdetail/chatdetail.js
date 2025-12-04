@@ -230,8 +230,6 @@ Page({
     this.imageUrlCache[url] = result;
     return result;
   },
-  // 获取可共享的图片URL
-
 
   // 批量处理图片URL（性能优化）
   async batchFixImageUrls(urls) {
