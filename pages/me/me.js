@@ -201,7 +201,7 @@ Page({
   
     // 计算加入天数
     calculateJoinDays(createTime) {
-      if (!createTime) return 0;
+      if (!createTime) return 1;
       
       let createDate;
       
