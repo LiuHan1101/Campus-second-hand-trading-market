@@ -6,7 +6,7 @@ Page({
     swapGoodsList: [],
     searchValue: '',
     isLoading: false,
-    userCache: new Map() // 添加用户信息缓存
+    // 注意：不要在 data 中放 Map，微信小程序会序列化 data 导致 Map 方法丢失
   },
 
   // 图片加载失败处理
@@ -31,6 +31,8 @@ Page({
   },
 
   onLoad() {
+    // 在页面实例上创建非响应性缓存，避免放入 data（会被序列化）
+    this.userCache = new Map();
     this.loadGoodsData();
   },
 
@@ -135,6 +137,7 @@ Page({
         price: parseFloat(item.price) || 0,
         image: imageUrl, // 使用处理后的图片URL
         transactionType: that.showTransactionType(item.transactionType),
+        transactionTypeRaw: item.transactionType || 'cash', // 原始英文值
         tag: item.categories,
         switch: item.switch,
         user: userInfo, // 使用获取到的用户信息
@@ -169,8 +172,8 @@ Page({
         return this.getDefaultUserInfo();
       }
 
-      if (this.data.userCache.has(userOpenid)) {
-        return this.data.userCache.get(userOpenid);
+      if (this.userCache && this.userCache.has && this.userCache.has(userOpenid)) {
+        return this.userCache.get(userOpenid);
       }
 
       // 3. 从users数据库查询
@@ -189,8 +192,9 @@ Page({
           userId: userData._id
         };
 
-        // 存入缓存
-        this.data.userCache.set(userOpenid, userInfo);
+        // 存入缓存（保存在页面实例上）
+        if (!this.userCache) this.userCache = new Map();
+        this.userCache.set(userOpenid, userInfo);
         return userInfo;
       } else {
         return this.getDefaultUserInfo();
@@ -336,23 +340,34 @@ Page({
   },
 
   // 跳转到详情页
-  goToDetail(e) {
-    const id = e.currentTarget.dataset.id;
-    const {
-      cashGoodsList,
-      swapGoodsList
-    } = this.data;
-    const allGoods = [...cashGoodsList, ...swapGoodsList];
-    const goods = allGoods.find(item => item.id === id);
+goToDetail(e) {
+  const id = e.currentTarget.dataset.id;
+  const { cashGoodsList, swapGoodsList } = this.data;
+  const allGoods = [...cashGoodsList, ...swapGoodsList];
+  const goods = allGoods.find(item => item.id === id);
 
-    if (goods) {
-      // 传递商品数据，包含完整的用户信息
-      const goodsData = encodeURIComponent(JSON.stringify(goods));
-      wx.navigateTo({
-        url: `/pages/detail/detail?id=${id}&goodsData=${goodsData}`
-      });
-    }
-  },
+  if (goods) {
+    // 【关键修改】重新构建传递的数据，使用英文值
+    const goodsDataToSend = {
+      ...goods,
+      // 使用原始英文值，而不是首页显示的中文值
+      transactionType: goods.transactionTypeRaw || goods.rawData?.transactionType || 'cash',
+      // 确保 user 信息正确
+      user: goods.user || {},
+      // 确保有 rawData
+      rawData: goods.rawData || {}
+    };
+    
+    // 调试信息
+    console.log('首页显示的中文值:', goods.transactionType);
+    console.log('传递的英文值:', goodsDataToSend.transactionType);
+    
+    const goodsData = encodeURIComponent(JSON.stringify(goodsDataToSend));
+    wx.navigateTo({
+      url: `/pages/detail/detail?id=${id}&goodsData=${goodsData}`
+    });
+  }
+},
 
   formatTime(time) {
     console.log('调试 - 原始时间:', time);
