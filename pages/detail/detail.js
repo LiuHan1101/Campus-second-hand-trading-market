@@ -470,8 +470,12 @@ Page({
       const chatData = {
         postId: goods.id,
         postTitle: goods.title,
-        publisherId: publisherInfo?.userId || '',
-        publisherName: publisherInfo?.nickname || '发布者'
+        // 强制使用 openid 作为发布者标识，避免 users._id 与 openid 混用
+        // 优先从 publisherInfo.openid，其次 goods.publisherOpenid/_openid，最后才退回到可能的 _id
+        publisherId: (
+          publisherInfo?.openid || goods.publisherOpenid || goods._openid || publisherInfo?.userId || goods.publisherId || goods.userId || ''
+        ),
+        publisherName: publisherInfo?.nickname || goods.publisherName || '发布者'
       };
       
       wx.navigateTo({

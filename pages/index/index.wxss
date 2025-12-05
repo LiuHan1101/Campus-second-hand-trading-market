@@ -96,7 +96,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  min-height: 100%;
 }
 
 /* 商品头部（标题和价格） */
@@ -127,6 +127,7 @@
   color: #e46225;
   flex-shrink: 0;
   text-align: right;
+  min-height: 57rpx;
 }
 
 /* 商品元信息（用户和时间） */
@@ -147,9 +148,19 @@
   color: #999;
 }
 
+/* 商品底部（标签和交易类型放在同一行） */
+.goods-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto; /* 将整个底部区域推到容器底部 */
+  padding-top: 8rpx; /* 添加一点上边距 */
+}
+
 /* 商品标签 */
 .goods-tags {
-  margin-bottom: 16rpx;
+  flex: 1; /* 让标签区域占据可用空间 */
+  margin-bottom: 0; /* 移除底部边距 */
 }
 
 .goods-tag {
@@ -160,7 +171,7 @@
   border-radius: 20rpx;
   display: inline-block;
   margin-right: 12rpx;
-  margin-bottom: 8rpx;
+  margin-bottom: 0rpx;
 }
 
 /* 商品底部（交易类型） */
@@ -176,4 +187,5 @@
   padding: 6rpx 16rpx;
   background: #f5f5f5;
   border-radius: 6rpx;
+  flex-shrink: 0; 
 }

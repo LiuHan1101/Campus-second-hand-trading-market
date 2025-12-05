@@ -1,5 +1,5 @@
 <!-- pages/me/profile/profile.wxml -->
-<view class="profile-container">
+<view class="profile-container" style="width: 710rpx; display: block; box-sizing: content-box">
   <!-- 主加载状态 -->
   <view class="loading-state" wx:if="{{isLoading}}">
     <view class="loading-content">
@@ -45,6 +45,14 @@
         wx:if="{{!isViewOtherUser}}" style="width: 147rpx; display: flex; box-sizing: border-box; left: 533rpx; top: 52rpx; position: absolute">
         编辑资料
       </button>
+      <!-- 右上角私信按钮 -->
+      <button 
+        class="message-btn" 
+        bindtap="onSendMessage" 
+        wx:else
+        style="width: 100rpx; display: flex; box-sizing: border-box; left: 533rpx; top: 52rpx; position: absolute">
+        私信
+      </button>
     </view>
 
   
@@ -85,13 +93,13 @@
 
     
     <!-- 出物和许愿信息模块 -->
-    <view class="goods-section">
+    <view class="goods-section" style="width: 710rpx; display: block; box-sizing: border-box; position: relative; left: 0rpx; top: -1rpx">
       <!-- 标签切换 -->
-      <view class="goods-tabs">
+      <view class="goods-tabs" style="position: relative; left: 0rpx; top: -2rpx">
         <view 
           class="tab {{activeGoodsTab === 'published' ? 'active' : ''}}"
           data-tab="published" 
-          bindtap="switchGoodsTab">
+          bindtap="switchGoodsTab" style="width: 347rpx; display: block; box-sizing: border-box; left: 0rpx; top: 0rpx">
           发布 ({{publishedGoods.length}})
         </view>
         <view 
@@ -145,14 +153,24 @@
               data-type="goods">
             </image>
             <view class="goods-info">
-              <view class="goods-title">{{item.title}}</view>
-              <view class="goods-price">
-                <text class="price" wx:if="{{item.price > 0}}">¥{{item.price}}</text>
-                <text class="swap-tag" wx:if="{{item.transactionType === 'swap'}}">可换物</text>
-                <text class="both-tag" wx:if="{{item.transactionType === 'both'}}">可买可换</text>
-                <text class="status-tag {{item.status}}" wx:if="{{item.status !== 'selling'}}">{{item.status === 'sold' ? '已售出' : '已下架'}}</text>
+              <view class="goods-header">
+                <view class="goods-title">{{item.title}}</view>
+                <view class="goods-price"><text wx:if="{{item.price > 0 && item.transactionType !== 'swap'}}">¥{{item.price}}</text></view>
               </view>
-              <view class="goods-desc">{{item.description}}</view>
+              <view class="goods-meta">
+                <view class="goods-description" style="position: relative; left: 0rpx; top: -2rpx">{{item.description}}</view>
+                <view class="goods-time">{{item.createTime}}</view>
+              </view>
+              <view class="goods-bottom">
+                <view class="goods-tags">
+                  <!-- 商品分类标签（绿色） -->
+                  <block wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this">
+                    <text class="goods-tag">{{tag}}</text>
+                  </block>
+                </view>
+                <!-- 交易类型（灰色） -->
+                <view class="goods-type">{{item.transactionType === 'cash' ? '现金' : item.transactionType === 'swap' ? '换物' : '均可'}}</view>
+              </view>
             </view>
           </view>
         </block>
@@ -166,25 +184,39 @@
           </view>
           
           <!-- 愿望列表 -->
-          <view wx:else class="goods-list">
-            <view wx:for="{{wishGoods}}" wx:key="id" 
-                  class="goods-item" 
-                  data-id="{{item.id}}" 
-                  data-type="wish"
-                  bindtap="onGoodsTap">
-              <image src="{{item.image}}" 
-                     class="goods-image" 
-                     mode="aspectFill"
-                     data-index="{{index}}"
-                     data-type="wish"
-                     binderror="onImageError"></image>
-              <view class="goods-info">
-                <text class="goods-title">{{item.title}}</text>
-                <text class="goods-desc">{{item.shortDescription}}</text>
-                <view class="goods-footer">
-                  <text class="goods-price">{{item.transactionTypeText}}</text>
-                  <text class="goods-time">{{item.createTime}}</text>
-               </view>
+          <view 
+            wx:for="{{wishGoods}}" 
+            wx:key="id" 
+            class="goods-item" 
+            data-id="{{item.id}}" 
+            data-type="wish"
+            bindtap="onGoodsTap">
+            <image 
+              src="{{item.image}}" 
+              class="goods-image" 
+              mode="aspectFill"
+              data-index="{{index}}"
+              data-type="wish"
+              binderror="onImageError"></image>
+            <view class="goods-info">
+              <view class="goods-header">
+                <view class="goods-title">{{item.title}}</view>
+                <!-- 即使没有价格，也保留这个view占位 -->
+                <view class="goods-price">
+                  <text wx:if="{{item.price > 0 && item.transactionType !== 'swap'}}">¥{{item.price}}</text>
+                </view>
+              </view>
+              <view class="goods-meta">
+                <view class="goods-description" style="position: relative; left: 0rpx; top: -2rpx">{{item.shortDescription}}</view>
+                <view class="goods-time">{{item.createTime}}</view>
+              </view>
+              <view class="goods-bottom">
+                <view class="goods-tags">
+                  <block wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this">
+                    <text class="goods-tag">{{tag}}</text>
+                  </block>
+                </view>
+                <view class="goods-type" wx:if="{{item.transactionTypeText}}">{{item.transactionTypeText}}</view>
               </view>
             </view>
           </view>

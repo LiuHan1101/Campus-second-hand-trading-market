@@ -122,22 +122,98 @@ Page({
   
     // 处理商品数据 - 移除了moveX字段
     processGoodsData(goodsList) {
+      if (!goodsList || !Array.isArray(goodsList)) {
+        return [];
+      }
+      
+      console.log('原始商品数据:', goodsList);
+      
       return goodsList.map(item => {
-        let imageUrl = '/images/default.jpg';
+        let image = '/images/default.jpg';
         if (item.images && item.images.length > 0) {
-          imageUrl = item.images[0];
+          image = item.images[0];
+        } else if (item.image) {
+          image = item.image;
         }
         
+        // 获取商品标签，支持多种可能的字段名
+        let tags = [];
+        if (item.tags && Array.isArray(item.tags)) {
+          tags = item.tags;
+        } else if (item.categories && Array.isArray(item.categories)) {
+          tags = item.categories;
+        } else if (item.tag) {
+          // 如果是单个标签字符串，转为数组
+          tags = [item.tag];
+        } else if (item.keywords && Array.isArray(item.keywords)) {
+          // 尝试其他可能的字段名
+          tags = item.keywords;
+        }
+        
+        console.log('商品ID:', item._id, '标签数据:', tags);
+        
         return {
-          id: item._id,
-          title: item.title,
-          description: item.description,
+          id: item._id || item.id,
+          title: item.title || '未命名商品',
+          description: item.description || '',
           price: parseFloat(item.price) || 0,
-          image: imageUrl,
+          image: image,
           transactionType: item.transactionType || 'cash',
-          tag: item.categories || [],
-          createTime: this.formatTime(item.createTime)
-          // 移除了moveX字段
+          tags: tags, // 确保tags字段被正确添加
+          createTime: this.formatTime(item.createTime),
+          status: item.status || 'selling',
+          switch: item.switch || 'publish'
+        };
+      });
+    },
+    
+    processWishesData(wishesList) {
+      if (!wishesList || !Array.isArray(wishesList)) {
+        return [];
+      }
+      
+      console.log('原始愿望数据:', wishesList);
+      
+      return wishesList.map(item => {
+        let image = '/images/default.jpg';
+        if (item.images && item.images.length > 0) {
+          image = item.images[0];
+        } else if (item.image) {
+          image = item.image;
+        }
+        
+        // 获取愿望标签，支持多种可能的字段名
+        let tags = [];
+        if (item.tags && Array.isArray(item.tags)) {
+          tags = item.tags;
+        } else if (item.categories && Array.isArray(item.categories)) {
+          tags = item.categories;
+        } else if (item.tag) {
+          // 如果是单个标签字符串，转为数组
+          tags = [item.tag];
+        } else if (item.keywords && Array.isArray(item.keywords)) {
+          // 尝试其他可能的字段名
+          tags = item.keywords;
+        }
+        
+        console.log('愿望ID:', item._id, '标签数据:', tags);
+        
+        return {
+          id: item._id || item.id,
+          title: item.title || '未命名愿望',
+          shortDescription: item.description ? (item.description.length > 50 ? item.description.substring(0, 50) + '...' : item.description) : '',
+          expectedswap: item.expectedswap || '任意物品',
+          displayText: item.transactionType === 'swap' ? 
+            `期望交换：${item.expectedswap || '任意物品'}` : 
+            `价格：${parseFloat(item.price) || 0}元`,
+          image: image,
+          transactionType: item.transactionType || 'swap',
+          transactionTypeText: item.transactionType === 'cash' ? '现金' : 
+                              item.transactionType === 'swap' ? '换物' : '均可',
+          tags: tags, // 确保tags字段被正确添加
+          createTime: this.formatTime(item.createTime),
+          status: item.status || 'selling',
+          switch: 'wish'
         };
       });
     },

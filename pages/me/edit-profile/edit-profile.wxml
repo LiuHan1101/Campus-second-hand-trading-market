@@ -2,7 +2,7 @@
 <view class="edit-profile-container">
   <view class="form-container">
     <!-- 头像 -->
-    <view class="form-item" style="height: 166rpx; display: flex; box-sizing: border-box; left: 0rpx; top: 0rpx">
+    <view class="form-item" style="height: 162rpx; display: flex; box-sizing: border-box; left: 0rpx; top: 0rpx">
       <text class="form-label">头像</text>
       <view class="avatar-section">
         <image 
@@ -16,7 +16,7 @@
     <!-- 昵称 -->
     <view class="form-item">
       <text class="form-label">昵称</text>
-      <input style="position: relative; left: 0rpx; top: -1rpx" 
+      <input style="position: relative; left: 22rpx; top: 1rpx" 
         class="form-input" 
         type="text" 
         placeholder="请输入昵称（最多20个字符）"
@@ -56,7 +56,7 @@
     <view class="form-item" style="height: 245rpx; display: flex; box-sizing: border-box; left: 0rpx; top: 0rpx">
       <text class="form-label">个人简介</text>
       <view class="textarea-container">
-        <textarea style="position: relative; left: 22rpx; top: 0rpx" 
+        <textarea style="position: relative; left: 24rpx; top: 0rpx; width: 493rpx; display: block; box-sizing: border-box" 
           class="form-textarea" 
           placeholder="介绍一下自己吧（最多100个字符）"
           value="{{bio}}"
@@ -70,7 +70,7 @@
     <!-- 个人标签 -->
     <view class="form-item" style="height: 243rpx; display: flex; box-sizing: border-box; left: 0rpx; top: 0rpx">
       <text class="form-label">个人标签</text>
-      <view class="tags-edit-section">
+      <view class="tags-edit-section" style="position: relative; left: 24rpx; top: 33rpx">
         <!-- 当前标签展示 -->
         <view class="tags-list-edit">
           <view class="tag-edit-item" wx:for="{{tags}}" wx:key="index" data-index="{{index}}">
