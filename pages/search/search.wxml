@@ -1,21 +1,23 @@
+<!-- 搜索页面 -->
 <view class="search-page">
   <!-- 搜索栏 -->
   <view class="search-header">
     <view class="search-input-container">
       <input 
         class="search-input" 
-        placeholder="搜索闲置物品..." 
+        placeholder="{{placeholderText}}"  
         focus="{{true}}"
         value="{{searchValue}}"
         bindinput="onSearchInput"
         bindconfirm="onSearchConfirm"
       />
+      <!-- 将清除按钮放在搜索框内部 -->
       <view 
         class="clear-btn {{showClearBtn ? 'show' : 'hide'}}" 
-        bindtap="onCancel"
-    >
+        bindtap="onClearInput"
+      >
         ×
-    </view>
+      </view>
     </view>
   </view>
 
@@ -26,12 +28,25 @@
       <text class="clear-all" bindtap="onClearAllHistory">一键清除</text>
     </view>
     <view class="history-list">
-                <view class="history-item" wx:for="{{searchHistory}}" wx:key="*this">
+      <view 
+        class="history-item" 
+        wx:for="{{searchHistory}}" 
+        wx:key="*this"
+        wx:for-index="index" 
+        wx:for-item="item"
+        bindtap="onHistoryItemTap"
+        data-keyword="{{item}}"
+      >
         <text class="history-text">{{item}}</text>
-        <view class="delete-btn" catchtap="onDeleteHistory" data-index="{{index}}">
-            <text class="delete-icon">×</text>
+        <view 
+          class="delete-btn" 
+          catchtap="onDeleteHistory" 
+          data-index="{{index}}"
+          data-keyword="{{item}}"
+        >
+          <text class="delete-icon"> × </text>
         </view>
-        </view>
+      </view>
     </view>
   </view>
 
@@ -51,8 +66,13 @@
 
   <!-- 搜索结果 -->
   <view class="search-results" wx:if="{{searchValue}}">
-    <view class="results-count">找到 {{searchResults.length}} 个结果</view>
-    <scroll-view class="results-list" scroll-y>
+    <!-- 修改结果计数文本 -->
+    <view class="results-count">
+      找到 {{searchResults.length}} 个{{searchType === 'goods' ? '商品' : '愿望'}}
+    </view>
+    
+    <!-- 有结果时显示结果列表 -->
+    <scroll-view class="results-list" scroll-y wx:if="{{searchResults.length > 0}}">
       <view 
         class="result-item" 
         wx:for="{{searchResults}}" 
@@ -63,15 +83,44 @@
         <image class="result-image" src="{{item.image}}" mode="aspectFill" />
         <view class="result-info">
           <view class="result-title">{{item.title}}</view>
-          <view class="result-price">¥{{item.price}}</view>
-          <view class="result-user">{{item.user.nickname}}</view>
+          
+          <!-- 商品搜索结果 -->
+          <view wx:if="{{searchType === 'goods'}}">
+            <!-- 商品：有价格就显示价格 -->
+            <view class="result-price" wx:if="{{item.price > 0}}">
+              ¥{{item.price}}
+            </view>
+            <!-- 商品：换物交易显示换物 -->
+            <view class="result-price" wx:if="{{item.transactionType === 'swap' && !item.price}}">
+              换物
+            </view>
+          </view>
+          
+          <!-- 愿望搜索结果 -->
+          <view wx:if="{{searchType === 'wish'}}">
+            <!-- 愿望：有期待价格就显示期待价格 -->
+            <view class="result-price" wx:if="{{item.price > 0}}">
+              期待价格: ¥{{item.price}}
+            </view>
+            <!-- 愿望：换物交易显示换物 -->
+            <view class="result-price" wx:if="{{item.transactionType === 'swap' && !item.price}}">
+              换物
+            </view>
+          </view>
+          
+          <view class="result-footer">
+            <view class="result-user">{{item.user.nickname}}</view>
+            <view class="result-time">{{item.displayTime}}</view>
+          </view>
         </view>
       </view>
     </scroll-view>
-  </view>
-
-  <!-- 无结果提示 -->
-  <view class="no-results" wx:if="{{searchValue && searchResults.length === 0}}">
-    <text class="no-results-text">没有找到相关商品</text>
+    
+    <!-- 无结果时显示提示 -->
+    <view class="no-results-inner" wx:if="{{searchResults.length === 0}}">
+      <text class="no-results-text">
+        没有找到相关{{searchType === 'goods' ? '商品' : '愿望'}}
+      </text>
+    </view>
   </view>
 </view>

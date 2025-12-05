@@ -5,25 +5,26 @@ Page({
     searchValue: '',
     wishList: [], // 当前分类的愿望列表
     isLoading: false,
-    currentCategoryLabel: '图书教材',
+    currentCategoryLabel: '全部',
     
-    // 分类列表
-    contentSidebar: 'books',
+    // 分类列表 - 在所有分类之前添加"全部"
+    contentSidebar: 'all',
     categoryList: [
-      { label: '图书教材', value: '图书教材' },
-      { label: '数码产品', value: '数码产品' },
-      { label: '服饰鞋包', value: '服饰鞋包' },
-      { label: '生活用品', value: '生活用品' },
-      { label: '运动器材', value: '运动器材' },
-      { label: '美妆个护', value: '美妆个护' },
-      { label: '宿舍神器', value: '宿舍神器' },
-      { label: '学习用品', value: '学习用品' },
-      { label: '其他', value: '其他' }
+      { label: '全部', value: 'all' },
+      { label: '图书教材', value: 'books' },
+      { label: '数码产品', value: 'electronics' },
+      { label: '服饰鞋包', value: 'clothing' },
+      { label: '生活用品', value: 'daily' },
+      { label: '运动器材', value: 'sports' },
+      { label: '美妆个护', value: 'beauty' },
+      { label: '宿舍神器', value: 'dorm' },
+      { label: '学习用品', value: 'study' },
+      { label: '其他', value: 'other' }
     ]
   },
 
   onLoad() {
-    this.loadWishesByCategory('books');
+    this.loadWishesByCategory('all'); // 默认加载"全部"
   },
 
   onShow() {
@@ -35,19 +36,40 @@ Page({
     const value = e.detail.value;
     if (value.trim()) {
       wx.navigateTo({
-        url: `/pages/search/search?keyword=${value}`
+        url: `/pages/search/search?keyword=${value}&source=wishpool`  // 添加source参数
       });
     }
   },
 
-  // 跳转到搜索页面
+  // 跳转到搜索页面 - 修复版
   goToSearch() {
+    console.log('跳转到搜索页面，来源：许愿池');
     wx.navigateTo({
-      url: '/pages/search/search'
+      url: '/pages/search/search?source=wishpool'  // 关键修改：使用source参数
+    }).catch(err => {
+      console.error('跳转失败:', err);
+      wx.showToast({
+        title: '跳转失败，请稍后重试',
+        icon: 'none',
+        duration: 2000
+      });
     });
   },
 
-  // 侧边栏分类切换
+  // 分类切换方法
+  switchCategory(e) {
+    const category = e.currentTarget.dataset.value;
+    console.log('切换分类:', category);
+    
+    this.setData({
+      contentSidebar: category,
+      isLoading: true
+    });
+    
+    this.loadWishesByCategory(category);
+  },
+
+  // 组件切换方法
   onContentSideBarChange(e) {
     const category = e.detail.value;
     this.setData({
@@ -69,12 +91,20 @@ Page({
       // 先尝试从数据库加载愿望数据
       let hasData = false;
       try {
-        // 查询指定分类的愿望，按创建时间倒序
-        const result = await db.collection('POST')
+        let query = db.collection('POST')
           .where({
-            categories: category,
             switch: 'wish' // 只显示愿望
-          })
+          });
+        
+        // 如果不是"全部"分类，添加分类条件
+        if (category !== 'all') {
+          query = query.where({
+            categories: category
+          });
+        }
+        
+        // 按创建时间倒序
+        const result = await query
           .orderBy('createTime', 'desc')
           .get();
         
@@ -116,7 +146,7 @@ Page({
     }
   },
 
-  // 处理愿望数据格式 - 删除用户和时间信息
+  // 处理愿望数据格式
   processWishesData(wishesList) {
     return wishesList.map(item => {
       // 处理图片URL - 支持多张图片
@@ -144,25 +174,31 @@ Page({
         }
       }
       
-      // 处理自定义标签
+      // 处理自定义标签 - 最多显示3个
       let customTags = [];
       if (item.customTags && Array.isArray(item.customTags)) {
-        customTags = item.customTags;
+        customTags = item.customTags.slice(0, 3).map(tag => {
+          // 标签太长时截断
+          return tag.length > 5 ? tag.substring(0, 5) + '...' : tag;
+        });
       } else if (item.tags) {
-        customTags = Array.isArray(item.tags) ? item.tags : [item.tags];
+        customTags = Array.isArray(item.tags) ? item.tags.slice(0, 3) : [item.tags];
       }
+      
+      // 处理描述，确保长度合适
+      let description = item.description || '';
       
       return {
         id: item._id || item.id,
         title: item.title,
-        description: item.description,
+        description: description,
         price: parseFloat(item.price) || 0,
         priceDisplay: priceDisplay,
-        allImages: allImages, // 所有图片
-        displayImages: displayImages.images, // 显示的图片（最多3张）
-        totalImages: allImages.length, // 总图片数量
+        allImages: allImages,
+        displayImages: displayImages.images,
+        totalImages: allImages.length,
         transactionType: item.transactionType || 'cash',
-        customTags: customTags, // 自定义标签
+        customTags: customTags,
         switch: item.switch,
         expectedSwap: item.expectedSwap || '',
         rawData: item
@@ -170,7 +206,7 @@ Page({
     });
   },
 
-  // 处理显示图片逻辑 - 保持原有的多图显示逻辑
+  // 处理显示图片逻辑
   processDisplayImages(images) {
     if (!images || images.length === 0) {
       return { images: [], totalImages: 0 };
@@ -178,7 +214,7 @@ Page({
     
     const displayImages = images.slice(0, 3).map((url, index) => ({ 
       url, 
-      isLast: index === 2 && images.length > 3 // 标记是否为最后一张且需要显示数量
+      isLast: index === 2 && images.length > 3
     }));
     
     return {
@@ -187,18 +223,19 @@ Page({
     };
   },
 
-  // 模拟愿望数据 - 删除用户和时间信息
+  // 模拟愿望数据 - 添加"全部"分类的数据
   loadMockWishesByCategory(category) {
-    const mockData = {
+    // 所有分类的模拟数据
+    const allMockData = {
       'books': [
         { 
           id: 1, 
           title: '线性代数课本', 
           price: 20, 
           priceRange: '20-30',
-          images: ['/images/demo2.jpg', '/images/demo1.jpg', '/images/demo3.jpg', '/images/demo4.jpg'], // 多张图片
+          images: ['/images/demo2.jpg', '/images/demo1.jpg', '/images/demo3.jpg', '/images/demo4.jpg'],
           transactionType: 'cash', 
-          customTags: ['教材', '数学', '课后答案'], // 自定义标签
+          customTags: ['教材', '数学', '课后答案'],
           description: '需要上海财经大学出版社的线性代数教材，希望有课后习题答案',
           switch: 'wish'
         },
@@ -206,7 +243,7 @@ Page({
           id: 4, 
           title: 'Python编程教材', 
           price: 25, 
-          images: ['/images/demo1.jpg'], // 单张图片
+          images: ['/images/demo1.jpg'],
           transactionType: 'cash', 
           customTags: ['编程', '计算机'],
           description: 'Python入门教材，人民邮电出版社',
@@ -218,11 +255,23 @@ Page({
           id: 3, 
           title: '机械键盘', 
           price: 0, 
-          images: ['/images/demo1.jpg', '/images/demo2.jpg'], // 2张图片
+          images: ['/images/demo1.jpg', '/images/demo2.jpg'],
           transactionType: 'swap', 
           customTags: ['外设', '游戏'],
           expectedSwap: '用我的游戏鼠标交换',
           description: '青轴机械键盘，希望换一个雷蛇游戏鼠标',
+          switch: 'wish'
+        }
+      ],
+      'daily': [
+        { 
+          id: 5, 
+          title: '宿舍台灯', 
+          price: 50, 
+          images: ['/images/demo1.jpg'],
+          transactionType: 'cash', 
+          customTags: ['生活', '照明'],
+          description: '需要可调节亮度的LED台灯，最好是夹式的',
           switch: 'wish'
         }
       ],
@@ -231,19 +280,88 @@ Page({
           id: 8, 
           title: '篮球', 
           price: 0, 
-          images: [], // 无图片
+          images: [],
           transactionType: 'swap', 
           customTags: ['运动', '球类'],
           expectedSwap: '用我的足球交换',
           description: '7号篮球，可用全新足球交换',
           switch: 'wish'
         }
+      ],
+      'clothing': [
+        { 
+          id: 9, 
+          title: '测试商品', 
+          price: 9.99, 
+          images: ['/images/demo1.jpg'],
+          transactionType: 'both', 
+          customTags: ['测试'],
+          description: '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111',
+          switch: 'wish'
+        }
+      ],
+      'beauty': [
+        { 
+          id: 10, 
+          title: '开会', 
+          price: 99.9, 
+          images: ['/images/demo1.jpg'],
+          transactionType: 'both', 
+          customTags: ['会议'],
+          description: '12345678910111213141516171819202122232425262728293031323334353637383940',
+          switch: 'wish'
+        }
+      ],
+      'dorm': [
+        { 
+          id: 11, 
+          title: '床帘', 
+          price: 30, 
+          images: ['/images/demo1.jpg'],
+          transactionType: 'cash', 
+          customTags: ['宿舍', '隐私'],
+          description: '需要宿舍床帘，深色遮光',
+          switch: 'wish'
+        }
+      ],
+      'study': [
+        { 
+          id: 12, 
+          title: '计算器', 
+          price: 15, 
+          images: ['/images/demo1.jpg'],
+          transactionType: 'cash', 
+          customTags: ['学习', '考试'],
+          description: '需要科学计算器，考试用',
+          switch: 'wish'
+        }
+      ],
+      'other': [
+        { 
+          id: 13, 
+          title: '其他商品', 
+          price: 10, 
+          images: ['/images/demo1.jpg'],
+          transactionType: 'cash', 
+          customTags: ['其他'],
+          description: '其他分类的商品',
+          switch: 'wish'
+        }
       ]
-      // ... 其他分类数据
     };
     
-    const wishes = mockData[category] || [];
-    // 处理模拟数据的图片显示
+    let wishes = [];
+    
+    // 如果是"全部"分类，合并所有分类的数据
+    if (category === 'all') {
+      Object.values(allMockData).forEach(categoryWishes => {
+        wishes = wishes.concat(categoryWishes);
+      });
+    } else {
+      // 单个分类的数据
+      wishes = allMockData[category] || [];
+    }
+    
     const processedWishes = wishes.map(item => {
       const displayImages = this.processDisplayImages(item.images);
       const priceDisplay = item.transactionType === 'cash' || item.transactionType === 'both' ? 
@@ -272,7 +390,7 @@ Page({
     });
   },
 
-  // 跳转到愿望详情 - 修复模拟数据跳转问题
+  // 跳转到愿望详情
   goToDetail(e) {
     console.log('点击事件:', e);
     
@@ -283,7 +401,6 @@ Page({
     console.log('愿望数据:', wish);
     
     if (wish) {
-        // 统一传递完整数据，让详情页自己处理
         const url = `/pages/detail/detail?goodsData=${encodeURIComponent(JSON.stringify(wish))}&type=wish`;
         console.log('跳转URL:', url);
         

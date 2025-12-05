@@ -1,6 +1,8 @@
 <!--pages/publish/publish.wxml-->
+
 <view class="publish-page">
-  <view class="publish-form" style="width: 693rpx; height: 2235rpx; display: block; box-sizing: border-box">
+  <!-- 表单内容 -->
+  <view class="publish-content">
     <!-- 标题 -->
     <view class="form-group">
       <view class="form-label">商品标题</view>
@@ -14,16 +16,16 @@
     </view>
 
     <!-- 描述 -->
-    <view class="form-group" style="width: 650rpx; height: 222rpx; display: block; box-sizing: border-box">
+    <view class="form-group">
       <view class="form-label">商品描述</view>
-      <textarea style="width: 650rpx; height: 191rpx; display: block; box-sizing: border-box; left: 2rpx; top: 0rpx; position: relative" 
+      <textarea 
         class="form-textarea" 
         placeholder="详细描述商品的状况、使用情况、瑕疵等..." 
         maxlength="500"
         value="{{formData.description}}"
         bindinput="onDescriptionInput"
       />
-      <view class="char-count" style="position: relative; left: 537rpx; top: -33rpx; width: 89rpx; display: block; box-sizing: border-box; height: 47rpx">{{formData.description.length}}/500</view>
+      <view class="char-count">{{formData.description.length}}/500</view>
     </view>
 
     <!-- 图片上传 -->
@@ -37,7 +39,7 @@
           <view class="upload-text">
             {{formData.images.length > 0 ? '继续添加图片' : '点击上传图片'}}
           </view>
-          <view class="upload-hint">已上传 {{formData.images.length}}/4 张</view>
+          <view class="upload-hint">已上传 {{formData.images.length}}/9张</view>
           <view class="upload-options">
             <text class="option-text">支持拍照和相册选择</text>
           </view>
@@ -63,6 +65,50 @@
       </view>
     </view>
 
+<!-- pages/publish/publish.wxml -->
+<!-- 分类选择（多选） -->
+<view class="form-group">
+  <view class="form-label">
+    商品标签
+    <text class="label-hint">（最多选3个）</text>
+  </view>
+
+  <!-- 已选标签显示区域 - 只在有选中标签时显示 -->
+  <view class="selected-tags" wx:if="{{formData.categories.length > 0}}">
+    <view class="selected-tags-list">
+      <view class="selected-tag-item" wx:for="{{formData.categories}}" wx:key="*this">
+        <text class="selected-tag-text">{{item}}</text>
+        <text class="selected-tag-remove" data-tag="{{item}}" bindtap="removeTag">×</text>
+      </view>
+    </view>
+  </view>
+  
+
+  <view class="category-grid">
+    <!-- 固定分类标签 - 使用动态样式对象 -->
+    <view 
+      style="{{categoryStyles[index]}}"
+      wx:for="{{categories}}"
+      wx:key="name"
+      data-index="{{index}}"
+      data-category="{{item.label}}"
+      bindtap="onCategorySelect"
+    >
+      <text class="category-label">{{item.label}}</text>
+    </view>
+    
+    <!-- 添加自定义标签按钮 -->
+    <view class="category-item custom-tag-add" bindtap="showCustomTagInput">
+      <text class="category-icon">+</text>
+      <text class="category-label">自定义</text>
+    </view>
+  </view>
+  
+  <!-- 选择数量提示 -->
+  <view class="selection-hint">
+    已选择 {{formData.categories.length}}/3 个标签
+  </view>
+</view>
     <!-- 自定义标签输入弹窗 -->
     <view wx:if="{{showCustomTagInput}}" class="custom-tag-modal">
       <view class="custom-tag-mask" bindtap="hideCustomTagInput"></view>
@@ -95,93 +141,80 @@
       </view>
     </view>
 
-    <!-- 分类选择（多选） -->
-    <view class="form-group">
-      <view class="form-label">
-        商品标签
-        <text class="label-hint">（最多选3个）</text>
+  <!-- 交易方式部分 -->
+<view class="form-group">
+  <view class="form-label">交易方式</view>
+  <view class="transaction-type">
+    <!-- 现金交易 -->
+    <view 
+      class="type-option {{formData.transactionType === 'cash' ? 'active' : ''}}"
+      data-type="cash"
+      bindtap="onTypeChange"
+    >
+      <view class="type-icon">
+        <image 
+          src="/images/cash.png" 
+          style="width:50rpx;height:50rpx;"
+          mode="aspectFit"
+          class="{{formData.transactionType === 'cash' ? 'icon-active' : 'icon-inactive'}}"
+        />
       </view>
-      
- <!-- 显示已选择的标签 -->
-<view class="selected-tags" wx:if="{{formData.categories.length > 0}}">
-  <text class="selected-text"></text>
-  <view class="selected-tags-list">
-    <view class="selected-tag-item" wx:for="{{formData.categories}}" wx:key="*this">
-      <text class="selected-tag-text">{{item}}</text>
-      <text class="selected-tag-remove" data-tag="{{item}}" bindtap="removeTag">×</text>
+      <view class="type-label">现金交易</view>
+    </view>
+    
+    <!-- 以物换物 -->
+    <view 
+      class="type-option {{formData.transactionType === 'swap' ? 'active' : ''}}"
+      data-type="swap"
+      bindtap="onTypeChange"
+    >
+      <view class="type-icon">
+        <image 
+          src="/images/exchange.png" 
+          style="width:50rpx;height:50rpx;"
+          mode="aspectFit"
+          class="{{formData.transactionType === 'swap' ? 'icon-active' : 'icon-inactive'}}"
+        />
+      </view>
+      <view class="type-label">以物换物</view>
+    </view>
+    
+    <!-- 均可 -->
+    <view 
+      class="type-option {{formData.transactionType === 'both' ? 'active' : ''}}"
+      data-type="both"
+      bindtap="onTypeChange"
+    >
+      <view class="type-icon">
+        <image 
+          src="/images/both.png" 
+          style="width:50rpx;height:50rpx;"
+          mode="aspectFit"
+          class="{{formData.transactionType === 'both' ? 'icon-active' : 'icon-inactive'}}"
+        />
+      </view>
+      <view class="type-label">均可</view>
     </view>
   </view>
 </view>
 
-      <view class="category-grid" style="width: 650rpx; height: 339rpx; display: flex; box-sizing: border-box">
-        <!-- 固定分类标签 -->
-        <view 
-          class="category-item {{formData.categories.indexOf(item.name) > -1 ? 'active' : ''}}"
-          wx:for="{{categories}}"
-          wx:key="name"
-          data-category="{{item.name}}"
-          bindtap="onCategorySelect"
-        >
-          <text class="category-icon">{{item.icon}}</text>
-          <text class="category-label">{{item.label}}</text>
-        </view>
-        
-        <!-- 添加自定义标签按钮 -->
-        <view class="category-item custom-tag-add" bindtap="showCustomTagInput">
-          <text class="category-icon">+ </text>
-          <text class="category-label">自定义</text>
-        </view>
-      </view>
-    </view>
-
-    <!-- 交易类型 -->
-    <view class="form-group">
-      <view class="form-label">交易方式</view>
-      <view class="transaction-type">
-        <view 
-          class="type-option {{formData.transactionType === 'cash' ? 'active' : ''}}"
-          data-type="cash"
-          bindtap="onTypeChange"
-        >
-          <view class="type-icon">💰</view>
-          <view class="type-label">现金交易</view>
-        </view>
-        <view 
-          class="type-option {{formData.transactionType === 'swap' ? 'active' : ''}}"
-          data-type="swap"
-          bindtap="onTypeChange"
-        >
-          <view class="type-icon">🔄</view>
-          <view class="type-label">以物换物</view>
-        </view>
-        <view 
-          class="type-option {{formData.transactionType === 'both' ? 'active' : ''}}"
-          data-type="both"
-          bindtap="onTypeChange"
-        >
-          <view class="type-icon">💫</view>
-          <view class="type-label">均可</view>
-        </view>
-      </view>
-    </view>
-
     <!-- 发布形式：出物/许愿 -->
     <view class="form-group">
       <view class="form-label">发布形式</view>
-      <view class="switch-type" style="height: 110rpx; display: block; box-sizing: border-box; width: 650rpx">
+      <view class="switch-type">
         <view 
           class="type-option {{formData.switch === 'object' ? 'active' : ''}}"
           data-type="object"
           bindtap="onFormChange"
-         style="position: relative; left: 6rpx; top: 25rpx; width: 293rpx; height: 106rpx; display: block; box-sizing: border-box">
-          <view class="type-label" style="position: relative; left: -2rpx; top: 2rpx; height: 52rpx; display: block; box-sizing: border-box">出物</view>
+        >
+          <view class="type-label">出物</view>
         </view>
         <view 
           class="type-option {{formData.switch === 'wish' ? 'active' : ''}}"
           data-type="wish"
           bindtap="onFormChange"
-         style="width: 289rpx; height: 102rpx; display: block; box-sizing: border-box; position: relative; left: 356rpx; top: -81rpx">
-          <view class="type-label" style="position: relative; left: 0rpx; top: 5rpx">许愿</view>
+        >
+          <view class="type-label">许愿</view>
         </view>
       </view>
     </view>
@@ -191,7 +224,7 @@
       <view class="form-label">商品价格</view>
       <view class="price-input-wrapper">
         <text class="price-symbol">¥</text>
-        <input style="width: 664rpx; height: 20rpx; display: block; box-sizing: border-box" 
+        <input 
           class="form-input price-input" 
           type="digit"
           placeholder="0.00"
@@ -217,13 +250,14 @@
       class="publish-btn" 
       bindtap="onSubmit"
       disabled="{{isSubmitting}}"
-     style="width: 650rpx; height: 77rpx; display: block; box-sizing: border-box; left: -1rpx; top: -41rpx; position: relative">
+    >
       {{isSubmitting ? '发布中...' : '立即发布'}}
     </button>
 
     <!-- 发布提示 -->
-    <view class="publish-tips" bindtap="showPublishTips" style="width: 229rpx; height: 41rpx; display: flex; box-sizing: border-box; position: relative; left: 209rpx; top: -47rpx">
-      <text class="tips-text" style="position: relative; left: 0rpx; top: 2rpx">发布小贴士</text>
+    <view class="publish-tips" bindtap="showPublishTips">
+      <text class="tips-icon">💡</text>
+      <text class="tips-text">发布小贴士</text>
     </view>
   </view>
 
@@ -248,3 +282,4 @@
     </view>
   </view>
 </view>
+

@@ -1,106 +1,213 @@
 <view class="detail-page">
-<!-- 卖家信息 -->
-<view class="seller-info">
-  <view class="seller-header">
-    <image class="seller-avatar" src="{{goods.user.avatar}}" />
-    <view class="seller-details">
-      <view class="seller-name">{{goods.user.nickname}}</view>
-      <view class="seller-rating">
-        <text class="rating-stars">★★★★★</text>
-        <text class="rating-score">4.8</text>
+  <!-- 卖家信息 - 占满一整行 -->
+  <view class="seller-info">
+    <view class="seller-header">
+      <image class="seller-avatar" src="{{goods.user.avatar}}" />
+      <view class="seller-details">
+        <view class="seller-name">{{goods.user.nickname}}</view>
+        <view class="seller-rating">
+          <text class="rating-stars">★★★★★</text>
+          <text class="rating-score">4.8</text>
+        </view>
+      </view>
+      <view class="seller-college">{{goods.user.college || '未知学校'}}</view>
+    </view>
+  </view>
+
+  <!-- 图片轮播 - 占满一整行 -->
+  <view class="image-swiper-panel" wx:if="{{goods.images && goods.images.length > 0}}">
+    <view class="image-swiper">
+      <swiper class="swiper" 
+              indicator-dots="{{goods.images.length > 1}}" 
+              autoplay="{{false}}" 
+              interval="5000" 
+              duration="500">
+        <swiper-item wx:for="{{goods.images}}" wx:key="*this">
+          <image class="swiper-image" src="{{item}}" mode="aspectFill" />
+        </swiper-item>
+      </swiper>
+    </view>
+  </view>
+  
+  <!-- 商品信息板块 -->
+  <view class="content-panel goods-info">
+    <!-- 价格和收藏 -->
+    <view class="price-section">
+      <view class="price-container">
+        <view class="price" wx:if="{{goods.transactionType === 'cash' || goods.transactionType === 'both'}}">
+          ¥{{goods.price}}
+        </view>
+        <view class="price" wx:elif="{{goods.transactionType === 'swap'}}" style="color: #52c41a; font-size: 36rpx;">
+          换物交易
+        </view>
+      </view>
+      
+      <!-- 右侧垂直排列：收藏按钮 -->
+      <view class="right-vertical-section">
+        <view class="favorite-btn {{isFavorite ? 'favorited' : ''}}" bindtap="onToggleFavorite">
+          <view class="favorite-icon">
+            <image 
+              wx:if="{{!isFavorite}}"
+              src="/images/unlike.png" 
+              style="width: 46rpx; height: 46rpx;"
+              mode="aspectFit"
+            />
+            <image 
+              wx:else
+              src="/images/like.png" 
+              style="width: 46rpx; height:46rpx;"
+              mode="aspectFit"
+            />
+          </view>
+          <text class="favorite-text">{{isFavorite ? '已收藏' : '收藏'}}</text>
+        </view>
       </view>
     </view>
-    <view class="seller-college">{{goods.user.college || '未知学校'}}</view>
-  </view>
-</view>
-
-<!-- 商品信息 -->
-<view class="goods-info">
-  <!-- 价格和收藏 -->
-  <view class="price-section">
-    <view class="price">¥{{goods.price}}</view>
-    <view class="favorite-btn {{isFavorite ? 'favorited' : ''}}" bindtap="onToggleFavorite">
-      <text class="favorite-icon">{{isFavorite ? '❤️' : '🤍'}}</text>
-      <text class="favorite-text">{{isFavorite ? '已收藏' : '收藏'}}</text>
-    </view>
-  </view>
-
-  <!-- 标题和交易类型 -->
-  <view class="title-section">
-    <text class="goods-title">{{goods.title}}</text>
-    <view class="transaction-tag {{goods.transactionType}}">
-      {{goods.transactionType === 'cash' ? '💰现金' : goods.transactionType === 'swap' ? '🔄换物' : '💰🔄现金/换物'}}
-    </view>
-  </view>
-
-
-<!-- 商品描述 -->
-<view class="description-section">
-  <view class="section-title">商品描述</view>
-  <view class="goods-description">{{goods.description}}</view>
-</view>
-
-<!-- 期望换物（如果是换物交易且有内容） -->
-<view class="swap-section" wx:if="{{(goods.transactionType === 'swap' || goods.transactionType === 'both') && goods.expectedSwap}}">
-  <view class="section-title">{{isWish ? '可提供的物品' : '期待换物'}}</view>
-  <view class="expected-swap">{{goods.expectedSwap}}</view>
-</view>
-
-<!-- 商品标签 -->
-<view class="tags-section" wx:if="{{goods.tag && goods.tag.length > 0}}">
-  <view class="section-title">商品标签</view>
-  <view class="tags-list">
-    <text class="tag" wx:for="{{goods.tag}}" wx:key="*this">{{item}}</text>
-  </view>
-</view>
-
-<!-- 商品图片轮播 -->
-<view class="image-swiper">
-  <swiper class="swiper" indicator-dots="{{true}}" autoplay="{{false}}" interval="5000" duration="500">
-    <swiper-item wx:for="{{goods.images}}" wx:key="*this">
-      <image class="swiper-image" src="{{item}}" mode="aspectFill" />
-    </swiper-item>
-  </swiper>
-</view>
-
-
-  <!-- 浏览量 -->
-  <view class="view-count">浏览 {{goods.viewCount || 0}} 次</view>
-</view>
-
-
-<!-- 底部操作栏 -->
-<view class="action-bar" style="position: fixed; left: -2rpx; top: 1281rpx; height: 162rpx; display: flex; box-sizing: border-box">
-  <view class="action-left"  >
-    <view class="action-btn chat-btn" bindtap="onChat" chatid="{{item.id}}">
-      <text class="btn-icon">💬</text>
-      <text class="btn-text">聊天</text>
-    </view>
-  </view>
-  <view class="action-right">
-    <!-- 出物商品 -->
-    <block wx:if="{{!isWish}}">
-      <view class="action-btn buy-btn" bindtap="onBuy" wx:if="{{goods.transactionType === 'cash' || goods.transactionType === 'both'}}">
-        <text class="btn-text">立即购买</text>
-      </view>
-      <view class="action-btn swap-btn" bindtap="onSwap" wx:if="{{goods.transactionType === 'swap' || goods.transactionType === 'both'}}">
-        <text class="btn-text">发起换物</text>
-      </view>
-    </block>
     
-    <!-- 许愿商品 -->
-    <block wx:else>
-      <view class="action-btn buy-btn" bindtap="onBuy" wx:if="{{goods.transactionType === 'cash' || goods.transactionType === 'both'}}">
-        <text class="btn-text">实现愿望</text>
+    <!-- 标题和交易类型在同一行 -->
+    <view class="title-section">
+      <text class="goods-title">{{goods.title}}</text>
+      <!-- 交易类型放在标题右侧 -->
+      <view class="transaction-tag {{goods.transactionType}}">
+        {{goods.transactionType === 'cash' ? '现金' : goods.transactionType === 'swap' ? '换物' : '现金/换物'}}
       </view>
-      <view class="action-btn swap-btn" bindtap="onSwap" wx:if="{{goods.transactionType === 'swap' || goods.transactionType === 'both'}}">
-        <text class="btn-text">以物换物</text>
+    </view>
+    
+    <!-- 商品描述 -->
+    <view class="description-section">
+      <view class="section-title">商品描述</view>
+      <view class="goods-description">{{goods.description}}</view>
+    </view>
+    
+    <!-- 期望换物（如果是换物交易且有内容） -->
+    <view class="swap-section" wx:if="{{(goods.transactionType === 'swap' || goods.transactionType === 'both') && goods.expectedSwap}}">
+      <view class="section-title">{{isWish ? '可提供的物品' : '期待换物'}}</view>
+      <view class="expected-swap">{{goods.expectedSwap}}</view>
+    </view>
+    
+    <!-- 商品标签 -->
+    <view class="tags-section" wx:if="{{goods.tags && goods.tags.length > 0}}">
+      <view class="section-title">商品标签</view>
+      <view class="tags-list">
+        <text class="tag" wx:for="{{goods.tags}}" wx:key="*this">{{item}}</text>
       </view>
-    </block>
-
-
-
-
+    </view>
+    
+    <!-- 浏览量 -->
+    <view class="view-count">浏览 {{goods.viewCount || 0}} 次</view>
   </view>
-</view>
+  
+  <!-- 底部操作栏 -->
+  <view class="action-bar">
+    <view class="action-left">
+      <view class="action-btn chat-btn" bindtap="onChat">
+        <view class="btn-icon">
+          <image 
+            src="/images/chat1.png" 
+            style="width: 48rpx; height: 48rpx;"
+            mode="aspectFit"
+          />
+        </view>
+      </view>
+    </view>
+    <view class="action-right">
+      <!-- 出物商品 -->
+      <block wx:if="{{!isWish}}">
+        <view class="action-btn buy-btn" bindtap="onBuy" wx:if="{{goods.transactionType === 'cash' || goods.transactionType === 'both'}}">
+          <text class="btn-text">立即购买</text>
+        </view>
+        <view class="action-btn swap-btn" bindtap="onSwap" wx:if="{{goods.transactionType === 'swap' || goods.transactionType === 'both'}}">
+          <text class="btn-text">发起换物</text>
+        </view>
+      </block>
+      
+      <!-- 许愿商品 -->
+      <block wx:else>
+        <view class="action-btn buy-btn" bindtap="onBuy" wx:if="{{goods.transactionType === 'cash' || goods.transactionType === 'both'}}">
+          <text class="btn-text">实现愿望</text>
+        </view>
+        <view class="action-btn swap-btn" bindtap="onSwap" wx:if="{{goods.transactionType === 'swap' || goods.transactionType === 'both'}}">
+          <text class="btn-text">发起换物</text>
+        </view>
+      </block>
+    </view>
+  </view>
+  
+  <!-- 交易确认弹窗 -->
+  <view class="confirm-popup-container" wx:if="{{showConfirmPopup}}">
+    <view class="popup-mask" bindtap="onPopupClose"></view>
+    
+    <view class="popup-content">
+      <view class="popup-header">
+        <text class="popup-title">确认线下交易信息</text>
+        <text class="popup-subtitle">请与卖家协商确认后再填写交易信息</text>
+      </view>
+      
+      <view class="popup-body">
+        <view class="form-item">
+          <text class="form-label">交易时间</text>
+          <view class="time-selector">
+            <picker 
+              mode="date" 
+              value="{{selectedDate}}" 
+              start="{{minDate}}"
+              end="{{maxDate}}"
+              bindchange="onDateChange"
+            >
+              <view class="time-option {{selectedDate ? 'selected' : ''}}">
+                {{selectedDate || '请选择日期'}}
+              </view>
+            </picker>
+            <picker 
+              mode="time" 
+              value="{{selectedTime}}" 
+              bindchange="onTimeChange"
+            >
+              <view class="time-option {{selectedTime ? 'selected' : ''}}">
+                {{selectedTime || '请选择时间'}}
+              </view>
+            </picker>
+          </view>
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">交易地点</text>
+          <input 
+            class="location-input" 
+            placeholder="请输入具体交易地点（如图书馆门口、食堂三楼等）"
+            placeholder-class="placeholder"
+            value="{{location}}"
+            bindinput="onLocationInput"
+          />
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">备注信息</text>
+          <textarea 
+            class="remark-textarea" 
+            placeholder="可填写其他约定事项（选填）"
+            placeholder-class="placeholder"
+            maxlength="100"
+            value="{{remark}}"
+            bindinput="onRemarkInput"
+          />
+          <text class="word-count">{{remark.length || 0}}/100</text>
+        </view>
+        
+        <view class="product-preview">
+          <image class="product-image" src="{{popupProductInfo.image}}" />
+          <view class="product-details">
+            <text class="product-title">{{popupProductInfo.title}}</text>
+            <text class="product-price" wx:if="{{popupProductInfo.price !== '' && popupProductInfo.price !== undefined}}">¥{{popupProductInfo.price}}</text>
+            <text class="product-price" wx:else>换物交易</text>
+          </view>
+        </view>
+      </view>
+      
+      <view class="popup-buttons">
+        <view class="cancel-btn" bindtap="onPopupCancel">取消</view>
+        <view class="confirm-btn" bindtap="onPopupConfirm">确认交易</view>
+      </view>
+    </view>
+  </view>
 </view>

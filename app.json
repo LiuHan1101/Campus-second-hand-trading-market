@@ -19,8 +19,8 @@
   ],
   "window": {
     "navigationBarTitleText": "上财易物",
-    "navigationBarBackgroundColor": "#E8B4B8",
-    "navigationBarTextStyle": "white",
+    "navigationBarBackgroundColor": "#ffffff", 
+    "navigationBarTextStyle": "black",         
     "backgroundColor": "#FAF7F2",
     "backgroundTextStyle": "dark",
     "enablePullDownRefresh": true,
@@ -68,8 +68,5 @@
       }
     ]
   },
-
-  
-
   "sitemapLocation": "sitemap.json"
 }

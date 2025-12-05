@@ -1,495 +1,26 @@
+/* pages/detail/detail.wxss */
 
-/* 页面容器 */
-.detail-page {
-    background: #f8f9fa;
-    min-height: 100vh;
-    padding-bottom: 140rpx;
-  }
-  
-  /* 卖家信息卡片 */
-  .seller-card {
-    background: white;
-    margin: 20rpx;
-    padding: 30rpx;
-    border-radius: 20rpx;
-    box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.06);
-  }
-  
-  .seller-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
-  .seller-avatar {
-    width: 80rpx;
-    height: 80rpx;
-    border-radius: 50%;
-    border: 2rpx solid #f0f0f0;
-  }
-  
-  .seller-details {
-    flex: 1;
-    margin-left: 20rpx;
-  }
-  
-  .seller-name {
-    font-size: 32rpx;
-    font-weight: 600;
-    color: #333;
-    display: block;
-    margin-bottom: 8rpx;
-  }
-  
-  .seller-rating {
-    display: flex;
-    align-items: center;
-  }
-  
-  .rating-stars {
-    color: #ffc107;
-    font-size: 24rpx;
-    margin-right: 10rpx;
-  }
-  
-  .rating-score {
-    font-size: 24rpx;
-    color: #666;
-  }
-  
-  .seller-college {
-    font-size: 26rpx;
-    color: #999;
-    text-align: right;
-  }
-  
-  /* 商品信息卡片 */
-  .goods-card {
-    background: white;
-    margin: 20rpx;
-    padding: 30rpx;
-    border-radius: 20rpx;
-    box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.06);
-    position: relative;
-  }
-  
-  /* 价格和收藏区域 */
-  .price-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30rpx;
-  }
-  
-  .price {
-    font-size: 48rpx;
-    font-weight: 700;
-    color: #ff6b35;
-  }
-  
-  .favorite-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 16rpx;
-    border-radius: 16rpx;
-    background: #f8f9fa;
-    transition: all 0.3s;
-  }
-  
-  .favorite-btn:active {
-    background: #e9ecef;
-    transform: scale(0.95);
-  }
-  
-  .favorite-icon {
-    font-size: 36rpx;
-    margin-bottom: 8rpx;
-  }
-  
-  .favorite-text {
-    font-size: 24rpx;
-    color: #666;
-  }
-  
-  .favorite-btn.favorited .favorite-text {
-    color: #ff6b35;
-  }
-  
-  /* 标题和交易类型 */
-  .title-section {
-    margin-bottom: 30rpx;
-    position: relative;
-  }
-  
-  .goods-title {
-    font-size: 36rpx;
-    font-weight: 600;
-    color: #333;
-    line-height: 1.4;
-    display: block;
-    margin-bottom: 20rpx;
-  }
-  
-  .transaction-tag {
-    padding: 12rpx 24rpx;
-    border-radius: 12rpx;
-    font-size: 24rpx;
-    font-weight: 500;
-    display: inline-block;
-  }
-  
-  .transaction-tag.cash {
-    background: linear-gradient(135deg, #fff0e6, #ffd8bf);
-    color: #ff6b35;
-    border: 1rpx solid #ffd8bf;
-  }
-  
-  .transaction-tag.swap {
-    background: linear-gradient(135deg, #e6f7ff, #bae7ff);
-    color: #1890ff;
-    border: 1rpx solid #bae7ff;
-  }
-  
-  .transaction-tag.both {
-    background: linear-gradient(135deg, #f6ffed, #d9f7be);
-    color: #52c41a;
-    border: 1rpx solid #d9f7be;
-  }
-  
-  /* 商品描述 */
-  .description-card {
-    background: #f8f9fa;
-    padding: 30rpx;
-    border-radius: 16rpx;
-    margin-bottom: 30rpx;
-  }
-  
-  .section-title {
-    font-size: 30rpx;
-    font-weight: 600;
-    color: #333;
-    display: block;
-    margin-bottom: 20rpx;
-  }
-  
-  .goods-description {
-    font-size: 28rpx;
-    color: #666;
-    line-height: 1.6;
-    display: block;
-  }
-  
-  /* 图片轮播 */
-  .swiper {
-    height: 600rpx;
-    border-radius: 20rpx;
-    overflow: hidden;
-    margin-bottom: 30rpx;
-    background: #f8f9fa;
-  }
-  
-  .swiper-image {
-    width: 100%;
-    height: 100%;
-    border-radius: 16rpx;
-  }
-  
-  /* 商品标签 */
-  .tags-card {
-    background: #f8f9fa;
-    padding: 30rpx;
-    border-radius: 16rpx;
-    margin-bottom: 30rpx;
-  }
-  
-  .tags-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16rpx;
-  }
-  
-  .tag {
-    padding: 12rpx 20rpx;
-    background: white;
-    border-radius: 20rpx;
-    font-size: 24rpx;
-    color: #666;
-    border: 1rpx solid #e9ecef;
-  }
-  
-  /* 浏览量 */
-  .view-count {
-    font-size: 24rpx;
-    color: #999;
-    text-align: center;
-    display: block;
-    margin-top: 20rpx;
-  }
-  
-  /* 期望换物 */
-  .swap-card {
-    background: white;
-    margin: 20rpx;
-    padding: 30rpx;
-    border-radius: 20rpx;
-    box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.06);
-  }
-  
-  .expected-swap {
-    font-size: 28rpx;
-    color: #666;
-    line-height: 1.6;
-    display: block;
-    margin-top: 20rpx;
-  }
-  
-  /* 底部操作栏 */
-  .action-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: white;
-    padding: 20rpx 30rpx;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1rpx solid #e9ecef;
-    box-shadow: 0 -4rpx 20rpx rgba(0,0,0,0.08);
-    z-index: 1000;
-  }
-  
-  .action-left {
-    flex: 1;
-  }
-  
-  .action-right {
-    flex: 2;
-    display: flex;
-    justify-content: flex-end;
-    gap: 20rpx;
-  }
-  
-  .action-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20rpx 40rpx;
-    border-radius: 40rpx;
-    font-size: 28rpx;
-    font-weight: 500;
-    padding: 24rpx 0;
-    border-radius: 16rpx;
-    font-size: 28rpx;
-    font-weight: 500;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s;
-  }
-  
-  .action-btn:active {
-    transform: scale(0.98);
-  }
-  
-  .chat-btn {
-    background: #f8f9fa;
-    color: #333;
-    flex-direction: column;
-    padding: 20rpx 30rpx;
-  }
-  
-  .btn-icon {
-    font-size: 32rpx;
-    margin-bottom: 8rpx;
-  }
-  
-  .btn-text {
-    font-size: 24rpx;
-  }
-  
-  .buy-btn {
-    background: #ff6b35;
-    color: #fff;
-    min-width: 200rpx;
-  }
-  
-  .swap-btn {
-    background: #52c41a;
-    color: #fff;
-    min-width: 200rpx;
-    color: #666;
-    flex: 1;
-  }
-  
-  .buy-btn {
-    background: linear-gradient(135deg, #ff6b35, #ff8c66);
-    color: white;
-    flex: 1;
-    box-shadow: 0 4rpx 16rpx rgba(255, 107, 53, 0.3);
-  }
-  
-  .swap-btn {
-    background: linear-gradient(135deg, #4CAF50, #66bb6a);
-    color: white;
-    flex: 1;
-    box-shadow: 0 4rpx 16rpx rgba(76, 175, 80, 0.3);
-  }
-  
-  .btn-icon {
-    margin-right: 12rpx;
-    font-size: 32rpx;
-  }
-  
-  .btn-text {
-    font-size: 28rpx;
-    font-weight: 500;
-  }
 
 .detail-page {
-  background: #f5f5f5;
-  padding-bottom: 120rpx;
+  background: #ffffff;
+  min-height: 100vh;
+  padding-bottom: 160rpx; 
 }
 
-/* 图片轮播 */
-.image-swiper {
-  height: 500rpx;
-  background: #fff;
-}
-
-.swiper {
-  height: 100%;
-}
-
-.swiper-image {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: contain;
-  background: #f8f9fa;
-}
-
-/* 商品信息 */
-.goods-info {
-  background: #fff;
-  padding: 30rpx;
-  margin-bottom: 20rpx;
-  position: relative;
-}
-
-.price-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20rpx;
-}
-
-.price {
-  font-size: 48rpx;
-  font-weight: bold;
-  color: #ff6b35;
-}
-
-.favorite-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 16rpx;
-}
-
-.favorite-btn.favorited .favorite-icon {
-  color: #ff6b35;
-}
-
-.favorite-icon {
-  font-size: 40rpx;
-  margin-bottom: 8rpx;
-}
-
-.favorite-text {
-  font-size: 24rpx;
-  color: #666;
-}
-
-.title-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 15rpx;
-}
-
-.goods-title {
-  flex: 1;
-  font-size: 32rpx;
-  font-weight: 600;
-  color: #333;
-  line-height: 1.4;
-  margin-right: 20rpx;
-}
-
-.transaction-tag {
-  padding: 8rpx 16rpx;
-  border-radius: 20rpx;
-  font-size: 24rpx;
-  white-space: nowrap;
-}
-
-.transaction-tag.cash {
-  background: #e6f7ff;
-  color: #1890ff;
-  border: 1rpx solid #91d5ff;
-}
-
-.transaction-tag.swap {
-  background: #f6ffed;
-  color: #52c41a;
-  border: 1rpx solid #b7eb8f;
-}
-
-.transaction-tag.both {
-  background: #fff7e6;
-  color: #fa8c16;
-  border: 1rpx solid #ffd591;
-}
-
-/* 商品类型标签 */
-.goods-type-tag {
-  display: inline-block;
-  padding: 6rpx 16rpx;
-  border-radius: 16rpx;
-  font-size: 22rpx;
-  margin-bottom: 15rpx;
-}
-
-.goods-type-tag.sell {
-  background: #fff0e8;
-  color: #ff6b35;
-  border: 1rpx solid #ffbb96;
-}
-
-.goods-type-tag.wish {
-  background: #f0f7ff;
-  color: #1890ff;
-  border: 1rpx solid #91d5ff;
-}
-
-.view-count {
-  font-size: 24rpx;
-  color: #999;
-}
-
-/* 卖家信息 */
+/* 卖家信息 - */
 .seller-info {
   background: #fff;
   padding: 30rpx;
-  margin-bottom: 20rpx;
+  margin: 0 0 8rpx 0; 
+  border-radius: 0;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  border-bottom: 1rpx solid #f0f0f0;
 }
 
 .seller-header {
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .seller-avatar {
@@ -529,15 +60,178 @@
 .seller-college {
   font-size: 24rpx;
   color: #999;
+  text-align: right;
+}
+
+/* 图片轮播板块 - 占满整行 */
+.image-swiper-panel {
+  background: #fff;
+  margin-bottom: 8rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.image-swiper {
+  height: 500rpx;
+}
+
+.swiper {
+  height: 100%;
+}
+
+.swiper-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  background: #f8f9fa;
+}
+
+/* 商品信息板块 - */
+.content-panel.goods-info {
+  background: #fff;
+  padding: 30rpx 30rpx 30rpx 40rpx;
+  border-radius: 16rpx;
+  margin: 0 6rpx;
+  border-top: 1rpx solid #f0f0f0;
+  border-left: 1rpx solid #f0f0f0;
+  border-right: 1rpx solid #f0f0f0;
+  border-bottom: none;
+  border-top: 1rpx solid #f0f0f0;
+  box-shadow: 0 -2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+/* 商品信息样式*/
+.price-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; 
+  margin-bottom: 30rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.price-container {
+  flex: 1;
+  display: flex;
+  align-items: flex-start; 
+  height: auto;
+  min-height: 56rpx;
+}
+
+.price {
+  font-size: 52rpx; 
+  font-weight: bold;
+  color: #ff6b35;
+  line-height: 1;
+  padding-top: 4rpx; 
+}
+.price[style*="color: #52c41a"] {
+  font-size: 44rpx; 
+  color: #52c41a !important;
+  font-weight: 700; 
+  padding-top: 6rpx;
+}
+
+
+/* 右侧垂直排列区域*/
+.right-vertical-section {
+  width: 100rpx; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 收藏按钮 */
+.favorite-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8rpx 12rpx;
+  background:transparent;
+  border-radius: 10rpx;
+  transition: all 0.1s;
+  width: 100%; 
+}
+
+.favorite-btn:active {
+  background: #f0f0f0;
+  transform: scale(0.95);
+}
+
+.favorite-icon {
+  font-size: 30rpx;
+  margin-bottom: 4rpx;
+}
+
+.favorite-btn.favorited .favorite-icon {
+  color: #ff6b35;
+  animation: heartBeat 0.4s ease;
+}
+
+
+.favorite-text {
+  font-size: 22rpx;
+  color: #666;
+}
+
+.favorite-btn.favorited .favorite-text {
+  color: #ff6b35;
+}
+
+/* 标题和交易类型在同一行 */
+.title-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30rpx;
+  margin-left: -10rpx; 
+  
+}
+
+.goods-title {
+  flex: 1;
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.5;
+  margin-right: 20rpx;
+}
+
+/* 交易类型标签 */
+.transaction-tag {
+  padding: 12rpx 8rpx; 
+  border-radius: 8rpx;
+  font-size: 24rpx; 
+  font-weight: 500;
+  white-space: nowrap;
+  text-align: center;
+  min-width: 100rpx; /* 最小宽度 */
+  max-width: 120rpx; 
+  flex-shrink: 0;
+  line-height: 1.2; /* 增加行高 */
+  box-sizing: border-box; 
+
+}
+
+.transaction-tag.cash,
+.transaction-tag.swap,
+.transaction-tag.both {
+  color: #ffd262;
+  background: #fef6e7;
+  box-shadow: 0 0 6rpx rgba(139, 195, 74, 0.1);
+  margin-left: 10rpx;
 }
 
 /* 描述和标签区域 */
-.description-section,
+.description-section {
+  padding: 0 0 30rpx 0;
+  margin-bottom: 24rpx;
+}
+
 .swap-section,
 .tags-section {
-  background: #fff;
-  padding: 30rpx;
-  margin-bottom: 20rpx;
+  padding: 0 0 30rpx 0;
+  margin-bottom: 24rpx;
 }
 
 .section-title {
@@ -547,11 +241,15 @@
   margin-bottom: 20rpx;
 }
 
+/* 商品描述 - 支持自动换行 */
 .goods-description,
 .expected-swap {
   font-size: 28rpx;
   color: #666;
-  line-height: 1.6;
+  line-height: 1.8;
+  white-space: normal;
+  word-wrap: break-word;
+  word-break: break-all;
 }
 
 .tags-list {
@@ -568,6 +266,14 @@
   font-size: 24rpx;
 }
 
+/* 浏览量 */
+.view-count {
+  font-size: 24rpx;
+  color: #999;
+  text-align: center;
+  margin-top: 20rpx;
+}
+
 /* 底部操作栏 */
 .action-bar {
   position: fixed;
@@ -575,15 +281,19 @@
   left: 0;
   right: 0;
   background: #fff;
-  padding: 20rpx 30rpx;
+  padding: 20rpx 30rpx 30rpx;
   display: flex;
   align-items: center;
   border-top: 1rpx solid #eee;
-  box-shadow: 0 -2rpx 10rpx rgba(0,0,0,0.1);
+  z-index: 1000;
+  box-shadow: 0 -2rpx 3rpx rgba(0, 0, 0, 0.1);
 }
 
 .action-left {
   display: flex;
+  width: 120rpx;
+  flex-shrink: 0;
+  margin-right: 24rpx;
 }
 
 .action-right {
@@ -593,43 +303,313 @@
   gap: 20rpx;
 }
 
-.action-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20rpx 40rpx;
-  border-radius: 40rpx;
-  font-size: 28rpx;
-  font-weight: 500;
-}
-
+/* 聊天按钮 - */
 .chat-btn {
   background: #f8f9fa;
   color: #333;
-  flex-direction: column;
-  padding: 20rpx 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 120rpx;
+  height: 80rpx; 
+  padding: 0;
+  border-radius: 40rpx; 
+  border: 1rpx solid #eee;
 }
 
 .btn-icon {
-  font-size: 32rpx;
-  margin-bottom: 8rpx;
+  font-size: 29rpx;
 }
 
-.btn-text {
+/* 右侧按钮 - 调整高度和文字 */
+.action-bar .action-right .action-btn {
+  height: 80rpx; 
+  line-height: 80rpx; 
+  text-align: center;
+  border-radius: 40rpx; 
+  font-size: 28rpx; 
+  font-weight: 500;
+  transition: all 0.3s;
+  color: #333333;
+}
+
+.action-bar .action-right .action-btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.1);
+}
+
+.action-bar .action-right .action-btn .btn-text {
+  color: #333333;
+  font-size: 28rpx; 
+  font-weight: 600;
+}
+
+/* 单个按钮宽度 */
+.action-bar .action-right .action-btn:only-child {
+  width: 360rpx;
+}
+
+/* 两个按钮宽度 */
+.action-bar .action-right .action-btn {
+  width: 240rpx;
+}
+
+/* 按钮颜色 */
+.action-bar .action-right .buy-btn {
+  background: #ffd262;
+}
+
+.action-bar .action-right .swap-btn {
+  background: #bad467;
+}
+
+
+/* 交易确认弹窗 - 半屏覆盖 */
+.confirm-popup-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+}
+
+/* 遮罩层 */
+.popup-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+/* 弹窗内容 - 固定高度半屏 */
+.popup-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80vh; /* 固定高度，覆盖页面下半部分 */
+  background: #ffffff;
+  border-radius: 32rpx 32rpx 0 0;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 -2rpx 16rpx rgba(0, 0, 0, 0.15);
+}
+
+/* 标题栏 */
+.popup-header {
+  padding: 40rpx 32rpx 20rpx;
+  text-align: center;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.popup-title {
+  display: block;
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 12rpx;
+}
+
+.popup-subtitle {
+  display: block;
   font-size: 24rpx;
+  color: #999999;
 }
 
-/* 购买/出售按钮 - 橙色 */
-.buy-btn {
-  background: #ff6b35;
-  color: #fff;
-  min-width: 200rpx;
+/* 弹窗主体内容 - 可滚动区域 */
+.popup-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20rpx 32rpx;
 }
 
-/* 换物按钮 - 绿色 */
-.swap-btn {
-  background: #52c41a;
-  color: #fff;
-  min-width: 200rpx;
+/* 表单项 */
+.form-item {
+  margin-bottom: 28rpx;
 }
 
+.form-label {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #333333;
+  margin-bottom: 18rpx;
+}
+
+/* 时间选择器 - 加长的样式 */
+.time-selector {
+  display: flex;
+  gap: 20rpx;
+}
+
+.time-option {
+  flex: 1;
+  min-width: 0; 
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  background: #f8f9fa;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  color: #999999;
+  border: 1rpx solid #e8e8e8;
+  padding: 0 20rpx;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 日期选择框  */
+.time-option.date-option {
+  flex: 1.2; 
+}
+
+/* 时间选择框 */
+.time-option.time-option {
+  flex: 1;
+}
+
+.time-option.selected {
+  color: #333333;
+  border-color: #bad467;
+  background: #ffffff;
+}
+
+/* 地点输入框 */
+.location-input {
+  width: 100%;
+  height: 80rpx;
+  line-height: 80rpx;
+  padding: 0 24rpx;
+  background: #f8f9fa;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  color: #333333;
+  border: 1rpx solid #e8e8e8;
+  box-sizing: border-box;
+}
+
+.location-input:focus {
+  border-color: #bad467;
+  background: #ffffff;
+}
+
+.placeholder {
+  color: #cccccc;
+  font-size: 28rpx;
+}
+
+/* 备注输入框 */
+.remark-textarea {
+  width: 100%;
+  height: 140rpx;
+  padding: 24rpx;
+  background: #f8f9fa;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  color: #333333;
+  border: 1rpx solid #e8e8e8;
+  box-sizing: border-box;
+  resize: none;
+}
+
+.remark-textarea:focus {
+  border-color: #bad467;
+  background: #ffffff;
+}
+
+.word-count {
+  display: block;
+  text-align: right;
+  font-size: 24rpx;
+  color: #999999;
+  margin-top: 8rpx;
+}
+
+/* 商品信息预览 */
+.product-preview {
+  display: flex;
+  align-items: center;
+  background: #f8f9fa;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  margin: 28rpx 0;
+}
+
+.product-image {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 8rpx;
+  margin-right: 20rpx;
+  background: #e0e0e0;
+}
+
+.product-details {
+  flex: 1;
+  min-width: 0; /* 重要：防止内容溢出 */
+}
+
+.product-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333333;
+  margin-bottom: 10rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.product-price {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #ff6b35;
+}
+
+/* 按钮区域 - 固定在底部 */
+.popup-buttons {
+  display: flex;
+  gap: 20rpx;
+  padding: 24rpx 32rpx;
+  border-top: 1rpx solid #f0f0f0;
+  background: #ffffff;
+  flex-shrink: 0; 
+}
+
+.cancel-btn,
+.confirm-btn {
+  flex: 1;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  border-radius: 44rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+}
+
+.cancel-btn {
+  background: #f8f9fa;
+  color: #666666;
+  border: 1rpx solid #e8e8e8;
+}
+
+.confirm-btn {
+  background: #ffd262;
+  color: #333333;
+  border: 1rpx solid #ffd262;
+}
+
+.cancel-btn:active {
+  background: #e9ecef;
+}
+
+.confirm-btn:active {
+  opacity: 0.9;
+}

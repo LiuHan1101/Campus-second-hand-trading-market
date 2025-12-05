@@ -211,7 +211,7 @@ Page({
     // 跳转到搜索页面
     goToSearch() {
       wx.navigateTo({
-        url: '/pages/search/search'
+        url: '/pages/search/search?from=index' 
       });
     },
   

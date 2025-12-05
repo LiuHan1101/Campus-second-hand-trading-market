@@ -1,6 +1,4 @@
 {
-    "usingComponents": {},
-    "navigationBarTitleText": "发布闲置",
-    "navigationBarBackgroundColor": "#E8B4B8",
-    "navigationBarTextStyle": "white"
-  }
+  "usingComponents": {},
+  "navigationBarTitleText": "发布"
+}

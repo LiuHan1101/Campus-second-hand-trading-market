@@ -4,20 +4,32 @@
     <view class="search-section">
         <view class="search-bar" bindtap="goToSearch">
             <input class="search-input" placeholder="搜索愿望..." value="{{searchValue}}" disabled />
-            <view class="search-icon">🔍</view>
+            <view class="search-icon">
+                <image 
+                    src="/images/search.png" 
+                    style="width: 42rpx; height: 42rpx;"
+                    mode="aspectFit"
+                />
+            </view>
         </view>
     </view>
 
-    <!-- 主要内容区域 -->
-    <view class="main-content">
-        <!-- 侧边栏 -->
+  <!-- 主要内容区域 -->
+  <view class="main-content">
+        <!-- 左侧分类栏 -->
         <view class="sidebar-section">
-            <t-side-bar value="{{contentSidebar}}" bind:change="onContentSideBarChange" class="category-sidebar">
-                <t-side-bar-item wx:for="{{categoryList}}" wx:key="value" label="{{item.label}}" value="{{item.value}}" />
-            </t-side-bar>
+            <scroll-view class="category-list" scroll-y enable-flex>
+                <view wx:for="{{categoryList}}" 
+                      wx:key="value" 
+                      class="category-item {{contentSidebar === item.value ? 'active' : ''}} {{item.value === 'all' ? 'all' : ''}}"
+                      data-value="{{item.value}}"
+                      bindtap="switchCategory">
+                    <text>{{item.label}}</text>
+                </view>
+            </scroll-view>
         </view>
-
-        <!-- 内容区域 -->
+        
+        <!-- 右侧内容区域 -->
         <view class="content-area">
             <!-- 分类标题 -->
             <view class="category-header">
@@ -26,50 +38,46 @@
             </view>
 
             <!-- 愿望列表 -->
-            <view class="wish-list">
+            <scroll-view class="wish-list" scroll-y>
                 <view class="wish-card" 
                       wx:for="{{wishList}}" 
                       wx:key="id" 
-                      data-id="{{item.id}}" 
                       data-index="{{index}}"
                       bindtap="goToDetail">
                     
-                    <!-- 第一行：愿望标题 -->
+                    <!-- 愿望标题 -->
                     <view class="wish-title">{{item.title}}</view>
                     
-                    <!-- 第二行：愿望描述 -->
+                    <!-- 愿望描述 -->
                     <view class="wish-description" wx:if="{{item.description}}">
                         {{item.description}}
                     </view>
                     
-                    <!-- 第三行：多张图片显示区域 -->
+                    <!-- 图片显示 -->
                     <view class="wish-images-section" wx:if="{{item.displayImages && item.displayImages.length > 0}}">
                         <view class="images-grid {{item.displayImages.length === 1 ? 'single-grid' : ''}}">
                             <view class="image-item {{item.displayImages.length === 1 ? 'single' : ''}}" 
                                   wx:for="{{item.displayImages}}" 
-                                  wx:key="index" 
-                                  wx:for-item="image" 
+                                  wx:key="index"
+                                  wx:for-item="img"
                                   wx:for-index="imgIndex">
                                 <image class="wish-image" 
-                                       src="{{image.url}}" 
+                                       src="{{img.url}}" 
                                        mode="aspectFill"
+                                       binderror="onImageError"
                                        data-index="{{index}}"
                                        data-img-index="{{imgIndex}}"
-                                       binderror="onImageError"
                                        lazy-load="true"></image>
-                                <!-- 图片数量提示 -->
-                                <view class="image-count" wx:if="{{image.isLast && item.totalImages > 3}}">
-                                    <text class="count-icon">🖼️</text>
-                                    <text class="count-number">{{item.totalImages}}</text>
+                                <view class="image-count" wx:if="{{img.isLast && item.totalImages > 3}}">
+                                    <text>{{item.totalImages}}</text>
                                 </view>
                             </view>
                         </view>
                     </view>
                     
-                    <!-- 底部：价格和交易方式 -->
+                    <!-- 底部信息 -->
                     <view class="wish-footer">
                         <view class="wish-tags">
-                            <!-- 自定义标签区域 -->
                             <view class="custom-tags" wx:if="{{item.customTags && item.customTags.length > 0}}">
                                 <view class="custom-tag" wx:for="{{item.customTags}}" wx:key="*this">
                                     {{item}}
@@ -77,13 +85,22 @@
                             </view>
                         </view>
                         <view class="price-section">
-                            <!-- 现金价格显示 -->
-                            <view class="price-display" wx:if="{{item.priceDisplay}}">
-                                {{item.priceDisplay}}
+                            <!-- 显示"现金" -->
+                            <view class="swap-display" 
+                                  wx:if="{{item.transactionType === 'cash'}}">
+                                现金
                             </view>
-                            <!-- 换物显示 -->
-                            <view class="swap-display" wx:if="{{item.transactionType === 'swap' || item.transactionType === 'both'}}">
+                            
+                            <!-- 显示"换物" -->
+                            <view class="swap-display" 
+                                  wx:if="{{item.transactionType === 'swap'}}">
                                 换物
+                            </view>
+                            
+                            <!-- 显示"均可" -->
+                            <view class="swap-display" 
+                                  wx:if="{{item.transactionType === 'both'}}">
+                                均可
                             </view>
                         </view>
                     </view>
@@ -100,7 +117,7 @@
                 <view class="loading-state" wx:if="{{isLoading}}">
                     <view class="loading-text">加载中...</view>
                 </view>
-            </view>
+            </scroll-view>
         </view>
     </view>
 </view>

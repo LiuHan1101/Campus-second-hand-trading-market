@@ -1,89 +1,156 @@
+/* 搜索页面 */
 .search-page {
-    min-height: 100vh;
-    background: #f5f5f5;
-  }
-  
-  /* 搜索头部 */
-  .search-header {
-    background: #fff;
-    padding: 20rpx 30rpx;
-    border-bottom: 1rpx solid #eee;
-  }
-  
-  .search-input-container {
-    display: flex;
-    align-items: center;
-    gap: 20rpx;
-  }
-  
-  .search-input {
-    flex: 1;
-    height: 80rpx;
-    background: #f8f8f8;
-    border-radius: 40rpx;
-    padding: 0 30rpx;
-    font-size: 28rpx;
-  }
-  
-  .search-cancel {
-    font-size: 28rpx;
-    color: #666;
-  }
-  
-  /* 搜索历史 */
-  .search-history {
-    background: #fff;
-    margin: 20rpx;
-    border-radius: 16rpx;
-    padding: 30rpx;
-  }
-  
-  .history-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30rpx;
-  }
-  
-  .history-title {
-    font-size: 32rpx;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .clear-all {
-    font-size: 26rpx;
-    color: #999;
-  }
-  
-  .history-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20rpx;
-  }
+  min-height: 100vh;
+  background: #ffffff; 
+  padding: 0 10rpx 20rpx;
+}
 
-.history-item {
+/* 搜索头部 - 作为第一个板块 */
+.search-header {
+  background: #fff;
+  padding: 14rpx 20rpx 20rpx; 
+  margin-bottom: 0rpx;
+  border-bottom: 1rpx solid #e8e8e8; 
+  border-radius: 0;
+  margin-left: -10rpx;
+  margin-right: -20rpx;
+  padding-left: 30rpx; 
+  padding-right: 30rpx; 
+}
+
+.search-input-container {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* 两端对齐 */
+  position: relative;
+}
+
+.search-input {
+  flex: 1;
+  height: 72rpx;
   background: #f8f9fa;
-  padding: 20rpx 24rpx;
-  border-radius: 40rpx;
-  font-size: 26rpx;
+  border-radius: 36rpx;
+  padding: 0 32rpx;
+  font-size: 28rpx;
+  color: #333333;
+  border: 1rpx solid #e8e8e8;
+  width: 100%;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+  padding-right: 70rpx !important;
+}
+
+/* 新增：清除按钮样式 */
+.clear-btn {
+  position: absolute;
+  right: 32rpx; 
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+  background: #cccccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26rpx; 
+  color: #ffffff;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+
+.clear-btn.show {
+  opacity: 1;
+}
+
+.clear-btn.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.clear-btn:active {
+  background: #aaaaaa;
+}
+
+/* 搜索历史板块 - 作为第二个板块 */
+.search-history {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 40rpx 30rpx 60rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+  margin-bottom: 8rpx; 
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35rpx; 
+}
+
+.history-title {
+  font-size: 32rpx;
+  font-weight: bold;
   color: #333;
 }
 
-.history-text {
-  flex: 1;
+.clear-all {
+  font-size: 26rpx;
+  color: #999;
 }
 
+.history-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+}
+
+/* 历史记录项 */
+.history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8f9fa;
+  padding: 16rpx 20rpx;
+  border-radius: 40rpx;
+  font-size: 26rpx;
+  color: #333;
+  height: 56rpx;
+  box-sizing: border-box;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.history-text {
+  flex: 1; 
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0 50rpx 0 20rpx; 
+}
+
+/* 删除按钮样式调整  */
 .delete-btn {
   display: flex;
   align-items: center;
-  padding: 8rpx 16rpx;
-  border-radius: 20rpx;
+  justify-content: center;
+  padding: 4rpx 6rpx; 
+  border-radius: 16rpx; 
   color: #999;
-  font-size: 24rpx;
+  font-size: 20rpx; 
+  min-width: 36rpx; 
+  min-height: 32rpx; 
+  z-index: 10;
+  position: absolute;
+  background-color: transparent;
+  flex-shrink: 0;
+  right: 12rpx; 
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* 鼠标悬停效果 */
+.history-item:active {
+  background: #e9ecef;
 }
 
 .delete-btn:active {
@@ -91,127 +158,145 @@
 }
 
 .delete-icon {
-  margin-right: 8rpx;
-  font-size: 28rpx;
+  font-size: 22rpx; 
+  color: #999;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22rpx;
+  height: 22rpx;
 }
-  
-  /* 添加点击反馈 */
-  .delete-icon:active {
-    background-color: rgba(0, 0, 0, 0.1);
-  }
-  
-  /* 热门搜索 */
-  .hot-search {
-    background: #fff;
-    margin: 20rpx;
-    border-radius: 16rpx;
-    padding: 30rpx;
-  }
-  
-  .hot-title {
-    font-size: 32rpx;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 30rpx;
-  }
-  
-  .hot-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20rpx;
-  }
-  
-  .hot-tag {
-    background: #e6f7ff;
-    color: #1890ff;
-    padding: 16rpx 24rpx;
-    border-radius: 40rpx;
-    font-size: 26rpx;
-    border: 1rpx solid #91d5ff;
-  }
-  
-  /* 搜索结果 */
-  .search-results {
-    background: #fff;
-    margin: 20rpx;
-    border-radius: 16rpx;
-    padding: 30rpx;
-  }
-  
-  .results-count {
-    font-size: 28rpx;
-    color: #666;
-    margin-bottom: 20rpx;
-  }
-  
-  .results-list {
-    max-height: 80vh;
-  }
-  
-  .result-item {
-    display: flex;
-    padding: 20rpx 0;
-    border-bottom: 1rpx solid #f0f0f0;
-  }
-  
-  .result-item:last-child {
-    border-bottom: none;
-  }
-  
-  .result-image {
-    width: 120rpx;
-    height: 120rpx;
-    border-radius: 12rpx;
-    margin-right: 24rpx;
-  }
-  
-  .result-info {
-    flex: 1;
-  }
-  
-  .result-title {
-    font-size: 28rpx;
-    color: #333;
-    margin-bottom: 12rpx;
-    line-height: 1.4;
-  }
-  
-  .result-price {
-    font-size: 26rpx;
-    color: #ff6b35;
-    font-weight: bold;
-    margin-bottom: 8rpx;
-  }
-  
-  .result-user {
-    font-size: 24rpx;
-    color: #999;
-  }
-  
-  /* 无结果 */
-  .no-results {
-    text-align: center;
-    padding: 100rpx 0;
-  }
-  
-  .no-results-text {
-    font-size: 28rpx;
-    color: #999;
-  }
 
+/* 热门搜索板块  */
+.hot-search {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 40rpx 30rpx 20rpx; 
+  border-top: 1rpx solid #f0f0f0;
+  border-left: 1rpx solid #f0f0f0;
+  border-right: 1rpx solid #f0f0f0;
+  margin-bottom: 10rpx;
+  border: 1rpx solid #e8e8e8;
+  border-bottom: none; 
+}
 
-  .clear-btn {
-    width: 60rpx;
-    height: 60rpx;
-    border-radius: 50%;
-    background: #f0f0f0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32rpx;
-    color: #999;
-    margin-left: 20rpx;
-  }
+.hot-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30rpx;
+}
 
+.hot-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+}
 
+/* 热门搜索改为椭圆形 */
+.hot-tag {
+  background: transparent;
+  color: #bad467;
+  padding: 20rpx 24rpx;
+  border-radius: 40rpx;
+  font-size: 26rpx;
+  border: 1rpx solid #bad467;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 58rpx;
+  box-sizing: border-box;
+}
 
+.hot-tag:active {
+  background: rgba(186, 212, 103, 0.1);
+}
+
+/* 搜索结果板块 */
+.search-results {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  box-shadow: 
+    2rpx 0 12rpx rgba(0, 0, 0, 0.05),
+    -2rpx 0 12rpx rgba(0, 0, 0, 0.05); 
+  margin-bottom: 12rpx;
+  border-top: 1rpx solid #e8e8e8;
+  border-left: 1rpx solid #e8e8e8;
+  border-right: 1rpx solid #e8e8e8;
+
+}
+.results-count {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 20rpx;
+}
+
+.results-list {
+  max-height: 80vh;
+}
+
+/* 无结果提示 - 在结果板块内部 */
+.no-results-inner {
+  text-align: center;
+  padding: 60rpx 0;
+}
+
+.no-results-text {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.result-item {
+  display: flex;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.result-item:last-child {
+  border-bottom: none;
+}
+
+.result-image {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 12rpx;
+  margin-right: 24rpx;
+}
+
+.result-info {
+  flex: 1;
+}
+
+.result-title {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 12rpx;
+  line-height: 1.4;
+}
+
+.result-price {
+  font-size: 26rpx;
+  color: #ff6b35;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+}
+
+/* 搜索结果底部布局 */
+.result-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8rpx;
+}
+
+.result-user {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.result-time {
+  font-size: 20rpx;
+  color: #999;
+}
