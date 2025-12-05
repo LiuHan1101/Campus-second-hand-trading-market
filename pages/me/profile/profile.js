@@ -154,17 +154,34 @@ Page({
       console.log('加载其他用户数据，userId:', userId);
       
       const db = wx.cloud.database();
+      // 兼容传入 openid 或 users._id，两种方式都尝试
+      let userData = null;
+      let byDoc = null;
+      try {
+        byDoc = await db.collection('users').doc(userId).get();
+      } catch (_) {}
+      if (byDoc && byDoc.data) {
+        userData = byDoc.data;
+      } else {
+        const byOpenid = await db.collection('users').where({
+          // 同时兼容 openid 与 _openid 两字段
+          openid: userId
+        }).limit(1).get();
+        if (byOpenid.data && byOpenid.data.length > 0) {
+          userData = byOpenid.data[0];
+        } else {
+          const byUnderOpenid = await db.collection('users').where({ _openid: userId }).limit(1).get();
+          userData = (byUnderOpenid.data && byUnderOpenid.data[0]) || null;
+        }
+      }
       
-      const userResult = await db.collection('users').doc(userId).get();
+      console.log('其他用户查询结果:', userData);
       
-      console.log('其他用户查询结果:', userResult);
-      
-      if (userResult.data) {
-        const userData = userResult.data;
+      if (userData) {
         
         const newUserInfo = {
           nickname: userData.nickname || userData.nickName || '上财同学',
-          avatar: userData.avatar || userData.avatarUrl || '/images/avatar.png',
+          avatar: userData.avatar || userData.avatarUrl || '/miniprogram/images/avatar.png',
           college: userData.college || '未知学院',
           bio: userData.bio || '',
           joinDays: this.calculateJoinDays(userData.createTime || userData.joinTime) || 1,

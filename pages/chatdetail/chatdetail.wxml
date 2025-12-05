@@ -28,6 +28,8 @@
           class="message-avatar" 
           src="{{item.avatar || '/images/avatar.png'}}" 
           mode="aspectFill"
+          bindtap="onAvatarTap"
+          data-userid="{{sellerInfo.userId}}"
         />
         
         <!-- 消息内容 -->
@@ -127,6 +129,8 @@
           class="message-avatar" 
           src="{{item.avatar || '/images/avatar.png'}}" 
           mode="aspectFill"
+          bindtap="onAvatarTap"
+          data-userid="{{currentUserInfo.userId}}"
         />
         
         <!-- 消息时间（仅在未使用居中分隔且需要显示时） -->

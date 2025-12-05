@@ -810,6 +810,16 @@ Page({
     this.setData({ inputValue: v, canSend: v.trim().length > 0 });
   },
 
+  // 点击头像进入个人主页
+  onAvatarTap(e) {
+    const userId = e.currentTarget.dataset.userid;
+    if (!userId) {
+      wx.showToast({ title: '用户信息缺失', icon: 'none' });
+      return;
+    }
+    wx.navigateTo({ url: `/pages/me/profile/profile?userId=${encodeURIComponent(userId)}` });
+  },
+
   // ==================== 时间分隔处理 ====================
   decorateMessagesWithTime(list) {
     const { timeSeparatorThresholdMinutes, useCenteredTimeSeparator } = this.data;
