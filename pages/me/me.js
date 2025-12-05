@@ -252,73 +252,187 @@ Page({
     },
   
     // 加载用户统计数据
-    async loadUserStats() {
-      try {
-        const openid = wx.getStorageSync('openid');
-        if (!openid) {
-          console.log('未登录，跳过加载统计数据');
-          return;
+  // 修改后的查询方法，确保只查询当前用户的商品
+async loadUserStats() {
+  try {
+    const userInfo = wx.getStorageSync('userInfo');
+    const openid = userInfo ? userInfo.openid : null;
+    
+    if (!openid) {
+      console.log('未登录，跳过加载统计数据');
+      this.setData({
+        stats: {
+          published: 0,
+          inProgress: 0,
+          completed: 0,
+          favorites: 0
         }
-        
-        const db = wx.cloud.database();
-        
-        // 获取已发布商品数量（当前用户的，状态为selling）
-        // 根据数据库记录，商品有_openid和status字段，但没有deleted字段
-        const publishedResult = await db.collection('POST')
+      });
+      return;
+    }
+    
+    console.log('开始加载统计数据，用户openid:', openid);
+    
+    const db = wx.cloud.database();
+    let stats = {
+      published: 0,
+      inProgress: 0,
+      completed: 0,
+      favorites: 0
+    };
+    
+    // 获取用户ID（可能有多个字段）
+    const userId = userInfo._id || openid;
+    
+    // 1. 获取已发布商品数量（当前用户的selling状态）
+    try {
+      console.log('查询已发布商品...');
+      
+      // 尝试多种可能的用户字段
+      let publishedRes;
+      try {
+        // 尝试按 _openid 查询
+        publishedRes = await db.collection('POST')
           .where({
-            _openid: openid,  // 使用_openid查询
-            status: 'selling'  // 状态为selling
+            _openid: openid,
+            status: 'selling',
+            deleted: db.command.neq(true)
           })
           .count();
-        
-        // 获取进行中商品数量
-        const inProgressResult = await db.collection('POST')
+      } catch (e) {
+        console.log('_openid查询失败，尝试publisherOpenid:', e);
+        // 尝试按 publisherOpenid 查询
+        publishedRes = await db.collection('POST')
           .where({
-            _openid: openid,  // 使用_openid查询
-            status: 'in_progress'  // 状态为in_progress
+            publisherOpenid: openid,
+            status: 'selling',
+            deleted: db.command.neq(true)
           })
           .count();
-        
-        // 获取收藏数量（当前用户的）
-        const favoritesResult = await db.collection('wishes')
-          .where({
-            _openid: openid  // 使用_openid查询
-            // 移除status条件，因为wishes表可能没有status字段
-          })
-          .count();
-  
-        console.log('统计查询结果:', {
-          published: publishedResult.total,
-          inProgress: inProgressResult.total,
-          favorites: favoritesResult.total
-        });
-  
-        this.setData({
-          stats: {
-            published: publishedResult.total || 0,
-            inProgress: inProgressResult.total || 0,
-            completed: 0,  // 需要已成交记录表
-            favorites: favoritesResult.total || 0
-          }
-        });
-  
-        // 更新菜单徽章（注意：菜单徽章逻辑仍然不正确，收藏数显示在"帮助与反馈"菜单项上）
-        this.updateMenuBadges();
-  
-      } catch (error) {
-        console.error('加载统计数据失败:', error);
-        // 使用默认数据
-        this.setData({
-          stats: {
-            published: 0,
-            inProgress: 0,
-            completed: 0,
-            favorites: 0
-          }
-        });
       }
-    },
-  
+      
+      stats.published = publishedRes.total || 0;
+      console.log('已发布商品数量:', stats.published);
+    } catch (publishedError) {
+      console.error('查询已发布商品失败:', publishedError);
+      
+      // 尝试通用查询（不按用户过滤）
+      try {
+        const allRes = await db.collection('POST')
+          .where({
+            status: 'selling',
+            deleted: db.command.neq(true)
+          })
+          .count();
+        console.warn('使用全部商品数量:', allRes.total);
+      } catch (e) {
+        console.error('通用查询也失败:', e);
+      }
+    }
+    
+    // 2. 获取进行中商品数量
+    try {
+      console.log('查询进行中商品...');
+      let inProgressRes;
+      try {
+        inProgressRes = await db.collection('POST')
+          .where({
+            _openid: openid,
+            status: 'in_progress',
+            deleted: db.command.neq(true)
+          })
+          .count();
+      } catch (e) {
+        console.log('_openid查询失败，尝试publisherOpenid:', e);
+        inProgressRes = await db.collection('POST')
+          .where({
+            publisherOpenid: openid,
+            status: 'in_progress',
+            deleted: db.command.neq(true)
+          })
+          .count();
+      }
+      stats.inProgress = inProgressRes.total || 0;
+      console.log('进行中商品数量:', stats.inProgress);
+    } catch (inProgressError) {
+      console.error('查询进行中商品失败:', inProgressError);
+    }
+    
+    // 3. 获取收藏数量
+    try {
+      console.log('查询收藏数量...');
+      const favoritesRes = await db.collection('favorites')
+        .where({
+          userId: openid
+        })
+        .count();
+      stats.favorites = favoritesRes.total || 0;
+      console.log('收藏数量:', stats.favorites);
+      
+      // 备用方案：如果没有收藏记录，检查本地存储
+      if (stats.favorites === 0) {
+        const localFavorites = wx.getStorageSync('favorites') || [];
+        if (Array.isArray(localFavorites)) {
+          stats.favorites = localFavorites.length;
+          console.log('从本地存储获取收藏数量:', stats.favorites);
+        }
+      }
+    } catch (favoritesError) {
+      console.error('查询收藏数量失败:', favoritesError);
+      // 出错时使用本地存储
+      const localFavorites = wx.getStorageSync('favorites') || [];
+      stats.favorites = localFavorites.length;
+      console.log('使用本地收藏数量:', stats.favorites);
+    }
+    
+    // 4. 获取已成交数量
+    try {
+      console.log('查询已成交商品...');
+      let completedRes;
+      try {
+        completedRes = await db.collection('POST')
+          .where({
+            _openid: openid,
+            status: 'completed',
+            deleted: db.command.neq(true)
+          })
+          .count();
+      } catch (e) {
+        console.log('_openid查询失败，尝试publisherOpenid:', e);
+        completedRes = await db.collection('POST')
+          .where({
+            publisherOpenid: openid,
+            status: 'completed',
+            deleted: db.command.neq(true)
+          })
+          .count();
+      }
+      stats.completed = completedRes.total || 0;
+      console.log('已成交商品数量:', stats.completed);
+    } catch (completedError) {
+      console.error('查询已成交商品失败:', completedError);
+    }
+    
+    console.log('最终统计数据:', stats);
+    
+    // 更新页面数据
+    this.setData({ stats });
+    
+    // 更新菜单徽章
+    this.updateMenuBadges();
+    
+  } catch (error) {
+    console.error('加载统计数据失败:', error);
+    this.setData({
+      stats: {
+        published: 0,
+        inProgress: 0,
+        completed: 0,
+        favorites: 0
+      }
+    });
+  }
+},
     // 更新菜单徽章
     updateMenuBadges() {
       const menuItems = [...this.data.menuItems];
