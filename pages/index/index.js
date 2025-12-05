@@ -7,8 +7,6 @@ Page({
     searchValue: '',
     isLoading: false,
     // 注意：不要在 data 中放 Map，微信小程序会序列化 data 导致 Map 方法丢失
-<<<<<<< HEAD
-=======
   },
 
   // 切换标签
@@ -17,7 +15,6 @@ Page({
     this.setData({
       activeTab: tab
     });
->>>>>>> develop2.0-ZRT
   },
 
   // 图片加载失败处理
@@ -45,9 +42,13 @@ Page({
     // 在页面实例上创建非响应性缓存，避免放入 data（会被序列化）
     this.userCache = new Map();
     this.loadGoodsData();
+     // 监听刷新事件
+     this.setupRefreshListener();
   },
 
   onShow() {
+    // 检查是否需要刷新
+    this.checkNeedRefresh();
     // 页面显示时刷新数据
     this.loadGoodsData();
   },
@@ -68,6 +69,7 @@ Page({
       this.loadMockData();
     }
   },
+  
 
   // 从云数据库加载商品
   async loadGoodsFromDatabase() {

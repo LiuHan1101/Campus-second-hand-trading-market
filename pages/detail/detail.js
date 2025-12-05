@@ -12,7 +12,6 @@ Page({
   
     onLoad(options) {
       console.log('详情页参数:', options);
-<<<<<<< HEAD
       if (!wx.cloud) {
         console.error('请使用 2.2.3 或以上的基础库以使用云能力');
       } else {
@@ -21,9 +20,6 @@ Page({
           traceUser: true,
         });
       }
-=======
-      
->>>>>>> develop2.0-ZRT
       const id = options.id;
       const type = options.type;
       const goodsData = options.goodsData;
@@ -43,7 +39,6 @@ Page({
         wx.showToast({
           title: '数据加载失败',
           icon: 'none'
-<<<<<<< HEAD
         });
         wx.navigateBack();
       }
@@ -85,39 +80,6 @@ Page({
       }
     },
   
-=======
-        });
-        wx.navigateBack();
-      }
-    },
-  
-    // 从传递的数据加载商品
-    loadGoodsFromData(goodsData) {
-      try {
-        const data = JSON.parse(decodeURIComponent(goodsData));
-        const goods = this.processGoodsData(data);
-        
-        this.setData({ 
-          goods,
-          isLoading: false
-        });
-        
-        this.checkFavoriteStatus(goods.id);
-        
-        // 加载发布者信息
-        this.loadPublisherInfo(goods);
-        
-      } catch (error) {
-        console.error('解析商品数据失败:', error);
-        wx.showToast({
-          title: '数据加载失败',
-          icon: 'none'
-        });
-        this.setData({ isLoading: false });
-      }
-    },
-  
->>>>>>> develop2.0-ZRT
     // 从数据库加载商品
     async loadGoodsFromDatabase(id) {
       try {
@@ -300,7 +262,6 @@ Page({
         tags = Array.isArray(data.tag) ? data.tag : [data.tag];
       } else if (data.categories) {
         tags = Array.isArray(data.categories) ? data.categories : [data.categories];
-<<<<<<< HEAD
       }
       
       // 处理用户信息（保留原有逻辑，用于兼容）
@@ -442,100 +403,6 @@ Page({
         return;
       }
 
-=======
-      }
-      
-      // 处理用户信息（保留原有逻辑，用于兼容）
-      let userInfo = {
-        nickname: '匿名用户',
-        avatar: '/images/avatar.png',
-        college: ''
-      };
-      
-      if (data.user && typeof data.user === 'object') {
-        userInfo = {
-          nickname: data.user.nickname || userInfo.nickname,
-          avatar: data.user.avatar || userInfo.avatar,
-          college: data.user.college || userInfo.college
-        };
-      } else if (data.nickname) {
-        userInfo.nickname = data.nickname;
-      }
-      
-      // 提取发布者信息
-        const publisherInfo = data.publisherInfo || {
-          nickname: userInfo.nickname,
-          avatar: userInfo.avatar,
-          college: userInfo.college
-        };
-
-        // 如果传入的是从列表页处理过的 goodsData，原始文档可能在 data.rawData
-        const raw = data.rawData || null;
-        // 优先从多种可能的位置提取发布者 openid
-        const extractedPublisherOpenid = data.publisherOpenid || data._openid || (raw && (raw.publisherOpenid || raw._openid)) || '';
-      
-      return {
-        id: data._id || data.id || Date.now().toString(),
-        title: data.title || '未知商品',
-        description: data.description || '暂无描述',
-        price: parseFloat(data.price) || 0,
-        priceRange: data.priceRange || '',
-        images: images,
-        transactionType: data.transactionType || 'cash',
-        tags: tags,
-        expectedSwap: data.expectedSwap || '',
-        viewCount: data.viewCount || 0,
-        createTime: data.createTime || '',
-        switch: data.switch || 'object',
-        user: userInfo,
-        // 添加发布者相关字段
-        publisherOpenid: extractedPublisherOpenid,
-        publisherInfo: publisherInfo,
-        _openid: data._openid || (raw && raw._openid) || '',
-        // 保留原始数据以便后续回退查找
-        rawData: raw
-      };
-    },
-  
-    // 检查收藏状态
-    checkFavoriteStatus(goodsId) {
-      const favorites = wx.getStorageSync('favorites') || [];
-      const isFavorite = favorites.includes(goodsId);
-      this.setData({ isFavorite });
-    },
-  
-    // 切换收藏状态
-    onToggleFavorite() {
-      const { goods, isFavorite } = this.data;
-      const favorites = wx.getStorageSync('favorites') || [];
-      
-      let newFavorites;
-      if (isFavorite) {
-        newFavorites = favorites.filter(id => id !== goods.id);
-        wx.showToast({ title: '取消收藏', icon: 'success' });
-      } else {
-        newFavorites = [...favorites, goods.id];
-        wx.showToast({ title: '收藏成功', icon: 'success' });
-      }
-      
-      wx.setStorageSync('favorites', newFavorites);
-      this.setData({ isFavorite: !isFavorite });
-    },
-  
-    // 查看发布者详情 - 修复跳转逻辑
-    onViewPublisherDetail() {
-      const { publisherInfo, goods } = this.data;
-      
-      // 先检查发布者信息是否完整；如果没有 userId/openid，则尝试使用商品中的 _openid 作为回退
-      if (!publisherInfo) {
-        wx.showToast({
-          title: '用户信息不完整',
-          icon: 'none'
-        });
-        return;
-      }
-
->>>>>>> develop2.0-ZRT
       if (!publisherInfo.userId && !publisherInfo.openid) {
         // 有时页面是从列表页传来的已处理数据，其中原始文档的 _openid 在 goods.rawData 中
         const fallbackOpenid = (goods && (goods.publisherOpenid || goods._openid))
@@ -839,7 +706,6 @@ Page({
         path: `/pages/detail/detail?id=${goods.id}`,
         imageUrl: goods.images && goods.images.length > 0 ? goods.images[0] : '/images/share-logo.png'
       };
-<<<<<<< HEAD
     },
 
 
@@ -1011,7 +877,3 @@ async removeFavoriteFromDB(goodsId) {
 
 
   });
-=======
-    }
-  });
->>>>>>> develop2.0-ZRT

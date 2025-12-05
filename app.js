@@ -18,7 +18,26 @@ App({
     },
     // 添加防重复标志
     isCheckingLogin: false,
-    hasCheckedInitialLogin: false
+    hasCheckedInitialLogin: false,
+    // 添加主页刷新支持
+    refreshHomePage: null,
+    eventBus: {
+      events: {},
+      on(event, callback) {
+        if (!this.events[event]) this.events[event] = [];
+        this.events[event].push(callback);
+      },
+      off(event, callback) {
+        if (this.events[event]) {
+          this.events[event] = this.events[event].filter(cb => cb !== callback);
+        }
+      },
+      emit(event, data) {
+        if (this.events[event]) {
+          this.events[event].forEach(callback => callback(data));
+        }
+      }
+    }
   },
 
   onLaunch: function() {
@@ -195,7 +214,7 @@ App({
     this.safeNavigateToLogin();
   },
 
-  // 其他方法保持不变...
+  // 获取用户信息
   async getUserProfile() {
     return new Promise((resolve, reject) => {
       wx.getUserProfile({
@@ -214,6 +233,7 @@ App({
     });
   },
 
+  // 更新用户信息
   async updateUserInfo(userInfo) {
     try {
       const res = await this.request({
@@ -236,6 +256,7 @@ App({
     }
   },
 
+  // 获取用户信息（从后端）
   async getUserInfo() {
     try {
       const res = await this.request({
@@ -254,6 +275,7 @@ App({
     }
   },
 
+  // 退出登录
   async logout() {
     try {
       // 调用后端退出接口
@@ -274,10 +296,12 @@ App({
     }
   },
 
+  // 设置登录成功回调
   setLoginSuccessCallback(callback) {
     this.loginSuccessCallback = callback;
   },
 
+  // 图片加载错误处理（这个是Page的方法，不应该在App里，建议删除或移动到对应页面）
   onImageError(e) {
     const index = e.currentTarget.dataset.index;
     const { activeTab, cashGoodsList, swapGoodsList } = this.data;

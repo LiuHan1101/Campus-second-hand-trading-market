@@ -1,9 +1,5 @@
 <!-- pages/me/profile/profile.wxml -->
-<<<<<<< HEAD
-<view class="profile-container">
-=======
 <view class="profile-container" style="width: 710rpx; display: block; box-sizing: content-box">
->>>>>>> develop2.0-ZRT
   <!-- 主加载状态 -->
   <view class="loading-state" wx:if="{{isLoading}}">
     <view class="loading-content">
@@ -24,14 +20,6 @@
           binderror="onImageError"
           data-type="avatar">
         </image>
-<<<<<<< HEAD
-        <view class="user-text-info">
-          <view class="user-nickname">{{userInfo.nickname}}</view>
-          <view class="user-college">{{userInfo.college || '未设置学院'}}</view>
-          <view class="user-stats">
-            <text class="stat-item">加入 {{userInfo.joinDays}} 天</text>
-            <text class="stat-item">信用 {{userInfo.creditScore}}</text>
-=======
         <view class="user-stats">
           <text class="stat-item">加入 {{userInfo.joinDays}} 天</text>
           <text class="stat-item">信用 {{userInfo.creditScore}}</text>
@@ -46,7 +34,6 @@
         <view class="tags-section">
           <view class="tags-list">
             <text class="tag" wx:for="{{userInfo.tags}}" wx:key="*this">{{item}}</text>
->>>>>>> develop2.0-ZRT
           </view>
         </view>
       </view>
@@ -87,18 +74,6 @@
         </view>
       </view>
 
-<<<<<<< HEAD
-    <!-- 个人简介模块 -->
-    <view class="bio-section card">
-      <view class="section-title">个人简介</view>
-      <view class="bio-content">{{userInfo.bio || '暂无简介'}}</view>
-      <view class="tags-section">
-        <view class="tags-title">个性标签</view>
-        <view class="tags-list">
-          <text class="tag" wx:for="{{userInfo.tags}}" wx:key="*this">{{item}}</text>
-          <text class="tag add-tag" bindtap="onAddTag" wx:if="{{!isViewOtherUser}}">+</text>
-        </view>
-=======
       <!-- 右边评分区域 - 固定30%宽度，始终显示 -->
       <view class="score-display">
         <view class="score-number">{{ratingScore || 0}}</view>
@@ -112,15 +87,11 @@
           >{{index < ratingScore ? '★' : '☆'}}</text>
         </view>
         <view class="rating-count">{{commentCount}}条评价</view>
->>>>>>> develop2.0-ZRT
       </view>
     </view>
   </view>
 
-<<<<<<< HEAD
-=======
     
->>>>>>> develop2.0-ZRT
     <!-- 出物和许愿信息模块 -->
     <view class="goods-section" style="width: 710rpx; display: block; box-sizing: border-box; position: relative; left: 0rpx; top: -1rpx">
       <!-- 标签切换 -->
@@ -200,10 +171,7 @@
                 <!-- 交易类型（灰色） -->
                 <view class="goods-type">{{item.transactionType === 'cash' ? '现金' : item.transactionType === 'swap' ? '换物' : '均可'}}</view>
               </view>
-<<<<<<< HEAD
               <view class="goods-desc">{{item.description}}</view>
-=======
->>>>>>> develop2.0-ZRT
             </view>
           </view>
         </block>

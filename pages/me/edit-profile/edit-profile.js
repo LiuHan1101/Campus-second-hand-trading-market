@@ -128,11 +128,6 @@ Page({
         showAvatarModal: false
       });
     },
-<<<<<<< HEAD
-  
-=======
-
->>>>>>> develop2.0-ZRT
     // 输入昵称
     onNicknameInput(e) {
       this.setData({
