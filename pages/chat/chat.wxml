@@ -1,9 +1,6 @@
 <!--pages/chat/chat.wxml-->
-<view class="chat-container" style="background-color: {{colors.neutralLight}}">
-  <!-- 顶部导航 -->
-  <view class="nav-bar" style="background-color: {{colors.primaryRed}}">
-    <text class="nav-title">消息</text>
-  </view>
+<view class="chat-container">
+  <!-- 删除自定义导航栏，使用系统导航栏 -->
 
   <!-- 聊天列表 -->
   <view class="chat-list">

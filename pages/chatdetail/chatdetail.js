@@ -3,6 +3,7 @@ Page({
   data: {
     messages: [],
     inputValue: '',
+    canSend: false,
     scrollTop: 0,
     showConfirmBubble: false,
     showRatingBubble: false,
@@ -10,6 +11,9 @@ Page({
     ratingData: { descScore: 0, timeScore: 0, attitudeScore: 0 },
     inputHeight: 44,
     safeAreaBottom: 0,
+    // 时间显示策略
+    timeSeparatorThresholdMinutes: 5,
+    useCenteredTimeSeparator: true,
     sellerInfo: { 
       nickname: '商家', 
       avatar: 'cloud://cloud1-8gw6xrycfea6d00b.636c-cloud1-8gw6xrycfea6d00b-1321710631/images/default-avatar.png', 
@@ -25,14 +29,19 @@ Page({
     isLoading: true,
     chatId: null
   },
+  onUnload() {
+    this.msgWatcher && this.msgWatcher.close();
+  },
   
   // ==================== 图片处理相关函数 ====================
   
   // 图片URL缓存
   imageUrlCache: {},
   
-  // 云函数调用缓存
+  // 云函数调用缓存（暂不使用头像云函数）
   cloudFunctionCache: {},
+
+  // 已移除 _id→openid 映射，系统内统一使用 openid
   
   /**
    * 获取可共享的图片URL（使用云函数中转）
@@ -40,34 +49,8 @@ Page({
    * @returns {Promise<string>} - 临时URL
    */
   async getSharedAvatar(fileID) {
-    // 检查缓存
-    if (this.cloudFunctionCache[fileID]) {
-      const cached = this.cloudFunctionCache[fileID];
-      // 临时URL有效期2小时，缓存1.5小时
-      if (Date.now() - cached.timestamp < 1.5 * 60 * 60 * 1000) {
-        return cached.url;
-      }
-    }
-    
-    try {
-      const result = await wx.cloud.callFunction({
-        name: 'getPublicUrl',
-        data: { fileID }
-      });
-      
-      if (result.result.success) {
-        // 缓存结果
-        this.cloudFunctionCache[fileID] = {
-          url: result.result.url,
-          timestamp: Date.now()
-        };
-        return result.result.url;
-      }
-      return null;
-    } catch (error) {
-      console.error('获取头像失败:', error);
-      return null;
-    }
+    // 暂时不使用远程头像，统一使用本地默认头像，保留接口以便未来启用
+    return this.getDefaultAvatar();
   },
   
   /**
@@ -129,7 +112,7 @@ Page({
    * 获取默认头像URL
    */
   getDefaultAvatar() {
-    return 'cloud://cloud1-8gw6xrycfea6d00b.636c-cloud1-8gw6xrycfea6d00b-1321710631/images/default-avatar.png';
+    return '/miniprogram/images/avatar.png';
   },
   
   /**
@@ -174,103 +157,6 @@ Page({
     this.initChat(options);
   },
 
-  // ==================== 图片处理相关函数 ====================
-  
-  // 图片URL缓存
-  imageUrlCache: {},
-
-  // 修复图片URL（带缓存）
-  async fixImageUrl(url) {
-    if (!url) {
-      return 'cloud://cloud1-8gw6xrycfea6d00b.636c-cloud1-8gw6xrycfea6d00b-1321710631/images/default-avatar.png';
-    }
-    
-    // 检查缓存
-    if (this.imageUrlCache[url]) {
-      return this.imageUrlCache[url];
-    }
-    
-    let result = url;
-    
-    // 如果是云存储路径，确保格式正确
-    if (url.startsWith('cloud://')) {
-      // 已经是云存储路径，直接返回
-      result = url;
-    } 
-    // 如果是相对路径，转换为云存储路径
-    else if (url.startsWith('/')) {
-      // 移除开头的斜杠，构建云存储路径
-      const path = url.substring(1);
-      result = `cloud://cloud1-8gw6xrycfea6d00b.636c-cloud1-8gw6xrycfea6d00b-1321710631/${path}`;
-    }
-    // 如果是网络URL，直接返回
-    else if (url.startsWith('http')) {
-      result = url;
-    }
-    // 其他情况，使用默认头像
-    else {
-      result = 'cloud://cloud1-8gw6xrycfea6d00b.636c-cloud1-8gw6xrycfea6d00b-1321710631/images/default-avatar.png';
-    }
-    
-    // 如果是云存储路径，需要获取临时URL供image组件使用
-    if (result.startsWith('cloud://')) {
-      try {
-        const tempUrl = await this.getTempFileURL(result);
-        // 缓存临时URL
-        this.imageUrlCache[url] = tempUrl;
-        return tempUrl;
-      } catch (error) {
-        console.error('获取临时URL失败:', error);
-        // 返回默认头像
-        return 'cloud://cloud1-8gw6xrycfea6d00b.636c-cloud1-8gw6xrycfea6d00b-1321710631/images/default-avatar.png';
-      }
-    }
-    
-    // 缓存结果
-    this.imageUrlCache[url] = result;
-    return result;
-  },
-
-  // 批量处理图片URL（性能优化）
-  async batchFixImageUrls(urls) {
-    if (!urls || !Array.isArray(urls)) return [];
-    
-    const results = [];
-    for (const url of urls) {
-      try {
-        const fixedUrl = await this.fixImageUrl(url);
-        results.push(fixedUrl);
-      } catch (error) {
-        console.error('处理图片URL失败:', error);
-        results.push('cloud://cloud1-8gw6xrycfea6d00b.636c-cloud1-8gw6xrycfea6d00b-1321710631/images/default-avatar.png');
-      }
-    }
-    
-    return results;
-  },
-
-  // 获取云存储临时URL
-  async getTempFileURL(cloudPath) {
-    try {
-      const res = await wx.cloud.getTempFileURL({
-        fileList: [cloudPath]
-      });
-      
-      if (res.fileList && res.fileList[0] && res.fileList[0].tempFileURL) {
-        return res.fileList[0].tempFileURL;
-      } else {
-        throw new Error('获取临时URL失败');
-      }
-    } catch (error) {
-      console.error('获取云存储临时URL失败:', error);
-      // 返回默认头像的临时URL
-      const defaultRes = await wx.cloud.getTempFileURL({
-        fileList: ['cloud://cloud1-8gw6xrycfea6d00b.636c-cloud1-8gw6xrycfea6d00b-1321710631/images/default-avatar.png']
-      });
-      return defaultRes.fileList[0]?.tempFileURL || '';
-    }
-  },
-
   // ==================== 核心业务函数 ====================
 
   // 初始化聊天
@@ -282,41 +168,51 @@ Page({
       const currentUserInfo = await this.getCurrentUserInfo();
       
       // 2. 获取卖家和商品信息
-      let { sellerInfo, postInfo } = await this.getChatData(options, currentUserInfo);
+      let { sellerInfo, postInfo, presetChatId } = await this.getChatData(options, currentUserInfo);
       
       // 3. 批量处理商品图片
       if (postInfo?.images?.length > 0) {
         postInfo.images = await this.batchFixImageUrls(postInfo.images);
       }
       
-      // 4. 处理卖家头像
-      sellerInfo.avatar = await this.fixImageUrl(sellerInfo.avatar);
+      // 4. 处理卖家头像（暂用默认头像，占位保留）
+      sellerInfo.avatar = this.getDefaultAvatar();
       
       // 5. 设置数据
       this.setData({ 
         sellerInfo, 
         currentUserInfo, 
         postInfo, 
-        chatId: null
+        chatId: presetChatId || null
       });
       
       // 6. 设置页面标题
       wx.setNavigationBarTitle({ title: `与${sellerInfo.nickname}聊天` });
       
-      // 7. 创建聊天会话（如果有用户ID）
-      if (sellerInfo.userId && currentUserInfo.userId) {
+      // 7. 自聊保护：如果目标用户是自己，直接提示并返回上一页
+      if (sellerInfo.userId && currentUserInfo.userId && String(sellerInfo.userId) === String(currentUserInfo.userId)) {
+        wx.showToast({ title: '不能与自己私信', icon: 'none' });
+        setTimeout(() => { wx.navigateBack({ fail: () => wx.switchTab({ url: '/pages/index/index' }) }); }, 800);
+        return;
+      }
+
+      // 8. 创建聊天会话（如果有用户ID）
+      if (sellerInfo.userId && currentUserInfo.userId && !this.data.chatId) {
         const chatId = await this.getOrCreateChatSession();
         if (chatId) {
           this.setData({ chatId });
         }
-      } else {
+      } else if (!sellerInfo.userId || !currentUserInfo.userId) {
         console.log('用户信息不完整，使用本地聊天');
       }
       
-      // 8. 加载历史消息
+      // 9. 加载历史消息
       await this.loadChatHistory();
+      // 开启实时监听并做已读回执
+      this.startMessageWatch();
+      this.markRead();
       
-      // 9. 添加欢迎消息
+      // 10. 添加欢迎消息
       if (this.data.messages.length === 0) {
         await this.addWelcomeMessage();
       }
@@ -333,38 +229,23 @@ Page({
   // 获取当前用户信息
   async getCurrentUserInfo() {
     try {
-      let userInfo = wx.getStorageSync('userInfo') || {};
-      let userId = wx.getStorageSync('userId');
-      
-      // 如果本地存储没有用户信息，尝试从云数据库获取
-      if (!userId && userInfo._openid) {
-        userId = await this.getUserIdByOpenid(userInfo._openid);
-        if (userId) {
-          wx.setStorageSync('userId', userId);
-        }
-      }
-      
-      // 处理头像
-      let avatar = userInfo.avatar || userInfo.avatarUrl || '';
-      if (avatar) {
-        avatar = await this.fixImageUrl(avatar);
-      } else {
-        avatar = 'cloud://cloud1-8gw6xrycfea6d00b.636c-cloud1-8gw6xrycfea6d00b-1321710631/images/default-avatar.png';
-      }
-      
+      const { result } = await wx.cloud.callFunction({ name: 'getUserInfo' });
+      if (!result || !result.success || !result.data) throw new Error('getUserInfo 失败');
+      const u = result.data;
+      const avatar = await this.fixImageUrl(u.avatar || u.avatarUrl || '');
       return {
-        userId: userId || userInfo._id || null,
-        nickname: userInfo.nickname || userInfo.nickName || '我',
-        avatar: avatar,
-        college: userInfo.college || ''
+        userId: u.openid,
+        nickname: u.nickname || '我',
+        avatar: avatar || 'cloud://cloud1-8gw6xrycfea6d00b.636c-cloud1-8gw6xrycfea6d00b-1321710631/images/default-avatar.png',
+        college: u.college || ''
       };
     } catch (error) {
       console.error('获取当前用户信息失败:', error);
-      return { 
-        nickname: '我', 
-        avatar: 'cloud://cloud1-8gw6xrycfea6d00b.636c-cloud1-8gw6xrycfea6d00b-1321710631/images/default-avatar.png', 
-        userId: null, 
-        college: '' 
+      return {
+        nickname: '我',
+        avatar: 'cloud://cloud1-8gw6xrycfea6d00b.636c-cloud1-8gw6xrycfea6d00b-1321710631/images/default-avatar.png',
+        userId: null,
+        college: ''
       };
     }
   },
@@ -389,7 +270,29 @@ Page({
 
   // 获取聊天数据
   async getChatData(options, currentUserInfo) {
-    if (options.chatData) {
+    if (options.chatId && options.userId) {
+      // 从会话列表跳转（简化参数）
+      const sellerDetails = await this.getUserInfo(options.userId);
+      const sellerInfo = {
+        nickname: sellerDetails?.nickname || sellerDetails?.nickName || '商家',
+        avatar: sellerDetails?.avatar || sellerDetails?.avatarUrl || 'cloud://cloud1-8gw6xrycfea6d00b.636c-cloud1-8gw6xrycfea6d00b-1321710631/images/default-avatar.png',
+        userId: options.userId,
+        college: sellerDetails?.college || ''
+      };
+      return { sellerInfo, postInfo: null, presetChatId: options.chatId };
+    } else if (options.targetUserId) {
+      // 从个人主页等入口跳转，可能同时带有 targetNickname
+        const targetOpenid = options.targetUserId;
+      const nicknameFromOptions = options.targetNickname ? decodeURIComponent(options.targetNickname) : '';
+      const sellerDetails = await this.getUserInfo(targetOpenid);
+      const sellerInfo = {
+        nickname: sellerDetails?.nickname || sellerDetails?.nickName || nicknameFromOptions || '用户',
+        avatar: sellerDetails?.avatar || sellerDetails?.avatarUrl || this.getDefaultAvatar(),
+        userId: targetOpenid,
+        college: sellerDetails?.college || ''
+      };
+      return { sellerInfo, postInfo: null, presetChatId: null };
+    } else if (options.chatData) {
       return await this.handleChatListEntry(options);
     } else if (options.postId) {
       return await this.handleProductDetailEntry(options);
@@ -401,7 +304,8 @@ Page({
         userId: null, 
         college: '' 
       },
-      postInfo: null
+      postInfo: null,
+      presetChatId: null
     };
   },
 
@@ -411,15 +315,25 @@ Page({
       const chatData = JSON.parse(decodeURIComponent(options.chatData));
       console.log('解析后的聊天数据:', chatData);
       
-      // 获取卖家信息
+      // 获取卖家信息（兼容 sellerId 与 publisherId 两种来源），并统一为 openid
       let sellerInfo;
       if (chatData.sellerId) {
-        const sellerDetails = await this.getUserInfo(chatData.sellerId);
+        const sellerOpenid = chatData.sellerId; // 假定为 openid；旧入口不再支持 _id 映射
+          const sellerDetails = await this.getUserInfo(sellerOpenid);
         sellerInfo = {
           nickname: sellerDetails?.nickname || chatData.sellerNickname || '商家',
           avatar: sellerDetails?.avatar || chatData.sellerAvatar || 'cloud://cloud1-8gw6xrycfea6d00b.636c-cloud1-8gw6xrycfea6d00b-1321710631/images/default-avatar.png',
-          userId: chatData.sellerId,
+          userId: sellerOpenid,
           college: sellerDetails?.college || chatData.sellerCollege || ''
+        };
+      } else if (chatData.publisherId) {
+        // 详情页 onChat 传入的是 publisherId/publisherName，可能为 users._id；做 openid 映射
+        const sellerOpenid = chatData.publisherId; // 仅接受 openid
+        sellerInfo = {
+          nickname: chatData.publisherName || '商家',
+          avatar: chatData.sellerAvatar || 'cloud://cloud1-8gw6xrycfea6d00b.636c-cloud1-8gw6xrycfea6d00b-1321710631/images/default-avatar.png',
+          userId: sellerOpenid,
+          college: chatData.sellerCollege || ''
         };
       } else {
         sellerInfo = {
@@ -443,6 +357,7 @@ Page({
           };
         }
       }
+
       
       return { sellerInfo, postInfo };
     } catch (error) {
@@ -463,12 +378,15 @@ Page({
         nickname: postInfo.sellerName || '商家',
         avatar: postInfo.sellerAvatar || 'cloud://cloud1-8gw6xrycfea6d00b.636c-cloud1-8gw6xrycfea6d00b-1321710631/images/default-avatar.png',
         college: postInfo.sellerCollege || '',
-        userId: postInfo.sellerId || null
+          // 统一使用 openid：仅使用 publisherOpenid
+          userId: postInfo.publisherOpenid
       };
+      // 不再支持基于 users._id 的映射，统一只用 publisherOpenid
       
       // 如果商品信息中有sellerId但没有详细卖家信息，尝试获取卖家详情
-      if (postInfo.sellerId && !postInfo.sellerName) {
-        const sellerDetails = await this.getSellerInfo(postInfo.sellerId);
+        if (postInfo.publisherOpenid && !postInfo.sellerName) {
+          const preferId = postInfo.publisherOpenid;
+        const sellerDetails = await this.getSellerInfo(preferId);
         if (sellerDetails) {
           sellerInfo = {
             ...sellerInfo,
@@ -495,14 +413,24 @@ Page({
   async getSellerInfo(sellerId) {
     try {
       const db = wx.cloud.database();
-      const userRes = await db.collection('users').doc(sellerId).get();
-      
-      if (userRes.data) {
+      // sellerId 可能是 users._id 或 openid；优先用 doc(id) 取，不行则按 openid 查
+      let userDoc = null;
+      try {
+        const byDoc = await db.collection('users').doc(sellerId).get();
+        userDoc = byDoc.data;
+      } catch (_) {}
+      if (!userDoc) {
+        const byOpenid = await db.collection('users').where({ openid: sellerId }).limit(1).get();
+        userDoc = (byOpenid.data && byOpenid.data[0]) || null;
+      }
+
+      if (userDoc) {
         return {
-          nickname: userRes.data.nickname || userRes.data.nickName || '商家',
-          avatar: userRes.data.avatar || userRes.data.avatarUrl || 'cloud://cloud1-8gw6xrycfea6d00b.636c-cloud1-8gw6xrycfea6d00b-1321710631/images/default-avatar.png',
-          userId: userRes.data._id,
-          college: userRes.data.college || ''
+          nickname: userDoc.nickname || userDoc.nickName || '商家',
+          avatar: userDoc.avatar || userDoc.avatarUrl || 'cloud://cloud1-8gw6xrycfea6d00b.636c-cloud1-8gw6xrycfea6d00b-1321710631/images/default-avatar.png',
+          // 统一返回 openid
+          userId: userDoc.openid || userDoc._openid || null,
+          college: userDoc.college || ''
         };
       }
     } catch (error) {
@@ -521,8 +449,17 @@ Page({
   async getUserInfo(userId) {
     try {
       const db = wx.cloud.database();
-      const userRes = await db.collection('users').doc(userId).get();
-      return userRes.data;
+      // 兼容传入的是 users._id 或 openid
+      let userDoc = null;
+      try {
+        const byDoc = await db.collection('users').doc(userId).get();
+        userDoc = byDoc.data;
+      } catch (_) {}
+      if (!userDoc) {
+        const byOpenid = await db.collection('users').where({ openid: userId }).limit(1).get();
+        userDoc = (byOpenid.data && byOpenid.data[0]) || null;
+      }
+      return userDoc;
     } catch (error) {
       console.error('获取用户信息失败:', error);
       return null;
@@ -534,37 +471,18 @@ Page({
     try {
       const db = wx.cloud.database();
       const postRes = await db.collection('POST').doc(postId).get();
-      return this.formatPostInfo(postRes.data);
+      return postRes && postRes.data ? postRes.data : null;
     } catch (error) {
       console.error('获取商品信息失败:', error);
       return null;
     }
   },
 
-  // 格式化商品信息
-  formatPostInfo(postData) {
-    if (!postData) return null;
-    
-    const publisherInfo = postData.publisherInfo || {};
-    
-    return {
-      id: postData._id,
-      title: postData.title || '相关商品',
-      price: postData.price || 0,
-      images: postData.images || [],
-      sellerId: postData.publisherId,
-      sellerName: publisherInfo.nickname || '商家',
-      sellerAvatar: publisherInfo.avatar || 'cloud://cloud1-8gw6xrycfea6d00b.636c-cloud1-8gw6xrycfea6d00b-1321710631/images/default-avatar.png',
-      sellerCollege: publisherInfo.college || '',
-      publisherOpenid: postData.publisherOpenid
-    };
-  },
-
   // 初始化错误处理
   async handleInitError() {
     wx.showToast({ title: '聊天初始化失败', icon: 'none' });
     
-    const avatarUrl = await this.fixImageUrl(this.data.sellerInfo.avatar);
+    const avatarUrl = this.getDefaultAvatar();
     
     this.setData({
       messages: [{ 
@@ -588,40 +506,27 @@ Page({
     try {
       const db = wx.cloud.database();
       
+      const _ = db.command;
       // 查找现有聊天会话
       const chatSessionRes = await db.collection('chat_sessions')
-        .where({
-          $or: [
-            { user1Id: currentUserInfo.userId, user2Id: sellerInfo.userId, postId: postInfo?.id || '' },
-            { user1Id: sellerInfo.userId, user2Id: currentUserInfo.userId, postId: postInfo?.id || '' }
-          ]
-        })
+        .where(
+          _.and([
+            _.or([
+              { user1Id: currentUserInfo.userId, user2Id: sellerInfo.userId },
+              { user1Id: sellerInfo.userId, user2Id: currentUserInfo.userId }
+            ]),
+            { postId: postInfo?.id || '' }
+          ])
+        )
+        .limit(1)
         .get();
       
       if (chatSessionRes.data.length > 0) {
         console.log('找到现有聊天会话:', chatSessionRes.data[0]._id);
         return chatSessionRes.data[0]._id;
-      } else {
-        // 创建新会话
-        const newSession = {
-          user1Id: currentUserInfo.userId,
-          user1Name: currentUserInfo.nickname,
-          user1Avatar: currentUserInfo.avatar,
-          user2Id: sellerInfo.userId,
-          user2Name: sellerInfo.nickname,
-          user2Avatar: sellerInfo.avatar,
-          postId: postInfo?.id || '',
-          postTitle: postInfo?.title || '',
-          lastMessage: '',
-          lastMessageTime: new Date(),
-          unreadCount: 0,
-          createTime: new Date()
-        };
-        
-        const addRes = await db.collection('chat_sessions').add({ data: newSession });
-        console.log('创建新聊天会话成功:', addRes._id);
-        return addRes._id;
       }
+      // 不在前端创建新会话，交由云函数 sendMessage 负责创建
+      return null;
     } catch (error) {
       console.error('创建聊天会话失败:', error);
       return null;
@@ -666,7 +571,7 @@ Page({
           (msg.fromUserAvatar || currentUserInfo.avatar) : 
           (msg.fromUserAvatar || sellerInfo.avatar);
         
-        const avatarUrl = await this.fixImageUrl(avatarPath);
+        const avatarUrl = this.getDefaultAvatar();
         
         messages.push({
           id: msg._id,
@@ -675,11 +580,13 @@ Page({
           time: this.formatTime(msg.createTime),
           avatar: avatarUrl,
           type: msg.type || 'text',
-          createTime: msg.createTime
+          createTime: msg.createTime,
+          showTime: false
         });
       }
-      
-      this.setData({ messages });
+      // 插入时间分隔
+      const decorated = this.decorateMessagesWithTime(messages);
+      this.setData({ messages: decorated });
     } catch (error) {
       console.error('加载聊天记录失败:', error);
     }
@@ -688,7 +595,7 @@ Page({
   // 添加欢迎消息
   async addWelcomeMessage() {
     const now = new Date();
-    const avatarUrl = await this.fixImageUrl(this.data.sellerInfo.avatar);
+    const avatarUrl = this.getDefaultAvatar();
     
     const welcomeMessage = {
       text: `你好！我是${this.data.sellerInfo.nickname}，有什么可以帮你的吗？`,
@@ -697,7 +604,8 @@ Page({
       avatar: avatarUrl
     };
     
-    this.setData({ messages: [...this.data.messages, welcomeMessage] });
+    const updated = this.decorateAppend([...this.data.messages], welcomeMessage);
+    this.setData({ messages: updated });
   },
 
   // 发送消息
@@ -716,11 +624,13 @@ Page({
       time: timeString,
       avatar: this.data.currentUserInfo.avatar,
       type: 'text',
-      createTime: now
+      createTime: now,
+      showTime: false
     };
     
+    const updated = this.decorateAppend([...this.data.messages], newMessage);
     this.setData({
-      messages: [...this.data.messages, newMessage],
+      messages: updated,
       inputValue: '',
       inputHeight: 44
     });
@@ -728,11 +638,22 @@ Page({
     this.scrollToBottom();
     
     try {
-      // 2. 保存消息到数据库
-      await this.saveMessageToDatabase(messageText);
-      
-      // 3. 模拟商家回复
-      setTimeout(() => this.simulateSellerReply(), 1000);
+      // 2. 通过云函数发送消息，统一更新会话/未读
+      const res = await wx.cloud.callFunction({
+        name: 'sendMessage',
+        data: {
+          receiverId: this.data.sellerInfo.userId,
+          type: 'text',
+          content: messageText,
+          postId: this.data.postInfo?.id || '',
+          chatId: this.data.chatId || ''
+        }
+      });
+      const { result } = res || {};
+      if (result && result.success && result.chatId && !this.data.chatId) {
+        this.setData({ chatId: result.chatId });
+        this.startMessageWatch();
+      }
     } catch (error) {
       console.error('发送失败:', error);
       wx.showToast({ title: '发送失败', icon: 'none' });
@@ -785,65 +706,7 @@ Page({
     }
   },
 
-  // 模拟商家回复
-  async simulateSellerReply() {
-    const { sellerInfo } = this.data;
-    if (!sellerInfo.userId) return;
-    
-    const now = new Date();
-    const lastMessage = this.data.messages[this.data.messages.length - 1];
-    const replies = this.generateSellerReplies(lastMessage.text);
-    const randomReply = replies[Math.floor(Math.random() * replies.length)];
-    
-    const avatarUrl = await this.fixImageUrl(sellerInfo.avatar);
-    
-    const replyMessage = {
-      id: `temp_${Date.now()}`,
-      text: randomReply,
-      sender: 'received',
-      time: this.formatTime(now),
-      avatar: avatarUrl,
-      type: 'text',
-      createTime: now
-    };
-    
-    this.setData({ messages: [...this.data.messages, replyMessage] });
-    this.scrollToBottom();
-    
-    // 保存商家回复
-    try {
-      const db = wx.cloud.database();
-      const messageData = {
-        content: randomReply,
-        fromUserId: sellerInfo.userId,
-        fromUserName: sellerInfo.nickname,
-        fromUserAvatar: sellerInfo.avatar,
-        toUserId: this.data.currentUserInfo.userId,
-        toUserName: this.data.currentUserInfo.nickname,
-        toUserAvatar: this.data.currentUserInfo.avatar,
-        chatId: this.data.chatId || '',
-        postId: this.data.postInfo?.id || '',
-        postTitle: this.data.postInfo?.title || '',
-        type: 'text',
-        isRead: false,
-        createTime: now
-      };
-      
-      await db.collection('chat_messages').add({ data: messageData });
-      
-      if (this.data.chatId) {
-        await db.collection('chat_sessions').doc(this.data.chatId).update({
-          data: {
-            lastMessage: randomReply,
-            lastMessageTime: now,
-            unreadCount: db.command.inc(1)
-          }
-        });
-      }
-    } catch (error) {
-      console.error('保存商家回复失败:', error);
-    }
-  },
+  // 已移除模拟商家回复，改为依赖实时监听
 
   // 生成商家回复
   generateSellerReplies(userMessage) {
@@ -862,6 +725,41 @@ Page({
     return ['收到你的消息了！', '这个问题我需要查一下。', '好的，明白了。', '还有什么其他问题吗？'];
   },
 
+  // ======== 实时与已读回执 ========
+  startMessageWatch() {
+    if (!this.data.chatId) return;
+    const db = wx.cloud.database();
+    this.msgWatcher && this.msgWatcher.close();
+    this.msgWatcher = db.collection('chat_messages')
+      .where({ chatId: this.data.chatId })
+      .orderBy('createTime', 'asc')
+      .watch({
+        onChange: async snapshot => {
+          // 全量刷新最简单稳妥
+          await this.loadChatHistory();
+          this.scrollToBottom();
+          // 将发给我的未读标记为已读
+          this.markRead();
+        },
+        onError: err => console.error('消息监听失败:', err)
+      });
+  },
+
+  async markRead() {
+    if (!this.data.chatId || !this.data.currentUserInfo.userId) return;
+    const db = wx.cloud.database();
+    const _ = db.command;
+    try {
+      await db.collection('chat_messages')
+        .where({ chatId: this.data.chatId, toUserId: this.data.currentUserInfo.userId, isRead: false })
+        .update({ data: { isRead: true } });
+      await db.collection('chat_sessions').doc(this.data.chatId)
+        .update({ data: { [`unread.${this.data.currentUserInfo.userId}`]: 0 } });
+    } catch (e) {
+      console.warn('更新已读失败:', e);
+    }
+  },
+
   // ==================== UI交互函数 ====================
 
   // 格式化时间
@@ -872,7 +770,94 @@ Page({
   },
 
   onInput(e) {
-    this.setData({ inputValue: e.detail.value });
+    const v = e.detail.value || '';
+    this.setData({ inputValue: v, canSend: v.trim().length > 0 });
+  },
+
+  // 点击头像进入个人主页
+  onAvatarTap(e) {
+    const userId = e.currentTarget.dataset.userid;
+    if (!userId) {
+      wx.showToast({ title: '用户信息缺失', icon: 'none' });
+      return;
+    }
+
+    // 如果点击的是自己的头像，直接跳转到自己的个人主页（不带 userId 参数），页面会显示“编辑”按钮
+    const currentUserId = this.data.currentUserInfo && this.data.currentUserInfo.userId;
+    try {
+      if (currentUserId && String(userId) === String(currentUserId)) {
+        wx.navigateTo({ url: '/pages/me/profile/profile' });
+        return;
+      }
+    } catch (err) {
+      console.warn('比较用户ID出错，仍按默认逻辑跳转:', err);
+    }
+
+    // 其它用户：传入 userId，个人主页页面会认为是查看他人并显示“私信”按钮
+    wx.navigateTo({ url: `/pages/me/profile/profile?userId=${encodeURIComponent(userId)}` });
+  },
+
+  // ==================== 时间分隔处理 ====================
+  decorateMessagesWithTime(list) {
+    const { timeSeparatorThresholdMinutes, useCenteredTimeSeparator } = this.data;
+    if (!Array.isArray(list) || list.length === 0) return [];
+    const result = [];
+    let lastTime = null;
+    for (const item of list) {
+      if (item.type === 'time-separator') {
+        result.push(item);
+        continue;
+      }
+      const ts = new Date(item.createTime);
+      if (!lastTime || (ts - lastTime) >= timeSeparatorThresholdMinutes * 60 * 1000) {
+        if (useCenteredTimeSeparator) {
+          result.push({
+            id: `sep_${ts.getTime()}_${Math.random().toString(36).slice(2, 8)}`,
+            type: 'time-separator',
+            text: this.formatTime(ts),
+            createTime: ts
+          });
+        } else {
+          item.showTime = true;
+        }
+      }
+      result.push(item);
+      if (item.type !== 'time-separator') {
+        lastTime = ts;
+      }
+    }
+    return result;
+  },
+
+  decorateAppend(current, newMsg) {
+    const { timeSeparatorThresholdMinutes, useCenteredTimeSeparator } = this.data;
+    const res = Array.isArray(current) ? [...current] : [];
+    // 找到最后一个非分隔消息的时间
+    let i = res.length - 1;
+    let lastNonSepTime = null;
+    while (i >= 0) {
+      const it = res[i];
+      if (it && it.type !== 'time-separator') {
+        lastNonSepTime = new Date(it.createTime);
+        break;
+      }
+      i--;
+    }
+    const ts = new Date(newMsg.createTime);
+    if (!lastNonSepTime || (ts - lastNonSepTime) >= timeSeparatorThresholdMinutes * 60 * 1000) {
+      if (useCenteredTimeSeparator) {
+        res.push({
+          id: `sep_${ts.getTime()}_${Math.random().toString(36).slice(2, 8)}`,
+          type: 'time-separator',
+          text: this.formatTime(ts),
+          createTime: ts
+        });
+      } else {
+        newMsg.showTime = true;
+      }
+    }
+    res.push(newMsg);
+    return res;
   },
   
   onInputLineChange(e) {
@@ -908,7 +893,7 @@ Page({
   async onConfirmReceipt() {
     this.setData({ showConfirmBubble: false });
     
-    const avatarUrl = await this.fixImageUrl(this.data.currentUserInfo.avatar);
+    const avatarUrl = this.getDefaultAvatar();
     
     const confirmMessage = {
       text: '确认收货成功',
@@ -922,7 +907,7 @@ Page({
     
     // 显示评价气泡
     setTimeout(async () => {
-      const sellerAvatarUrl = await this.fixImageUrl(this.data.sellerInfo.avatar);
+      const sellerAvatarUrl = this.getDefaultAvatar();
       
       const sellerMessage = {
         text: '请评价本次交易',

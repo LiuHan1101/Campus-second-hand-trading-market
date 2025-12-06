@@ -249,9 +249,10 @@
 
 .message-item {
   display: flex;
-  margin-bottom: 48rpx;
+  margin-bottom: 28rpx;
   position: relative;
-  animation: messageFadeIn 0.4s ease-out;
+  animation: messageFadeIn 0.3s ease-out;
+  align-items: flex-end; /* 头像与气泡底部对齐，视觉更整洁 */
 }
 
 @keyframes messageFadeIn {
@@ -266,20 +267,54 @@
 }
 
 .message-sent {
-  flex-direction: row-reverse;
+  flex-direction: row;
+  justify-content: flex-end;
 }
 
 .message-received {
   flex-direction: row;
 }
 
+/* 居中时间分隔 */
+.time-separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 12rpx 0; /* 收紧上下间距 */
+  position: relative;
+  color: #9aa; /* 更柔和的灰色 */
+  font-size: 20rpx; /* 略小字号 */
+  font-weight: 400;
+  letter-spacing: 0.5rpx;
+  animation: messageFadeIn 0.2s ease-out;
+}
+
+.time-separator::before,
+.time-separator::after {
+  content: '';
+  flex: 1;
+  height: 1rpx;
+  background: linear-gradient(90deg, transparent, rgba(0,0,0,0.04), transparent); /* 降低分割线对比 */
+}
+
+.time-separator {
+  gap: 10rpx; /* 缩小左右间距 */
+}
+
+.time-separator {
+  padding: 0; /* 去除胶囊背景与边框 */
+  background: transparent;
+  border: none;
+  border-radius: 0;
+}
+
 .message-avatar {
-  width: 80rpx;
-  height: 80rpx;
+  width: 64rpx;
+  height: 64rpx;
   border-radius: 50%;
-  margin: 0 20rpx;
-  border: 3rpx solid rgba(255, 255, 255, 0.8);
-  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.1);
+  margin: 0; /* 由父容器的方向决定左右间距 */
+  border: 2rpx solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
   flex-shrink: 0;
   position: relative;
   z-index: 1;
@@ -302,21 +337,35 @@
 
 /* 消息内容包装器 */
 .message-content-wrapper {
-  max-width: 520rpx;
+  max-width: 76%; /* 让气泡宽度更自适应屏幕 */
   position: relative;
   z-index: 2;
+}
+
+/* 两侧内容与头像的安全间距，避免气泡尾巴贴住头像 */
+.message-received .message-content-wrapper { margin-left: 16rpx; }
+.message-sent .message-content-wrapper { margin-right: 16rpx; }
+
+/* 明确头像左右间距：接收方头像靠左，自己头像靠右 */
+.message-received .message-avatar {
+  margin-right: 12rpx;
+  margin-left: 0;
+}
+.message-sent .message-avatar {
+  margin-left: 0rpx;
+  margin-right: 12rpx;
 }
 
 /* 普通消息气泡 */
 .message-bubble {
   position: relative;
-  padding: 24rpx;
-  border-radius: 24rpx;
+  padding: 18rpx;
+  border-radius: 20rpx;
   line-height: 1.5;
   word-break: break-word;
-  font-size: 30rpx;
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
-  animation: bubbleGrow 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-size: 28rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+  animation: bubbleGrow 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 @keyframes bubbleGrow {
@@ -331,42 +380,66 @@
 }
 
 .sent-bubble {
-  background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
+  background: #ffffff;
+  border: 2rpx solid #bad467; /* 我方气泡描边：绿色 */
   border-top-right-radius: 8rpx;
-  margin-left: 100rpx;
+  margin-right: 0;
 }
 
 .received-bubble {
-  background: white;
+  background: #ffffff;
+  border: 2rpx solid #ffd262; /* 对方气泡描边：黄色 */
   border-top-left-radius: 8rpx;
-  margin-right: 100rpx;
+  margin-right: 72rpx;
 }
 
+/* 我方气泡尾巴（白色填充 + 绿色描边） */
+.sent-bubble::before {
+  content: '';
+  position: absolute;
+  top: 20rpx;
+  right: -14rpx;
+  border: 14rpx solid transparent;
+  border-left-color: #bad467; /* 外层描边 */
+  border-right-width: 0;
+  z-index: 0;
+}
 .sent-bubble::after {
   content: '';
   position: absolute;
-  top: 24rpx;
-  right: -16rpx;
-  border: 16rpx solid transparent;
-  border-left-color: #00b09b;
+  top: 20rpx;
+  right: -12rpx;
+  border: 12rpx solid transparent;
+  border-left-color: #ffffff; /* 内层填充 */
   border-right-width: 0;
-  filter: drop-shadow(2rpx 0 2rpx rgba(0, 0, 0, 0.05));
+  z-index: 1;
 }
 
+/* 对方气泡尾巴（白色填充 + 黄色描边） */
+.received-bubble::after {
+  content: '';
+  position: absolute;
+  top: 20rpx;
+  left: -14rpx;
+  border: 14rpx solid transparent;
+  border-right-color: #ffd262; /* 外层描边 */
+  border-left-width: 0;
+  z-index: 0;
+}
 .received-bubble::before {
   content: '';
   position: absolute;
-  top: 24rpx;
-  left: -16rpx;
-  border: 16rpx solid transparent;
-  border-right-color: white;
+  top: 20rpx;
+  left: -12rpx;
+  border: 12rpx solid transparent;
+  border-right-color: #ffffff; /* 内层填充 */
   border-left-width: 0;
-  filter: drop-shadow(-2rpx 0 2rpx rgba(0, 0, 0, 0.05));
+  z-index: 1;
 }
 
 .message-text {
-  color: white;
-  text-shadow: 0 1rpx 2rpx rgba(0, 0, 0, 0.1);
+  color: #1a1a1a; /* 统一黑色文字 */
+  text-shadow: none;
 }
 
 .received-bubble .message-text {
@@ -377,24 +450,24 @@
 /* 消息时间 */
 .message-time {
   position: absolute;
-  bottom: -32rpx;
-  font-size: 22rpx;
+  bottom: -26rpx;
+  font-size: 20rpx;
   color: #888;
   white-space: nowrap;
-  padding: 4rpx 12rpx;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 12rpx;
-  backdrop-filter: blur(10px);
+  padding: 2rpx 8rpx;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 10rpx;
+  backdrop-filter: blur(8px);
   border: 1rpx solid rgba(0, 0, 0, 0.05);
 }
 
 .message-sent .message-time {
-  right: 100rpx;
+  right: 72rpx;
   text-align: right;
 }
 
 .message-received .message-time {
-  left: 100rpx;
+  left: 72rpx;
   text-align: left;
 }
 
@@ -408,6 +481,10 @@
   border: 1rpx solid rgba(0, 0, 0, 0.05);
   animation: specialBubbleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+
+/* 根据左右方向分别留出头像空间 */
+.message-sent .special-bubble { margin-right: 16rpx; }
+.message-received .special-bubble { margin-left: 16rpx; }
 
 @keyframes specialBubbleIn {
   0% {

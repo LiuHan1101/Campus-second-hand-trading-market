@@ -1,13 +1,5 @@
 <!-- pages/chatdetail/chatdetail.wxml -->
 <view class="chat-container">
-  <!-- 在商品卡片下方添加卖家信息 -->
-<view wx:if="{{sellerInfo && sellerInfo.college}}" class="seller-info">
-  <image class="seller-avatar" src="{{sellerInfo.avatar}}" mode="aspectFill" />
-  <view class="seller-details">
-    <view class="seller-name">{{sellerInfo.nickname}}</view>
-    <view class="seller-college">{{sellerInfo.college}}</view>
-  </view>
-</view>
 
   <!-- 消息容器 -->
   <scroll-view 
@@ -24,17 +16,20 @@
 
     <!-- 消息列表 -->
     <view class="messages-list">
-      <view 
-        wx:for="{{messages}}" 
-        wx:key="id" 
-        class="message-item {{item.sender === 'sent' ? 'message-sent' : 'message-received'}}"
-      >
+      <view wx:for="{{messages}}" wx:key="id">
+        <!-- 居中时间分隔 -->
+        <view wx:if="{{item.type === 'time-separator'}}" class="time-separator">{{item.text}}</view>
+        
+        <!-- 普通消息 -->
+        <view wx:else class="message-item {{item.sender === 'sent' ? 'message-sent' : 'message-received'}}">
         <!-- 对方头像 -->
         <image 
           wx:if="{{item.sender === 'received'}}" 
           class="message-avatar" 
           src="{{item.avatar || '/images/avatar.png'}}" 
           mode="aspectFill"
+          bindtap="onAvatarTap"
+          data-userid="{{sellerInfo.userId}}"
         />
         
         <!-- 消息内容 -->
@@ -134,10 +129,13 @@
           class="message-avatar" 
           src="{{item.avatar || '/images/avatar.png'}}" 
           mode="aspectFill"
+          bindtap="onAvatarTap"
+          data-userid="{{currentUserInfo.userId}}"
         />
         
-        <!-- 消息时间 -->
-        <view class="message-time">{{item.time}}</view>
+        <!-- 消息时间（仅在未使用居中分隔且需要显示时） -->
+        <view wx:if="{{item.showTime}}" class="message-time">{{item.time}}</view>
+        </view>
       </view>
     </view>
   </scroll-view>
@@ -158,9 +156,9 @@
         style="height: {{inputHeight}}px"
       />
       <button 
-        class="send-btn {{inputValue.trim() ? 'send-btn-active' : ''}}" 
+        class="send-btn {{canSend ? 'send-btn-active' : ''}}" 
         bindtap="sendMessage"
-        disabled="{{!inputValue.trim()}}"
+        disabled="{{!canSend}}"
       >
         <text class="send-text">发送</text>
       </button>
