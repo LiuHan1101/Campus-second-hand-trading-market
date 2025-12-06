@@ -462,7 +462,7 @@ Page({
       }
     },
   
-    // 聊天 - 使用 postId
+    // 聊天 - 使用 postId（强制只传 openid）
     onChat() {
       const { goods, publisherInfo } = this.data;
       
@@ -470,10 +470,9 @@ Page({
       const chatData = {
         postId: goods.id,
         postTitle: goods.title,
-        // 强制使用 openid 作为发布者标识，避免 users._id 与 openid 混用
-        // 优先从 publisherInfo.openid，其次 goods.publisherOpenid/_openid，最后才退回到可能的 _id
+        // 强制使用 openid 作为发布者标识，只取 openid 系列字段
         publisherId: (
-          publisherInfo?.openid || goods.publisherOpenid || goods._openid || publisherInfo?.userId || goods.publisherId || goods.userId || ''
+          publisherInfo?.openid || goods.publisherOpenid || goods._openid || ''
         ),
         publisherName: publisherInfo?.nickname || goods.publisherName || '发布者'
       };
@@ -481,43 +480,7 @@ Page({
       wx.navigateTo({
         url: `/pages/chatdetail/chatdetail?chatData=${encodeURIComponent(JSON.stringify(chatData))}`
       });
-              // 在商品详情页或用户信息页跳转时
-          const goToChat = async (sellerId, postId) => {
-            try {
-              // 获取卖家详细信息
-              const db = wx.cloud.database();
-              const sellerRes = await db.collection('users').doc(sellerId).get();
-              const postRes = await db.collection('POST').doc(postId).get();
-              
-              const sellerInfo = sellerRes.data;
-              const postInfo = postRes.data;
-              
-              // 准备聊天数据
-              const chatData = {
-                sellerId: sellerId,
-                sellerNickname: sellerInfo.nickname || '商家',
-                sellerAvatar: sellerInfo.avatar || sellerInfo.avatarUrl || '/images/avatar.png',
-                sellerCollege: sellerInfo.college || '',
-                postId: postId,
-                postTitle: postInfo.title || '相关商品',
-                postPrice: postInfo.price,
-                postImage: postInfo.images?.[0] || ''
-              };
-              
-              // 编码数据并跳转
-              const encodedData = encodeURIComponent(JSON.stringify(chatData));
-              wx.navigateTo({
-                url: `/pages/chatdetail/chatdetail?chatData=${encodedData}`
-              });
-              
-            } catch (error) {
-              console.error('跳转聊天失败:', error);
-              // 简化版本，只传递必要参数
-              wx.navigateTo({
-                url: `/pages/chatdetail/chatdetail?sellerId=${sellerId}&postId=${postId}`
-              });
-            }
-          };
+      // 旧的 goToChat(sellerId, postId) 逻辑不再使用，避免传递 users._id
     },
   
     // 购买/出售

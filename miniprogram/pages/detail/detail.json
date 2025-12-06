@@ -1,7 +1,0 @@
-
-  {
-    "usingComponents": {
-      "confirm-popup": "/miniprogram/components/confirm-popup/confirm-popup"
-    },
-    "navigationBarTitleText": "商品详情"
-  }

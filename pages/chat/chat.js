@@ -138,7 +138,7 @@ Page({
 
   // 跳转到聊天详情页
   goToChatDetail(e) {
-    const { chatid, userid } = e.currentTarget.dataset;
+    const { chatid, userid, index } = e.currentTarget.dataset;
     
     if (!chatid || !userid) {
       wx.showToast({
@@ -147,10 +147,77 @@ Page({
       });
       return;
     }
+
+    // 进入会话前，先本地清零未读，改善视觉反馈
+    if (typeof index === 'number') {
+      const key = `chatList[${index}].unreadCount`;
+      this.setData({ [key]: 0 });
+    }
+
+    // 同步清零会话未读计数到数据库（冗余保护，聊天页也会处理）
+    this.clearUnread(chatid).catch(err => console.warn('清零未读失败(可忽略):', err));
     
     wx.navigateTo({
       url: `/pages/chatdetail/chatdetail?chatId=${chatid}&userId=${userid}`
     });
+  },
+
+  // 清零指定会话对当前用户的未读数
+  async clearUnread(chatId) {
+    if (!this.data.me || !chatId) return;
+    const me = this.data.me.openid;
+    try {
+      await db.collection('chat_sessions').doc(chatId)
+        .update({ data: { [`unread.${me}`]: 0 } });
+    } catch (e) {
+      throw e;
+    }
+  },
+
+  // 长按删除会话
+  async onLongPressChatItem(e) {
+    const { chatid, index } = e.currentTarget.dataset;
+    if (!chatid) return;
+
+    try {
+      const act = await wx.showActionSheet({ itemList: ['删除会话'] }).catch(() => null);
+      if (!act || act.tapIndex !== 0) return;
+
+      const confirm = await new Promise((resolve) => {
+        wx.showModal({
+          title: '确认删除',
+          content: '将删除该会话及相关消息，且不可恢复。',
+          confirmColor: '#E64340',
+          success: (res) => resolve(res.confirm === true)
+        });
+      });
+      if (!confirm) return;
+
+      wx.showLoading({ title: '删除中', mask: true });
+
+      // 1) 删除会话文档
+      await db.collection('chat_sessions').doc(chatid).remove();
+
+      // 2) 删除关联消息
+      await db.collection('chat_messages').where({ chatId: chatid }).remove();
+
+      wx.hideLoading();
+      wx.showToast({ title: '已删除', icon: 'success' });
+
+      // 3) 本地移除项（watcher也会刷新，先优化视觉反馈）
+      if (typeof index === 'number') {
+        const list = [...this.data.chatList];
+        list.splice(index, 1);
+        this.setData({ chatList: list });
+      } else {
+        // 兜底刷新
+        this.loadChatList();
+      }
+    } catch (err) {
+      console.error('删除会话失败:', err);
+      wx.hideLoading();
+      wx.showToast({ title: '删除失败', icon: 'none' });
+    }
   },
 
   // 跳转到搜索页面（保留注释逻辑）

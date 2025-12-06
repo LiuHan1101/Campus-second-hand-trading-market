@@ -41,29 +41,7 @@ Page({
   // 云函数调用缓存（暂不使用头像云函数）
   cloudFunctionCache: {},
 
-  /**
-   * 将可能的 users._id 映射为 openid，统一系统内使用 openid 作为用户ID
-   * @param {string} id - 可能是 openid 或 users 表的 _id
-   * @returns {Promise<string|null>} - 返回 openid 或 null
-   */
-  async resolveToOpenid(id) {
-    if (!id || typeof id !== 'string') return null;
-    // 简单判断：openid 通常为 28 位，且由小写字母和数字组成（此处不做严格校验）
-    if (id.length >= 24 && id.length <= 32 && !id.includes('-')) {
-      // 假设已是 openid（兼容历史数据）
-      return id;
-    }
-    // 若传入可能是 users._id，尝试读取并返回其 openid 字段
-    try {
-      const db = wx.cloud.database();
-      const res = await db.collection('users').doc(id).get();
-      const u = res && res.data ? res.data : null;
-      return u && (u.openid || u._openid) ? (u.openid || u._openid) : null;
-    } catch (e) {
-      console.warn('resolveToOpenid 映射失败:', e);
-      return null;
-    }
-  },
+  // 已移除 _id→openid 映射，系统内统一使用 openid
   
   /**
    * 获取可共享的图片URL（使用云函数中转）
@@ -211,7 +189,14 @@ Page({
       // 6. 设置页面标题
       wx.setNavigationBarTitle({ title: `与${sellerInfo.nickname}聊天` });
       
-      // 7. 创建聊天会话（如果有用户ID）
+      // 7. 自聊保护：如果目标用户是自己，直接提示并返回上一页
+      if (sellerInfo.userId && currentUserInfo.userId && String(sellerInfo.userId) === String(currentUserInfo.userId)) {
+        wx.showToast({ title: '不能与自己私信', icon: 'none' });
+        setTimeout(() => { wx.navigateBack({ fail: () => wx.switchTab({ url: '/pages/index/index' }) }); }, 800);
+        return;
+      }
+
+      // 8. 创建聊天会话（如果有用户ID）
       if (sellerInfo.userId && currentUserInfo.userId && !this.data.chatId) {
         const chatId = await this.getOrCreateChatSession();
         if (chatId) {
@@ -221,13 +206,13 @@ Page({
         console.log('用户信息不完整，使用本地聊天');
       }
       
-      // 8. 加载历史消息
+      // 9. 加载历史消息
       await this.loadChatHistory();
       // 开启实时监听并做已读回执
       this.startMessageWatch();
       this.markRead();
       
-      // 9. 添加欢迎消息
+      // 10. 添加欢迎消息
       if (this.data.messages.length === 0) {
         await this.addWelcomeMessage();
       }
@@ -297,9 +282,9 @@ Page({
       return { sellerInfo, postInfo: null, presetChatId: options.chatId };
     } else if (options.targetUserId) {
       // 从个人主页等入口跳转，可能同时带有 targetNickname
-      const targetOpenid = await this.resolveToOpenid(options.targetUserId) || options.targetUserId;
+        const targetOpenid = options.targetUserId;
       const nicknameFromOptions = options.targetNickname ? decodeURIComponent(options.targetNickname) : '';
-      const sellerDetails = await this.getUserInfo(options.targetUserId);
+      const sellerDetails = await this.getUserInfo(targetOpenid);
       const sellerInfo = {
         nickname: sellerDetails?.nickname || sellerDetails?.nickName || nicknameFromOptions || '用户',
         avatar: sellerDetails?.avatar || sellerDetails?.avatarUrl || this.getDefaultAvatar(),
@@ -333,8 +318,8 @@ Page({
       // 获取卖家信息（兼容 sellerId 与 publisherId 两种来源），并统一为 openid
       let sellerInfo;
       if (chatData.sellerId) {
-        const sellerOpenid = await this.resolveToOpenid(chatData.sellerId) || chatData.sellerId;
-        const sellerDetails = await this.getUserInfo(chatData.sellerId);
+        const sellerOpenid = chatData.sellerId; // 假定为 openid；旧入口不再支持 _id 映射
+          const sellerDetails = await this.getUserInfo(sellerOpenid);
         sellerInfo = {
           nickname: sellerDetails?.nickname || chatData.sellerNickname || '商家',
           avatar: sellerDetails?.avatar || chatData.sellerAvatar || 'cloud://cloud1-8gw6xrycfea6d00b.636c-cloud1-8gw6xrycfea6d00b-1321710631/images/default-avatar.png',
@@ -343,7 +328,7 @@ Page({
         };
       } else if (chatData.publisherId) {
         // 详情页 onChat 传入的是 publisherId/publisherName，可能为 users._id；做 openid 映射
-        const sellerOpenid = await this.resolveToOpenid(chatData.publisherId) || chatData.publisherId;
+        const sellerOpenid = chatData.publisherId; // 仅接受 openid
         sellerInfo = {
           nickname: chatData.publisherName || '商家',
           avatar: chatData.sellerAvatar || 'cloud://cloud1-8gw6xrycfea6d00b.636c-cloud1-8gw6xrycfea6d00b-1321710631/images/default-avatar.png',
@@ -393,16 +378,14 @@ Page({
         nickname: postInfo.sellerName || '商家',
         avatar: postInfo.sellerAvatar || 'cloud://cloud1-8gw6xrycfea6d00b.636c-cloud1-8gw6xrycfea6d00b-1321710631/images/default-avatar.png',
         college: postInfo.sellerCollege || '',
-        // 统一使用 openid：优先使用 publisherOpenid，其次将 sellerId(可能为 users._id) 映射为 openid
-        userId: postInfo.publisherOpenid || null
+          // 统一使用 openid：仅使用 publisherOpenid
+          userId: postInfo.publisherOpenid
       };
-      if (!sellerInfo.userId && postInfo.sellerId) {
-        sellerInfo.userId = await this.resolveToOpenid(postInfo.sellerId);
-      }
+      // 不再支持基于 users._id 的映射，统一只用 publisherOpenid
       
       // 如果商品信息中有sellerId但没有详细卖家信息，尝试获取卖家详情
-      if ((postInfo.publisherOpenid || postInfo.sellerId) && !postInfo.sellerName) {
-        const preferId = postInfo.publisherOpenid || postInfo.sellerId;
+        if (postInfo.publisherOpenid && !postInfo.sellerName) {
+          const preferId = postInfo.publisherOpenid;
         const sellerDetails = await this.getSellerInfo(preferId);
         if (sellerDetails) {
           sellerInfo = {
@@ -457,7 +440,7 @@ Page({
     return { 
       nickname: '商家', 
       avatar: 'cloud://cloud1-8gw6xrycfea6d00b.636c-cloud1-8gw6xrycfea6d00b-1321710631/images/default-avatar.png', 
-      userId: await this.resolveToOpenid(sellerId) || sellerId, 
+      userId: sellerId, 
       college: '' 
     };
   },
@@ -488,30 +471,11 @@ Page({
     try {
       const db = wx.cloud.database();
       const postRes = await db.collection('POST').doc(postId).get();
-      return this.formatPostInfo(postRes.data);
+      return postRes && postRes.data ? postRes.data : null;
     } catch (error) {
       console.error('获取商品信息失败:', error);
       return null;
     }
-  },
-
-  // 格式化商品信息
-  formatPostInfo(postData) {
-    if (!postData) return null;
-    
-    const publisherInfo = postData.publisherInfo || {};
-    
-    return {
-      id: postData._id,
-      title: postData.title || '相关商品',
-      price: postData.price || 0,
-      images: postData.images || [],
-      sellerId: postData.publisherId,
-      sellerName: publisherInfo.nickname || '商家',
-      sellerAvatar: publisherInfo.avatar || 'cloud://cloud1-8gw6xrycfea6d00b.636c-cloud1-8gw6xrycfea6d00b-1321710631/images/default-avatar.png',
-      sellerCollege: publisherInfo.college || '',
-      publisherOpenid: postData.publisherOpenid
-    };
   },
 
   // 初始化错误处理
@@ -817,6 +781,19 @@ Page({
       wx.showToast({ title: '用户信息缺失', icon: 'none' });
       return;
     }
+
+    // 如果点击的是自己的头像，直接跳转到自己的个人主页（不带 userId 参数），页面会显示“编辑”按钮
+    const currentUserId = this.data.currentUserInfo && this.data.currentUserInfo.userId;
+    try {
+      if (currentUserId && String(userId) === String(currentUserId)) {
+        wx.navigateTo({ url: '/pages/me/profile/profile' });
+        return;
+      }
+    } catch (err) {
+      console.warn('比较用户ID出错，仍按默认逻辑跳转:', err);
+    }
+
+    // 其它用户：传入 userId，个人主页页面会认为是查看他人并显示“私信”按钮
     wx.navigateTo({ url: `/pages/me/profile/profile?userId=${encodeURIComponent(userId)}` });
   },
 

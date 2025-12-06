@@ -649,14 +649,14 @@ Page({
   },
 
   onSendMessage() {
-    if (this.data.isViewOtherUser && this.data.userInfo._id) {
+    // 优先使用 openid 作为聊天系统的用户ID
+    if (this.data.isViewOtherUser && (this.data.userInfo.openid || this.data.userInfo._openid || this.data.userInfo._id)) {
+      const targetOpenid = this.data.userInfo.openid || this.data.userInfo._openid || this.data.userInfo._id;
       wx.navigateTo({
-        url: `/pages/chatdetail/chatdetail?targetUserId=${this.data.userInfo._id}&targetNickname=${encodeURIComponent(this.data.userInfo.nickname)}`
+        url: `/pages/chatdetail/chatdetail?targetUserId=${encodeURIComponent(targetOpenid)}&targetNickname=${encodeURIComponent(this.data.userInfo.nickname || '')}`
       });
     } else {
-      wx.navigateTo({
-        url: '/pages/chat/chat'
-      });
+      wx.navigateTo({ url: '/pages/chat/chat' });
     }
   },
 
