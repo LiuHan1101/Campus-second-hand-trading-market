@@ -1,0 +1,537 @@
+/* pages/me/profile/profile.wxss */
+
+.profile-container {
+  min-height: 100vh;
+  background: #ffffff;
+  padding: 20rpx;
+}
+
+/* 头部用户信息 - 新版排版 */
+.header-section {
+  display: flex;
+  position: relative;
+  background: #ffffff;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  padding: 30rpx;
+  border-radius: 16rpx;
+}
+
+/* 左边区域 */
+.left-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 30rpx;
+}
+
+.user-avatar {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  /*border: 4rpx solid #181717;*/
+  margin-bottom: 20rpx;
+}
+
+.user-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  width: 100%;
+  align-items: center;
+}
+
+.stat-item {
+  font-size: 24rpx;
+  color: #666;
+  background: #f5f5f5;
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+  text-align: center;
+  white-space: nowrap;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 右边区域 */
+.right-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* 防止内容溢出 */
+}
+
+.user-nickname {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #1a1818;
+  margin-bottom: 10rpx;
+}
+
+.user-college {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 16rpx;
+}
+
+/* 编辑资料按钮 - 右上角 */
+.edit-btn, .message-btn {
+  position: absolute;
+  top: 30rpx;
+  right: 30rpx;
+  background: #ffd262;
+  color: #ffffff;
+  border: none;
+  border-radius: 30rpx;
+  padding: 12rpx 24rpx;
+  font-size: 24rpx;
+  line-height: 1.2;
+  height: auto;
+  min-width: auto;
+  width: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+
+/* 评价模块 - 统一布局 */
+.rating-section {
+  margin-bottom: 30rpx;
+  background: #ffffff;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  border-radius: 16rpx;
+  padding: 30rpx;
+}
+
+.rating-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #1a1818;
+  margin-bottom: 24rpx;
+}
+
+/* 评价内容区域 - 固定73分比例 */
+.rating-content {
+  display: flex;
+  height: 200rpx;
+  width: 100%;
+}
+
+/* 左边评论区域 - 70% */
+.comment-scroll {
+  flex: 7;
+  border-right: 2rpx solid #f0f0f0;
+  padding-right: 24rpx;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.comment-list {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.comment-item {
+  padding: 12rpx 0;
+  border-bottom: 1rpx solid rgba(140, 123, 108, 0.1);
+}
+
+.comment-user {
+  font-weight: bold;
+  color: #333;
+  font-size: 28rpx;
+  margin-right: 12rpx;
+}
+
+.comment-text {
+  color: #666;
+  font-size: 26rpx;
+}
+
+.comment-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #999;
+  font-size: 26rpx;
+}
+
+/* 右边评分区域 - 30% 居中显示 */
+.score-display {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-left: 24rpx;
+  height: 100%;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.score-number {
+  font-size: 56rpx;
+  font-weight: bold;
+  color: #dd7724;
+  line-height: 1;
+  margin-bottom: 8rpx;
+}
+
+.score-total {
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 16rpx;
+}
+
+.rating-stars {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12rpx;
+}
+
+.star {
+  font-size: 32rpx;
+  margin: 0 4rpx;
+  color: #ddd; /* 默认空心星星颜色 */
+}
+
+.star.active {
+  color: #faad14; /* 实心星星颜色 */
+}
+
+.rating-count {
+  font-size: 22rpx;
+  color: #999;
+}
+
+/* 个人简介模块 */
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 20rpx;
+}
+
+.bio-content {
+  font-size: 28rpx;
+  color: var(--neutral-dark);
+  line-height: 1.6;
+  margin-bottom: 14rpx;
+  padding: 20rpx;
+  background: rgb(243, 243, 243);
+  border-radius: 12rpx;
+}
+
+/* 标签区域 */
+.tags-section {
+  width: 100%;
+}
+
+.tags-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333 !important;
+  margin-bottom: 50rpx;
+  display: block;
+}
+
+/* 标签列表 - 关键修正 */
+.tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+/* 标签样式 - 修正宽度自适应问题 - 一个都不许动！！！ */
+.tag {
+  background: #bad467;
+  color: white;
+  padding: 12rpx 24rpx; /* 足够的水平内边距 */
+  border-radius: 40rpx;
+  font-size: 26rpx;
+  display: inline-flex; /* 关键修改 */
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  height: 60rpx;
+  line-height: 1.4;
+  box-shadow: 0 2rpx 8rpx rgba(186, 212, 103, 0.2);
+  min-width: min-content; /* 关键属性：宽度至少能容纳内容 */
+  max-width: none;
+  width: auto;
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+/* 商品展示模块 */
+.goods-section {
+  margin: 20rpx 0;
+  background: white;
+  border-radius: 16rpx;
+  padding: 20rpx;
+}
+
+.goods-tabs {
+  display: flex;
+  border-bottom: 2rpx solid #f0f0f0;
+  margin-bottom: 30rpx;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 25rpx 0;
+  font-size: 32rpx;
+  color:  #1a1818;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  position: relative;
+  background: #fdf3d8; /* 未激活状态 */
+}
+
+.tab.active {
+  color: #1a1818;
+  font-weight: bold;
+  background: #FFD262; /* 激活状态*/
+}
+
+.tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120rpx;
+  height: 4rpx;
+  background: #666; /* 底部边框保持深色 */
+  border-radius: 2rpx;
+}
+
+.goods-list {
+  min-height: 200rpx;
+}
+
+/* 商品项容器 */
+.goods-section {
+  margin: 20rpx 0;
+  background: white;
+  border-radius: 16rpx;
+  padding: 3rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 商品项容器 - 调整高度 */
+.goods-item {
+  background: #ffffff;
+  border-radius: 12rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+  padding: 24rpx; /* 减少内边距 */
+  display: flex;
+  height: 230rpx; 
+  position: relative;
+  margin-bottom: 20rpx;
+  width: 100%; 
+  box-sizing: border-box;
+}
+
+/* 商品图片 */
+.goods-image {
+  width: 200rpx; /* 稍微减小 */
+  height: 200rpx; 
+  border-radius: 10rpx;
+  margin-right: 20rpx; /* 减小间距 */
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+/* 商品信息区域 */
+.goods-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100%;
+}
+
+/* 商品头部 */
+.goods-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16rpx;
+}
+
+.goods-title {
+  font-size: 32rpx; 
+  font-weight: bold;
+  color: #333;
+  flex: 1;
+  margin-right: 16rpx; 
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.goods-price {
+  font-size: 36rpx; 
+  font-weight: bold;
+  color: #e46225;
+  flex-shrink: 0;
+  text-align: right;
+  min-height: 60rpx;
+}
+
+/* 商品元信息 */
+.goods-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx; 
+}
+
+.goods-description {
+  font-size: 26rpx;
+  color: #666;
+  flex: 1;
+  margin-right: 20rpx;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.goods-time {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 商品底部 */
+.goods-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 8rpx;
+}
+
+.goods-tags {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+/* 商品标签 */
+.goods-tag {
+  font-size: 24rpx; 
+  color: #ffffff;
+  background: #bad476;
+  padding: 8rpx 24rpx; 
+  border-radius: 20rpx;
+  display: inline-block;
+  margin-right: 12rpx; 
+  margin-bottom: 0;
+}
+
+/* 交易类型 */
+.goods-type {
+  font-size: 24rpx; 
+  color: #999;
+  padding: 6rpx 16rpx;
+  background: #f5f5f5;
+  border-radius: 6rpx;
+  flex-shrink: 0;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.empty-icon {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 16px;
+  opacity: 0.6;
+}
+
+.empty-text {
+  color: #999;
+  font-size: 14px;
+}
+
+/* 商品状态标签 */
+.status-tag {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-left: 5px;
+}
+
+.status-tag.sold {
+  background-color: #f0f0f0;
+  color: #999;
+}
+
+.status-tag.offline {
+  background-color: #ffe6e6;
+  color: #f56c6c;
+}
+
+.both-tag {
+  background-color: #e6f7ff;
+  color: #1890ff;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-left: 5px;
+}
+
+/* 星星评分 */
+.star {
+  font-size: 16px;
+  margin-right: 2px;
+}
+
+.star.active {
+  color: #faad14;
+}
+
+/* 加载状态 */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loading-icon {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 16px;
+}
+
+.loading-state text {
+  color: #999;
+  font-size: 14px;
+}
